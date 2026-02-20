@@ -1,0 +1,221 @@
+
+/* Background Slider Container */
+.Sustainability-container {
+    margin-top: 40px;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+/* Background Media Wrapper */
+.bg-slider-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.bg-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.bg-slide.active {
+    opacity: 1;
+}
+
+.bg-slide img,
+.bg-slide video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.bg-overlay-dark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000073;
+    z-index: 2;
+}
+
+.sustainability-content-layer {
+    position: relative;
+    z-index: 3;
+}
+
+.Sustainability {
+    width: 100%;
+    min-height: 90vh;
+    padding: 0px 140px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 60px;
+}
+
+.Sustainability-Box-1 {
+    position: relative;
+    border: 1px solid #ffffff80;
+    padding: 20px 0px;
+    border-radius: 4px;
+    color: white;
+    margin-top: 30px;
+    background: #ffffff1a;
+    backdrop-filter: blur(5px);
+}
+
+.Sustainability-container li {
+    text-align: center;
+    list-style: none;
+}
+
+.Sustainability-Box-1-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+li.Sustainability-Box-1-list-title {
+    font-size: 28px;
+    font-weight: 400;
+}
+
+.Sustainability-Box-1-list-des {
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 1px;
+    padding-top: 5px;
+    font-family: "Quicksand", sans-serif;
+}
+
+.Sustainability-title {
+    font-size: 40px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.Sustainability-des {
+    font-size: 18px;
+    color: white;
+    line-height: 28px;
+    letter-spacing: 1px;
+    padding-bottom: 50px;
+    font-weight: 200;
+}
+
+/* Icon Sizing inside boxes */
+.Sustainability-Box-1-list-i-1,
+.Sustainability-Box-1-list-i-3 {
+    width: 25%;
+}
+
+.Sustainability-Box-1-list-i-2,
+.Sustainability-Box-1-list-i-4 {
+    width: 38%;
+}
+
+.Sustainability-Box-1-list img {
+    width: 100%;
+}
+
+/* Marquee Section */
+.container-Sustainability-mrq {
+    width: 100%;
+    padding: 12px 0px;
+    overflow: hidden;
+    background: #a1a5aa;
+    white-space: nowrap;
+}
+
+.scroll {
+    display: inline-flex;
+    animation: scroll-left 25s linear infinite;
+}
+
+.marquee-group {
+    display: flex;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 40px;
+    color: white;
+}
+
+.item span {
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Responsiveness */
+@media screen and (max-width: 1400px) {
+    .Sustainability {
+        padding: 0px 30px 60px 30px;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .Sustainability {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 40px 30px;
+    }
+
+    .Sustainability-des {
+        padding-bottom: 30px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .Sustainability {
+        padding: 40px 20px;
+    }
+
+    .Sustainability-title {
+        font-size: 28px;
+    }
+
+    .Sustainability-des {
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    .item span {
+        font-size: 14px;
+    }
+
+    .conatiner-Sustainability {
+        padding-top: 40px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .conatiner-Sustainability {
+        padding-top: 10px;
+    }
+}

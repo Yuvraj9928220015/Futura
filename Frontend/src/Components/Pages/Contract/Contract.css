@@ -1,0 +1,591 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.Contract {
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    overflow-x: hidden;
+}
+
+/* Hero Banner */
+.About-Banner {
+    position: relative;
+    height: 90vh;
+    min-height: 600px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.About-Banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 8s ease-in-out;
+}
+
+.About-Banner:hover img {
+    transform: scale(1.05);
+}
+
+.About-Banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    text-align: center;
+    color: white;
+    max-width: 1000px;
+    padding: 0 20px;
+    animation: fadeInUp 1s ease-out;
+}
+
+.About-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.About-des {
+    font-size: clamp(1.1rem, 2vw, 1.3rem);
+    margin-bottom: 30px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.cta-button {
+    padding: 15px 35px;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+}
+
+/* Section Headers */
+.Section-Header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.About-Banner-video {
+    width: 100%;
+}
+
+.About-Section-Heading {
+    font-family: 'Georgia', serif;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-top: 20px;
+}
+
+/* Featured Collections */
+.Product-Ranges-Section {
+    padding: 0 40px 80px;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.featured-item {
+    position: relative;
+    min-height: 500px;
+}
+
+.Contract-Box {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.image-box {
+    background: #000;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.4s ease;
+    opacity: 0.8;
+}
+
+.image-box:hover img {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.image-box:hover .image-overlay {
+    opacity: 1;
+}
+
+.overlay-content {
+    text-align: center;
+    color: white;
+    transform: translateY(20px);
+    transition: transform 0.4s ease;
+}
+
+.image-box:hover .overlay-content {
+    transform: translateY(0);
+}
+
+.overlay-content p {
+    letter-spacing: 1px;
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 100;
+}
+
+.content-box {
+    padding: 0;
+}
+
+.Contract-main-Box {
+    padding: 60px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Contract-subtitle {
+    font-size: 0.9rem;
+    color: #ff6b6b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.Contract-title {
+    font-size: 2.2rem;
+    font-weight: 300;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-family: 'Georgia', serif;
+}
+
+.Contract-des {
+    text-align: justify;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #191a1b;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+    font-family: "Quicksand", sans-serif;
+}
+
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feature-item {
+    font-size: 18px;
+    color: #2c3e50;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    font-family: "Quicksand", sans-serif;
+}
+
+/* Product Ranges - EQUAL HEIGHT BOXES */
+.Overview {
+    padding: 80px 40px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin: 0 auto;
+    align-items: stretch;
+    /* Important for equal height */
+}
+
+.col-item {
+    display: flex;
+    height: 100%;
+    /* Makes all items stretch to same height */
+}
+
+.Overview-Box {
+    background: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    /* Ensures box takes full height */
+}
+
+.Overview-Box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.Overview-Box:hover::before {
+    left: 100%;
+}
+
+.Overview-Box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.Overview-Box.active {
+    transform: translateY(-10px) scale(1.02);
+}
+
+.Overview-Box-image {
+    position: relative;
+    height: 350px;
+    overflow: hidden;
+    flex-shrink: 0;
+    /* Prevents image from shrinking */
+}
+
+.Overview-Box-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.Overview-Box:hover .Overview-Box-image img {
+    transform: scale(1.1);
+}
+
+.image-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.Overview-Box-content {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* Allows content to fill remaining space */
+}
+
+.Overview-Box-content-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-family: 'Georgia', serif;
+}
+
+.Overview-Box-content-des {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #5a6c7d;
+    margin-bottom: 25px;
+    flex-grow: 1;
+    /* Pushes button to bottom */
+}
+
+.view-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 25px;
+    background: transparent;
+    border: 2px solid #ff6b6b;
+    color: #ff6b6b;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    align-self: flex-start;
+    /* Aligns button to start */
+    margin-top: auto;
+    /* Pushes button to bottom */
+}
+
+.view-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.view-btn:hover {
+    background: #ff6b6b;
+    color: white;
+    transform: translateX(5px);
+}
+
+.view-btn:hover svg {
+    transform: translateX(3px);
+}
+
+/* Stats Section */
+.stats-section {
+    padding: 80px 40px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: white;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 20px;
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    margin-bottom: 10px;
+    font-family: 'Georgia', serif;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    color: black;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+
+    .Product-Ranges-Section,
+    .Overview,
+    .stats-section {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .Contract-main-Box {
+        padding: 40px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .featured-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .featured-item {
+        min-height: 400px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .Product-Ranges-Section,
+    .Overview,
+    .stats-section {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .About-Banner {
+        height: 70vh;
+        min-height: 500px;
+    }
+
+    .Contract-main-Box {
+        padding: 30px;
+    }
+
+    .Contract-title {
+        font-size: 1.8rem;
+    }
+
+    .featured-item {
+        min-height: 350px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .Overview-Box-image {
+        height: 250px;
+    }
+
+    .Overview-Box-content {
+        padding: 25px;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .Overview-Box-image {
+        height: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .Product-Ranges-Section,
+    .Overview,
+    .stats-section {
+        padding: 60px 15px;
+    }
+
+    .About-Banner {
+        height: 60vh;
+        min-height: 400px;
+    }
+
+    .Contract-main-Box {
+        padding: 25px;
+    }
+
+    .Contract-title {
+        font-size: 1.5rem;
+    }
+
+    .featured-item {
+        min-height: 300px;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .Overview-Box-image {
+        height: 250px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .cta-button {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+
+    .view-btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+}

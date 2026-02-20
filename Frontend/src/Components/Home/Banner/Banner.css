@@ -1,0 +1,331 @@
+/* Main Slider Container */
+.Banner-slider-container {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    overflow: hidden;
+}
+
+.Banner-slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.Banner-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.Banner-slide.active {
+    opacity: 1;
+}
+
+.Banner-slide-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background-color: #1a202c;
+}
+
+.Banner-slide-video::-webkit-media-controls {
+    display: none !important;
+}
+
+.Banner-slide-video::-webkit-media-controls-panel {
+    display: none !important;
+}
+
+.Banner-slide-video::-webkit-media-controls-play-button {
+    display: none !important;
+}
+
+.Banner-slide-video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+.Banner-slide-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #2d3748;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    z-index: 5;
+}
+
+.Banner-slide-overlay {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Text Overlay Styling */
+.Banner-text-overlay {
+    text-align: center;
+    color: white;
+    padding: 0px 30px;
+    padding-top: 20px;
+    /* background-color: #c7c7c757; */
+    /* backdrop-filter: blur(5px); */
+    /* border: 1px solid #ffffff33; */
+    pointer-events: none;
+}
+
+.Banner-text-subtitle-line {
+    width: 80px;
+    height: 1px;
+    background-color: #fcfcfc86;
+}
+
+.Banner-text-title {
+    font-size: 50px;
+    letter-spacing: 2px;
+    font-family: 'Georgia', serif;
+    text-shadow: 2px 2px 6px #00000099;
+    font-weight: 100;
+}
+
+.Banner-text-subtitle {
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 1.4px;
+    text-shadow: 1px 1px 3px #c9c7c56b;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+
+.Banner-text-subtitle button {
+    /* padding: 7px 25px; */
+    border: none;
+    border-radius: 50px;
+    background-color: transparent;
+    color: #fcfcfc;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    pointer-events: auto;
+}
+
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ffffff66;
+    z-index: 30;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 300ms ease;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-arrow:hover {
+    /* background-color: #ffffff66; */
+    transform: translateY(-50%) scale(1.1);
+}
+
+.nav-arrow-left {
+    left: 1.5rem;
+}
+
+.nav-arrow-right {
+    right: 1.5rem;
+}
+
+.play-pause-btn {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 30;
+    background-color: #ffffff33;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 300ms ease;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play-pause-btn:hover {
+    background-color: #ffffff66;
+    transform: scale(1.1);
+}
+
+.dot-indicators {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ffffff80;
+    cursor: pointer;
+    transition: all 300ms ease;
+    padding: 0;
+}
+
+.dot:hover {
+    background-color: #ffffffcc;
+    transform: scale(1.25);
+}
+
+.dot.dot-active {
+    background-color: white;
+    transform: scale(1.25);
+    box-shadow: 0 0 10px #ffffff80;
+}
+
+/* Slide Counter */
+.Banner-slide-counter {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 30;
+    background-color: #00000066;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+    border: 1px solid #ffffff1a;
+}
+
+.image-Overlay {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    background-color: #ffffff3d;
+    top: 125px;
+}
+
+@media screen and (max-width: 992px) {
+    .image-Overlay {
+        position: absolute;
+        width: 100%;
+        height: 50px;
+        background-color: #ffffff3d;
+        top: 58px;
+    }
+
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .Banner-text-title {
+        font-size: 1rem;
+    }
+
+    .nav-arrow {
+        padding: 8px;
+    }
+
+    .nav-arrow-left {
+        left: 0.5rem;
+    }
+
+    .nav-arrow-right {
+        right: 0.5rem;
+    }
+
+    .play-pause-btn {
+        top: 1rem;
+        left: 1rem;
+        padding: 8px;
+    }
+
+    .Banner-slide-counter {
+        top: 1rem;
+        right: 1rem;
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .Banner-text-overlay {
+        padding: 15px;
+    }
+
+    .Banner-text-subtitle {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .Banner-text-title {
+        font-size: 1.6rem;
+    }
+
+    .Banner-text-subtitle {
+        font-size: 1rem;
+    }
+
+    .Banner-text-subtitle-line {
+        width: 50px;
+    }
+
+    .play-pause-btn {
+        padding: 6px;
+    }
+
+    .nav-arrow {
+        padding: 6px;
+    }
+
+    .Banner-text-overlay {
+        padding: 10px;
+    }
+
+    .image-Overlay {
+        position: absolute;
+        width: 100%;
+        height: 50px;
+        background-color: #ffffff3d;
+        top: 54px;
+    }
+}
+
+.Banner-slide:not(.active) .Banner-slide-video {
+    visibility: hidden;
+}
+
+.Banner-slide.active .Banner-slide-video {
+    visibility: visible;
+}

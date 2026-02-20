@@ -1,0 +1,411 @@
+/* Footer Main Container */
+.Footer {
+    /* background-color: #6e7b88; */
+    background-color: #5a6570;
+    color: white;
+    width: 100%;
+    padding: 30px 60px;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+
+.Footer-Top {
+    background-color: #d9d9d8;
+    width: 100%;
+    height: 60px;
+}
+
+.Footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #1e1e1e1a;
+    pointer-events: none;
+}
+
+/* Left Section */
+.Footer-Box-1 {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.Futura-logo {
+    margin-bottom: 40px;
+}
+
+.Futura-logo img {
+    width: 280px;
+    height: auto;
+    filter: brightness(1.1);
+}
+
+/* Contact Section */
+.contact-section {
+    margin-bottom: 40px;
+}
+
+.footer-contact-title {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 5px;
+    color: #e0e0e0;
+    /* font-family: 'Roboto', sans-serif; */
+    letter-spacing: 0.5px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px;
+    font-size: 14px;
+    color: #d0d0d0;
+}
+
+.contact-icon {
+    margin-right: 8px;
+    font-size: 20px;
+    color: #a0a0a0;
+}
+
+.contact-item span {
+    font-weight: 500;
+    font-family: "Quicksand", sans-serif;
+    font-size: 16px;
+}
+
+/* Address Section */
+.address-section {
+    margin-bottom: 35px;
+    margin-top: 50px;
+}
+
+.address-title {
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 6px;
+    color: #e0e0e0;
+    letter-spacing: 0.5px;
+}
+
+.address-item {
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px;
+    color: #d0d0d0;
+    line-height: 1.4;
+}
+
+.address-icon {
+    margin-right: 8px;
+    margin-top: 2px;
+    font-size: 18px;
+    color: #a0a0a0;
+    flex-shrink: 0;
+}
+
+.address-icon span {
+    font-weight: 500;
+    font-family: "Quicksand", sans-serif;
+}
+
+/* Google Maps Button */
+.map-button-section {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.google-maps-btn {
+    background-color: #d9d9d8;
+    color: rgb(255, 255, 255);
+    border: 1px solid #666;
+    padding: 10px 25px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.google-maps-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #888;
+}
+
+/* Map Image */
+.Map {
+    position: absolute;
+    top: 20%;
+    right: 130px;
+    width: 50%;
+    z-index: 1;
+}
+
+.Map img {
+    width: 100%;
+    height: auto;
+    opacity: 0.8;
+    filter: brightness(0.9) contrast(1.1);
+}
+
+/* Right Section */
+.Footer-Box-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: flex-end;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0;
+    z-index: 2;
+    position: relative;
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.social-mida-icons {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+}
+
+.social-icon {
+    font-size: 30px;
+    color: #d0d0d0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Social Text */
+.social-text {
+    font-size: 19px;
+    /* font-weight: 200; */
+    margin-bottom: 40px;
+    font-family: 'Roboto', sans-serif;
+    color: #e0e0e0;
+    text-align: right;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    width: 100%;
+    margin-top: 100px;
+}
+
+.newsletter-title {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    color: white;
+    text-align: right;
+    line-height: 1.3;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.input-row {
+    display: flex;
+    gap: 15px
+}
+
+.form-input {
+    padding: 12px 15px;
+    border: 1px solid #666;
+    background-color: white;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    border-radius: 3px;
+    outline: none;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.form-input::placeholder {
+    color: #aaa;
+}
+
+.form-input:focus {
+    border-color: #888;
+    background-color: #ffffff1a;
+}
+
+.full-width {
+    flex: 2;
+}
+
+.signup-btn {
+    background-color: #d9d9d8;
+    color: white;
+    border: 1px solid #666;
+    padding: 12px 30px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.signup-btn:hover {
+    background-color: #ffffff1a;
+    border-color: #888;
+}
+
+/* Copyright Section */
+.Copyright {
+    background-color: #d9d9d8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #303030;
+    padding: 20px 60px;
+    border-top: 1px solid #333;
+}
+
+.Copyright-text {
+    font-size: 14px;
+}
+
+.Copyright-text a {
+    text-decoration: none;
+    color: #2e2e2e;
+    transition: color 0.3s ease;
+}
+
+.Copyright-text a:hover {
+    color: rgb(36, 36, 36);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .Map {
+        width: 40%;
+        top: 35%;
+    }
+}
+
+@media (max-width: 992px) {
+    .Footer {
+        padding: 60px 40px;
+    }
+
+    .Footer-Box-2 {
+        align-items: flex-start;
+        margin-top: 50px;
+    }
+
+    .social-text,
+    .newsletter-title {
+        text-align: left;
+    }
+
+    .Map {
+        position: static;
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .Map img {
+        width: 80%;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .Footer {
+        padding: 40px 20px;
+    }
+
+    .Copyright {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .Futura-logo img {
+        width: 220px;
+    }
+
+    .social-icons {
+        justify-content: flex-start;
+    }
+
+    .social-icon {
+        font-size: 32px;
+    }
+
+    .newsletter-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .Footer {
+        padding: 30px 15px;
+    }
+
+    .input-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .full-width {
+        flex: 1;
+    }
+
+    .signup-btn {
+        width: 100%;
+    }
+
+    .social-icon {
+        font-size: 28px;
+    }
+
+    .Futura-logo img {
+        width: 180px;
+    }
+
+    .newsletter-title {
+        font-size: 18px;
+    }
+
+    .Map img {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .Copyright-text {
+        font-size: 12px;
+    }
+
+    .social-icons {
+        gap: 15px;
+    }
+
+    .form-input,
+    .signup-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}

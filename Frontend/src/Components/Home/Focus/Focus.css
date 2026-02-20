@@ -1,0 +1,534 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&display=swap');
+
+.Focus-main-container {
+    padding: 0px 20px;
+    padding-top: 40px;
+    background-color: #fffdf9;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Features Section */
+.Features-Section {
+    padding: 0px 30px;
+    width: 100%;
+}
+
+.Focus {
+    width: 100%;
+    padding: 80px 20px;
+    background-color: #ffffff;
+    margin-bottom: 40px;
+}
+
+.Focus-Box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    justify-content: space-around;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.Focus-Box:hover {
+    transform: translateY(-5px);
+}
+
+.Focus-Box-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.Features-Section-Box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Features-Section-text {
+    text-align: center;
+    font-size: 24px;
+    font-family: "Cormorant Garamond", serif;
+    line-height: 25px;
+}
+
+.Features-Section-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+}
+
+.product-video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    /* optional */
+}
+
+.Features-Section-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.Focus-Box-image img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.Focus-Box:hover .focus-icon {
+    color: #6B5B47;
+    transform: scale(1.1);
+}
+
+.Focus-Box-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.focus-title {
+    font-size: clamp(12px, 2.5vw, 14px);
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #333;
+}
+
+.focus-subtitle {
+    font-size: clamp(12px, 2.5vw, 14px);
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #666;
+    font-family: 'Playfair Display', serif;
+}
+
+/* Product Section */
+.Focus-Product {
+    padding: 0px 20px;
+    width: 100%;
+}
+
+.Focus-Product-Image-Box {
+    width: 100%;
+    padding: 20px 0px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.Focus-Product-Image-Box img {
+    width: 100%;
+    height: auto;
+    min-height: 300px;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 2px;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.Focus-Product-Image-Box:hover img {
+    transform: scale(1.05);
+}
+
+.Focus-Product-Content-Box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 40px 80px;
+    position: relative;
+}
+
+.Focus-Product-Box-title {
+    font-size: clamp(40px, 8vw, 80px);
+    line-height: 1.1;
+    font-weight: 100;
+    color: #494a4a;
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+    word-break: break-word;
+    font-family: 'Georgia', serif;
+    hyphens: auto;
+}
+
+.Explore-Features {
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+.explore-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    background-color: #e8e5e2;
+    color: #494a4a;
+    cursor: pointer;
+    font-size: clamp(14px, 3vw, 25px);
+    margin-right: 20px;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+    white-space: nowrap;
+    min-width: fit-content;
+    font-weight: 500;
+    font-family: "Quicksand", sans-serif;
+}
+
+.explore-btn:hover {
+    background-color: #d8d5d2;
+    transform: translateY(-2px);
+}
+
+.decorative-line {
+    width: clamp(60px, 15vw, 150px);
+    height: clamp(2px, 1vw, 10px);
+    background-color: #6b6f74;
+    border-radius: 2px;
+}
+
+/* Responsive Design Breakpoints */
+
+/* Extra Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .Focus-Product {
+        padding-left: 70px;
+    }
+
+    .Features-Section-image img {
+        width: 70%;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: 500px;
+    }
+
+    .Focus-Product-Box-title {
+        font-size: clamp(32px, 8vw, 70px);
+    }
+}
+
+/* Large devices (desktops, 992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .Focus-Product {
+        padding-left: 40px;
+    }
+
+    .Focus-Product-Box-title {
+        font-size: clamp(32px, 8vw, 40px);
+    }
+
+    .Features-Section-image img {
+        width: 75%;
+    }
+
+    .Focus-Product-Content-Box {
+        padding: 35px 25px;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: 450px;
+    }
+}
+
+/* Medium devices (tablets, 768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .Focus-main-container {
+        padding: 30px 15px;
+    }
+
+    .Focus {
+        padding: 60px 15px;
+    }
+
+    .Features-Section {
+        padding: 0px 15px;
+    }
+
+    .Features-Section-image img {
+        width: 85%;
+    }
+
+    .Focus-Product-Box-title {
+        text-align: start;
+        font-size: clamp(32px, 8vw, 50px);
+    }
+
+    .Focus-Product {
+        padding: 0px 15px;
+    }
+
+    .Focus-Product-Content-Box {
+        padding: 30px 20px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: 400px;
+    }
+
+    .explore-btn {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
+
+/* Small devices (landscape phones, 576px to 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+    .Focus-main-container {
+        padding: 20px 10px;
+    }
+
+    .Focus {
+        padding: 40px 10px;
+        margin-bottom: 30px;
+    }
+
+    .Features-Section {
+        padding: 0px 10px;
+    }
+
+    .Features-Section-image img {
+        width: 90%;
+    }
+
+    .Focus-Box {
+        margin-bottom: 30px;
+        padding: 15px;
+    }
+
+    .Focus-Product {
+        padding: 0px 10px;
+    }
+
+    .Focus-Product-Content-Box {
+        padding: 25px 15px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: 300px;
+    }
+
+    .explore-btn {
+        padding: 10px 20px;
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575px) {
+    .Focus-main-container {
+        padding: 15px 5px;
+    }
+
+    .Focus {
+        padding: 30px 5px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+    }
+
+    .Features-Section {
+        padding: 0px 5px;
+    }
+
+    .Features-Section-image img {
+        width: 95%;
+    }
+
+    .Focus-Box {
+        padding: 15px 10px;
+        margin-bottom: 20px;
+    }
+
+    .Focus-Product {
+        padding: 0px 5px;
+    }
+
+    .Focus-Product-Content-Box {
+        padding: 20px 10px;
+        text-align: center;
+        align-items: center;
+    }
+
+    .Focus-Product-Image-Box {
+        padding: 15px 0;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: 250px;
+        min-height: 200px;
+    }
+
+    .Focus-Product-Box-title {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .explore-btn {
+        padding: 10px 15px;
+        width: 100%;
+        max-width: 180px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .Explore-Features {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+    }
+    .Features-Section-text  {
+        font-size: 19px;
+        letter-spacing: 1px;
+    }
+}
+
+/* Ultra small devices (very small phones, less than 400px) */
+@media (max-width: 399px) {
+    .Focus-main-container {
+        padding: 10px 3px;
+    }
+
+    .Focus {
+        padding: 25px 3px;
+    }
+
+    .Features-Section {
+        padding: 0px 3px;
+    }
+
+    .Features-Section-image img {
+        width: 98%;
+    }
+
+    .Focus-Box {
+        padding: 12px 8px;
+    }
+
+    .Focus-Product {
+        padding: 0px 3px;
+    }
+
+    .Focus-Product-Content-Box {
+        padding: 15px 8px;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: 200px;
+        min-height: 150px;
+    }
+
+    .explore-btn {
+        padding: 8px 12px;
+        max-width: 150px;
+        font-size: 12px;
+    }
+    .Features-Section-text  {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+}
+
+/* Animation for scroll effects */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.Focus-Box {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.Focus-Box:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.Focus-Box:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.Focus-Box:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.Focus-Box:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.h-auto {
+    height: auto;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.explore-btn:focus {
+    outline: 2px solid #6B5B47;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .Focus-main-container {
+        padding: 20px;
+        background-color: white;
+    }
+
+    .Focus-Product-Image-Box img {
+        height: auto;
+        max-height: 300px;
+    }
+
+    .explore-btn {
+        display: none;
+    }
+}
+
+

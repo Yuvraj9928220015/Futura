@@ -1,0 +1,508 @@
+/* Product Component Styles */
+.product-wrapper {
+    width: 100%;
+    background-color: #fffdf9;
+    min-height: 100vh;
+}
+
+/* Three Panel Slider Styles */
+.threePanelSlider {
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    margin: 0;
+    margin-top: 40px;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.sliderContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0px;
+    margin-top: 100px;
+    gap: 40px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.panel {
+    position: relative;
+    height: 70vh;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    min-width: 0;
+    flex-shrink: 0;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel:hover {
+    transform: scale(1.02);
+}
+
+.panelImage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.leftPanel {
+    flex: 0.2;
+    opacity: 1;
+    filter: brightness(0.7);
+}
+
+.leftPanel.transitioning {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+.centerPanel {
+    flex: 0.6;
+    z-index: 10;
+    opacity: 1;
+}
+
+.centerPanel.transitioning {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+.rightPanel {
+    flex: 0.2;
+    opacity: 1;
+    filter: brightness(0.7);
+}
+
+.rightPanel.transitioning {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+.panelOverlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    opacity: 1;
+}
+
+.panelNumber {
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #00000099;
+    border: 2px solid #ffffffcc;
+    transition: all 0.3s ease;
+}
+
+.contentOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, #000000cc);
+    padding: 40px 30px 30px;
+}
+
+.slideContent {
+    color: white;
+    text-align: center;
+}
+
+.slideTitle {
+    font-size: 2.5rem;
+    font-weight: 300;
+    font-family: 'Georgia', serif;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.5rem 0;
+    transition: all 0.3s ease;
+}
+
+.slideSubtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 300;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #333;
+    box-shadow: 0 4px 20px #00000026;
+}
+
+.navBtn:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 25px #00000033;
+}
+
+.navBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: translateY(-50%) scale(1);
+}
+
+.prevBtn {
+    left: 30px;
+}
+
+.nextBtn {
+    right: 30px;
+}
+
+.slideIndicators {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 15;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #ffffff80;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.indicator:hover {
+    border-color: #ffffffcc;
+    transform: scale(1.1);
+}
+
+.activeIndicator {
+    background: white;
+    border-color: white;
+    transform: scale(1.25);
+}
+
+
+.Product-Container-title {
+    font-size: 3rem;
+    text-align: center;
+    font-family: 'Georgia', serif;
+    font-weight: 300;
+    color: #333;
+    margin-bottom: 40px;
+    letter-spacing: 0.02em;
+}
+
+.Product-Container-image {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.Product-Container-image img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Product-Container-des */
+.Product-Container-des {
+    padding-bottom: 70px;
+}
+
+.Product-Container-des p {
+    font-size: 18px;
+    letter-spacing: 1.4px;
+    padding-bottom: 15px;
+}
+
+.Product-Container-des p span {
+    font-size: 40px;
+    letter-spacing: 1px;
+    padding-bottom: 15px;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(520px, 3fr));
+    gap: 40px;
+    margin: 0 auto;
+}
+
+.no-projects {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.no-projects p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 0;
+}
+
+.Projects-Box {
+    overflow: hidden;
+    /* box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+}
+
+
+.project-image-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Projects-Box:hover .project-image {
+    transform: scale(1.1);
+}
+
+.project-overlay {
+    position: absolute;
+    inset: 0;
+    background: #00000000;
+    transition: background 0.3s ease;
+}
+
+.Projects-Box:hover .project-overlay {
+    background: #0000001a;
+}
+
+.Projects-Box-main-heading {
+    font-size: 20px;
+    font-weight: 400;
+    font-family: 'Georgia', serif;
+    color: #333;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+    line-height: 1.4;
+}
+
+.Projects-Box-main-des {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+}
+
+.Projects-Box:hover .Projects-Box-main-des {
+    color: #333;
+}
+
+.project-category {
+    margin-top: 20px;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: capitalize;
+    transition: all 0.3s ease;
+}
+
+/* Category Badge Colors */
+.category-apollo {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.category-americana {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.category-autorevolution {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+}
+
+.category-marinerevolution {
+    background: rgba(168, 85, 247, 0.1);
+    color: #a855f7;
+}
+
+.category-matrix {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.category-polaris {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.category-promorevolution {
+    background: rgba(236, 72, 153, 0.1);
+    color: #ec4899;
+}
+
+.category-rudra {
+    background: rgba(139, 69, 19, 0.1);
+    color: #8b4513;
+}
+
+.category-runaboutglaucus {
+    background: rgba(6, 182, 212, 0.1);
+    color: #06b6d4;
+}
+
+.category-xtreme {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+
+.category-offroad {
+    background: rgba(101, 163, 13, 0.1);
+    color: #65a30d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .threePanelSlider {
+        height: 70vh;
+        margin-top: 20px;
+    }
+
+    .sliderContainer {
+        padding: 20px 10px;
+        margin-top: 50px;
+        gap: 15px;
+    }
+
+    .panel {
+        height: 50vh;
+    }
+
+    .slideTitle {
+        font-size: 1.8rem;
+    }
+
+    .slideSubtitle {
+        font-size: 1rem;
+    }
+
+    .navBtn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .prevBtn {
+        left: 15px;
+    }
+
+    .nextBtn {
+        right: 15px;
+    }
+
+    .Product-Container {
+        padding: 40px 20px;
+    }
+
+    .Product-Container-title {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+    }
+
+    .search-filter-container {
+        padding: 20px;
+        border-width: 3px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .Projects-Box-main-heading {
+        font-size: 1.2rem;
+    }
+
+    .project-content {
+        padding: 20px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .search-filter-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .category-select-wrapper {
+        min-width: 250px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .sliderContainer {
+        gap: 25px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .search-filter-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .category-select-wrapper {
+        min-width: 300px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1400px) {
+    .projects-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
