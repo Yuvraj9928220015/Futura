@@ -5,9 +5,9 @@ import { FiMinus } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import "./Product.css";
 
-// ✅ FIXED: Relative URLs - Live server par kaam karega
-const API_URL = "http://82.25.91.73:8000/api/products";
-const BASE_URL = "http://82.25.91.73:8000";
+// ✅ FIXED: Absolute API URL
+const API_URL = "http://api.futuratextiles.in/api/products";
+const BASE_URL = "http://api.futuratextiles.in";
 
 // Category hierarchy mapping
 const CATEGORY_HIERARCHY = {
@@ -186,10 +186,18 @@ const Product = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await fetch(API_URL);
+
+            // ✅ FIXED: Added proper headers for cross-origin request
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            });
 
             if (!response.ok) {
-                throw new Error('Failed to fetch products');
+                throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.json();
@@ -478,6 +486,17 @@ const Product = () => {
         }).length;
     };
 
+    // ✅ FIXED: Image URL helper function
+    const getImageUrl = (imagePath) => {
+        if (!imagePath) return "https://via.placeholder.com/400x300?text=No+Image";
+        // Agar already full URL hai
+        if (imagePath.startsWith('http')) return imagePath;
+        // Agar path mein uploads already hai
+        if (imagePath.startsWith('/uploads')) return `${BASE_URL}${imagePath}`;
+        // Normal path
+        return `${BASE_URL}/uploads/${imagePath}`;
+    };
+
     return (
         <>
             <div className="product-wrapper">
@@ -566,7 +585,21 @@ const Product = () => {
                             margin: '1rem 0',
                             textAlign: 'center'
                         }}>
-                            {error}
+                            ❌ Error: {error}
+                            <button
+                                onClick={fetchProducts}
+                                style={{
+                                    marginLeft: '10px',
+                                    padding: '5px 10px',
+                                    background: '#c33',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                Retry
+                            </button>
                         </div>
                     )}
 
@@ -827,12 +860,16 @@ const Product = () => {
                                         <div key={product._id} className="Projects-Box-new">
                                             <div className="project-image-wrapper">
                                                 <Link to={`/ProductDetail/${product._id}`} className="project-image-link">
+                                                    {/* ✅ FIXED: Using getImageUrl helper */}
                                                     <img
                                                         src={product.image && product.image.length > 0
-                                                            ? `${BASE_URL}/${product.image[0]}`
+                                                            ? getImageUrl(product.image[0])
                                                             : "https://via.placeholder.com/400x300?text=No+Image"}
                                                         alt={product.title || 'Product'}
                                                         className="project-image"
+                                                        onError={(e) => {
+                                                            e.target.src = "https://via.placeholder.com/400x300?text=No+Image";
+                                                        }}
                                                     />
                                                     <div className="project-overlay"></div>
                                                 </Link>
@@ -850,7 +887,7 @@ const Product = () => {
                                                                 {product.icons.map((icon, index) => (
                                                                     <img
                                                                         key={index}
-                                                                        src={`${BASE_URL}/${icon}`}
+                                                                        src={getImageUrl(icon)}
                                                                         alt={`Icon ${index + 1}`}
                                                                         className="products-icon-item"
                                                                         style={{
@@ -858,6 +895,9 @@ const Product = () => {
                                                                             height: '80px',
                                                                             objectFit: 'contain',
                                                                             marginLeft: '5px'
+                                                                        }}
+                                                                        onError={(e) => {
+                                                                            e.target.style.display = 'none';
                                                                         }}
                                                                     />
                                                                 ))}
