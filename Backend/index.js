@@ -23,7 +23,14 @@ console.log('Database Type:', dbType);
 console.log('MongoDB URL:', MONGO_URL.substring(0, 40) + '...');
 
 // Middleware
-app.use(cors());
+const cors = require("cors");
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET","POST","PUT","DELETE"],
+  credentials: true
+}));
+
 app.use(express.json({ limit: '500mb' }));
 app.use(express.urlencoded({ limit: '500mb', extended: true }));
 

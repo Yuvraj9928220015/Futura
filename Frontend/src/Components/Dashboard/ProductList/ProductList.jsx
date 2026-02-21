@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./ProductList.css";
 
-const API_URL = "http://localhost:8000/api/products";
+const API_URL = "http://82.25.91.73:8000/api/products";
 const LOGIN_API_URL = "http://localhost:8000/api/auth/login";
 
 const Navbar = ({ onAddProductClick, onLogout }) => {

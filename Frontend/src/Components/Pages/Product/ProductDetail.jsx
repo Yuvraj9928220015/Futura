@@ -5,7 +5,7 @@ import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icon
 
 import "./ProductDetail.css"
 
-const API_URL = "http://localhost:8000/api/products";
+const API_URL = "http://82.25.91.73:8000/api/products";
 
 const ProductDetail = () => {
     const { id } = useParams();

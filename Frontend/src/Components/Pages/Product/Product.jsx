@@ -5,7 +5,9 @@ import { FiMinus } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import "./Product.css";
 
-const API_URL = "http://localhost:8000/api/products";
+// ✅ FIXED: Relative URLs - Live server par kaam karega
+const API_URL = "http://82.25.91.73:8000/api/products";
+const BASE_URL = "http://82.25.91.73:8000";
 
 // Category hierarchy mapping
 const CATEGORY_HIERARCHY = {
@@ -153,7 +155,7 @@ const Product = () => {
         {
             id: 3,
             image: "/Product-Banner-3.png",
-            title: " Automotive",
+            title: "Automotive",
             subtitle: "Contemporary living spaces",
             description: "Innovative design meets functional living",
             category: "automotive"
@@ -287,7 +289,6 @@ const Product = () => {
             features: Array.from(newDynamicOptions.features.values()).sort((a, b) => a.label.localeCompare(b.label))
         });
     };
-
 
     const nextSlide = () => {
         if (isTransitioning) return;
@@ -828,7 +829,7 @@ const Product = () => {
                                                 <Link to={`/ProductDetail/${product._id}`} className="project-image-link">
                                                     <img
                                                         src={product.image && product.image.length > 0
-                                                            ? `http://localhost:8000/${product.image[0]}`
+                                                            ? `${BASE_URL}/${product.image[0]}`
                                                             : "https://via.placeholder.com/400x300?text=No+Image"}
                                                         alt={product.title || 'Product'}
                                                         className="project-image"
@@ -842,14 +843,14 @@ const Product = () => {
                                                         {product.title || 'Untitled Product'}
                                                     </Link>
 
-                                                    {/* UPDATED: Display product icons instead of SVG */}
+                                                    {/* Display product icons */}
                                                     <div className="Projects-Box-svg">
                                                         {product.icons && product.icons.length > 0 ? (
                                                             <div className="product-icons-display">
                                                                 {product.icons.map((icon, index) => (
                                                                     <img
                                                                         key={index}
-                                                                        src={`http://localhost:8000/${icon}`}
+                                                                        src={`${BASE_URL}/${icon}`}
                                                                         alt={`Icon ${index + 1}`}
                                                                         className="products-icon-item"
                                                                         style={{
@@ -885,4 +886,4 @@ const Product = () => {
     );
 };
 
-export default Product; 
+export default Product;
