@@ -4,6 +4,9 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
+console.log("ADMIN EMAIL:", process.env.ADMIN_EMAIL);
+console.log("ADMIN PASSWORD:", process.env.ADMIN_PASSWORD);
+
 const app = express();
 
 const MONGO_URL = process.env.MONGO_URL;
