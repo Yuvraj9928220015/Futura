@@ -21,24 +21,17 @@ const dbType = MONGO_URL.includes('mongodb+srv') ? '☁️  MongoDB Atlas (Live)
 console.log('Database Type:', dbType);
 console.log('MongoDB URL:', MONGO_URL.substring(0, 40) + '...');
 
-// ✅ FIX 1: Sabse pehle manual CORS headers (most reliable method)
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.setHeader("Access-Control-Max-Age", "86400");
-
-    if (req.method === "OPTIONS") {
-        return res.status(200).end();
-    }
-    next();
-});
-
-// ✅ FIX 2: cors package double safety ke liye
+// ✅ FIXED: Sirf cors() — app.options bilkul nahi, wahi crash karta tha
 app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"],
+    origin: [
+        'https://futuratextiles.in',
+        'https://www.futuratextiles.in',
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://localhost:4173',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
     credentials: false
 }));
 

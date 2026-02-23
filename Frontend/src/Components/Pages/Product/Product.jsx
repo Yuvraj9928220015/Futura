@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 import "./Product.css";
 
 // ✅ FIXED: Absolute API URL
-const API_URL = "http://api.futuratextiles.in/api/products";
-const BASE_URL = "http://api.futuratextiles.in";
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in/api/products';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in';
 
 // Category hierarchy mapping
 const CATEGORY_HIERARCHY = {
