@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Categories.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
@@ -7,99 +7,157 @@ const categoryData = {
         latest: 'LATEST COLLECTION',
         title: 'Apollo',
         description: 'The unique 4 way stretch of this vinyl makes it perfect for contouring around any frame securing a snuggle, waterproof fit. Futura a Apollo 360 degrees 4-way stretch features a contemporary color line and is preferred as a perfect seating in marine, healthcare, ergonomic contract furnishings and much more.',
-        image1: 'Apollo-2.png',
-        image2: 'Apollo-3.png',
+        image1: 'Apollo-image-2.png',
+        image2: 'Apollo-image-1.png',
     },
     Americana: {
         latest: 'LATEST COLLECTION',
         title: 'Americana',
-        description: 'Americana passes the flammability tests which are of utmost importance. Determines the burn resistance capabilities of materials used in Marine, contract furnishing and healthcare. Passes fire-test-response standard, designed for the assessment of the resistance of our applications when it comes to combustion after exposure to smouldering cigarettes.',
-        image1: 'Americana-2.png',
-        image2: 'Americana-1.png',
-    },
-    'Auto Revolution': {
-        latest: 'NEW RELEASE',
-        title: 'Auto Revolution',
-        description: 'Auto Revolution synthetic leather is resistant to weather, abrasions, UV radiations and biological fluids. They can be characterized by a wide range of thickness, embossing, colors, patterns and color fastness. Mostly used for automotive and trucking surfaces',
-        image1: 'Auto_Revolution-image.png',
-        image2: 'Auto_Revolution-image-1.JPG',
-    },
-    'Marien Revolution': {
-        latest: 'SPRING COLLECTION',
-        title: 'Marien Revolution',
-        description: 'Marien Revolution passes the flammability tests which are of utmost importance. Determines the burn resistance capabilities of materials used in Marine, contract furnishing and healthcare. Passes fire-test-response standard, designed for the assessment of the resistance of our applications when it comes to combustion after exposure to smouldering cigarettes.',
-        image1: '1eb.jpg',
-        image2: 'In-grid-2.webp',
+        description: 'Americana passes the flammability tests which are of utmost importance. Determines the burn resistance capabilities of materials used in Marine, contract furnishing and healthcare. Passes fire-test-response standard.',
+        image1: 'image (2).png',
+        image2: 'image (4).png',
     },
     Matrix: {
         latest: 'SEASONAL FAVORITE',
         title: 'Matrix',
         description: 'It is ideal for contract and hospitality applications and combines the practicality of a PVC coated artificial leather with a real leather finish. Even in the most demanding contract environments, they are cleanable, chemical resistant, and super durable.',
-        image1: 'd7b.jpg',
-        image2: 'In-grid-2.webp',
+        image1: 'Matrix-image-2.png',
+        image2: 'Matrix-image-1.png',
     },
-    Polaris: {
-        latest: 'WINTER COLLECTION',
-        title: 'Polaris',
-        description: 'Polaris is the luxury artificial leather having a unique depth of quality and is extremely fire retardant, waterproof and anti microbial. It is approved for deep, infection control cleaning making it ideally suited for severe contract/hospitality and automotive upholstery',
-        image1: '1eb.jpg',
-        image2: 'In-grid-2.webp',
+    Suave: {
+        latest: 'SEASONAL FAVORITE',
+        title: 'Suave',
+        description: 'It is ideal for contract and hospitality applications and combines the practicality of a PVC coated artificial leather with a real leather finish. Even in the most demanding contract environments, they are cleanable, chemical resistant, and super durable.',
+        image1: 'Sauve-image-3.png',
+        image2: 'Suave-New-image-1.png',
     },
-    'Promo Revolution': {
-        latest: 'SPECIAL EDITION',
-        title: 'Promo Revolution',
-        description: 'From steering wheels to door trims, our designs enable the automotive interior industry to choose materials for next generation. Promo Rev strive for a cleaner and more sustainable design, with appealing, long-lasting materials for automotive interior surfaces.',
-        image1: 'd7b.jpg',
-        image2: 'In-grid-2.webp',
+    Offroad: {
+        latest: 'SUMMER LINE',
+        title: 'Offroad',
+        description: 'Rich in style and aesthetics, Runabout designs are sturdy and high in performance. The breathability aspect of this vinyl material makes it extremely comfortable to cover automotive and marine surfaces.',
+        image1: 'OffRoad-New-image-2.JPG',
+        image2: 'OffRoad-image-1.png',
     },
-    Rudra: {
-        latest: 'CULTURAL COLLECTION',
-        title: 'Rudra',
-        description: 'The Rudra collection is a powerful statement of tradition and strength, inspired by ancient motifs and crafted with modern precision.',
-        image1: '1eb.jpg',
-        image2: 'In-grid-2.webp',
+    Poseiden: {
+        latest: 'ATHLETIC WEAR',
+        title: 'Poseiden',
+        description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout makes it extremely comfortable to cover automotive and marine surfaces.',
+        image1: 'Poseiden-image-1.JPG',
+        image2: 'Poseiden-image-2.png',
     },
     'Runabout Glaucus': {
         latest: 'SUMMER LINE',
         title: 'Runabout Glaucus',
         description: 'Rich in style and aesthetics, Runabout designs are sturdy and high in performance. The breathability aspect of this vinyl material makes it extremely comfortable to cover automotive and marine surfaces.',
-        image1: 'd7b.jpg',
-        image2: 'In-grid-2.webp',
+        image1: 'Runabout-New-image-1.png',
+        image2: 'Runabout-New-image-2.JPG',
     },
-    Extreme: {
-        latest: 'ATHLETIC WEAR',
-        title: 'Extreme', 
-        description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout',
-        image1: '1eb.jpg',
-        image2: 'In-grid-2.webp',
-    },
+    // 'Auto Revolution': {
+    //     latest: 'NEW RELEASE',
+    //     title: 'Auto Revolution',
+    //     description: 'Auto Revolution synthetic leather is resistant to weather, abrasions, UV radiations and biological fluids. They can be characterized by a wide range of thickness, embossing, colors, patterns and color fastness. Mostly used for automotive and trucking surfaces.',
+    //     image1: 'Auto_Revolution-image.png',
+    //     image2: 'Auto_Revolution-image-1.JPG',
+    // },
+    // 'Marien Revolution': {
+    //     latest: 'SPRING COLLECTION',
+    //     title: 'Marien Revolution',
+    //     description: 'Marien Revolution passes the flammability tests which are of utmost importance. Determines the burn resistance capabilities of materials used in Marine, contract furnishing and healthcare. Passes fire-test-response standard.',
+    //     image1: '1eb.jpg',
+    //     image2: 'In-grid-2.webp',
+    // },
+    // 'Promo Revolution': {
+    //     latest: 'SPECIAL EDITION',
+    //     title: 'Promo Revolution',
+    //     description: 'From steering wheels to door trims, our designs enable the automotive interior industry to choose materials for next generation. Promo Rev strive for a cleaner and more sustainable design, with appealing, long-lasting materials for automotive interior surfaces.',
+    //     image1: 'image-2.png',
+    //     image2: 'Apollo-3.png',
+    // },
+    // Extreme: {
+    //     latest: 'ATHLETIC WEAR',
+    //     title: 'Extreme',
+    //     description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout makes it extremely comfortable to cover automotive and marine surfaces.',
+    //     image1: '1eb.jpg',
+    //     image2: 'In-grid-2.webp',
+    // },
 };
 
 export default function Categories() {
     const categoryNames = Object.keys(categoryData);
+
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
+    const [displayIndex, setDisplayIndex] = useState(0);
+
+    const [contentAnim, setContentAnim] = useState('idle');
+    const [imagesAnim, setImagesAnim] = useState('idle');
+
+    const isAnimating = useRef(false);
+
+    const changeSlide = (newIndex, direction) => {
+        if (isAnimating.current) return;
+        isAnimating.current = true;
+
+        // ── Phase 1: EXIT ──
+        setContentAnim('exit');
+        setImagesAnim(direction === 'next' ? 'exit-left' : 'exit-right');
+
+        setTimeout(() => {
+            setDisplayIndex(newIndex);
+            setCurrentSlideIndex(newIndex);
+
+            setContentAnim('enter');
+            setImagesAnim(direction === 'next' ? 'enter-right' : 'enter-left');
+
+            setTimeout(() => {
+                setContentAnim('idle');
+                setImagesAnim('idle');
+                isAnimating.current = false;
+            }, 500);
+        }, 400);
+    };
+
     const nextSlide = () => {
-        setCurrentSlideIndex((prevIndex) => (prevIndex + 1) % categoryNames.length);
+        const newIndex = (currentSlideIndex + 1) % categoryNames.length;
+        changeSlide(newIndex, 'next');
     };
 
     const prevSlide = () => {
-        setCurrentSlideIndex((prevIndex) => (prevIndex - 1 + categoryNames.length) % categoryNames.length);
+        const newIndex = (currentSlideIndex - 1 + categoryNames.length) % categoryNames.length;
+        changeSlide(newIndex, 'prev');
     };
-
-    useEffect(() => {
-        const interval = setInterval(nextSlide, 5000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const currentCategoryName = categoryNames[currentSlideIndex];
-    const selectedData = categoryData[currentCategoryName];
 
     const goToSlide = (index) => {
-        setCurrentSlideIndex(index);
+        if (index === currentSlideIndex || isAnimating.current) return;
+        const direction = index > currentSlideIndex ? 'next' : 'prev';
+        changeSlide(index, direction);
     };
 
-    console.log(goToSlide);
+    // Auto-play
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const newIndex = (currentSlideIndex + 1) % categoryNames.length;
+            changeSlide(newIndex, 'next');
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [currentSlideIndex]);
+
+    const selectedData = categoryData[categoryNames[displayIndex]];
+
+    // ── Map state → CSS class ──
+    const contentClass = {
+        idle: '',
+        exit: 'content-exit',
+        enter: 'content-enter',
+    }[contentAnim] || '';
+
+    const imagesClass = {
+        idle: '',
+        'exit-left': 'images-exit-left',
+        'exit-right': 'images-exit-right',
+        'enter-right': 'images-enter-right',
+        'enter-left': 'images-enter-left',
+    }[imagesAnim] || '';
 
     return (
         <>
@@ -112,13 +170,22 @@ export default function Categories() {
 
             <div className="Categories-Container">
                 <div className="Slider-Wrapper">
-                    <button onClick={prevSlide} className="Slider-Button prev-button" aria-label="Previous slide">
+
+                    {/* ── Prev Button ── */}
+                    <button
+                        onClick={prevSlide}
+                        className="Slider-Button prev-button"
+                        aria-label="Previous slide"
+                    >
                         <FaChevronLeft />
                     </button>
 
-                    <div data-aos="zoom-in" className="Slider-Content-Container">
+                    {/* ── Slider Content ── */}
+                    <div className="Slider-Content-Container">
                         <div className="Categories-Content-Box">
-                            <div className="Categories-Box-content">
+
+                            {/* ── LEFT: Text Content (FADE only) ── */}
+                            <div className={`Categories-Box-content ${contentClass}`}>
                                 <div className="Categories-Box-Latest">{selectedData.latest}</div>
                                 <div className="Categories-Box-title">{selectedData.title}</div>
                                 <div className="Categories-Box-des">{selectedData.description}</div>
@@ -127,7 +194,8 @@ export default function Categories() {
                                 </div>
                             </div>
 
-                            <div className="Categories-Images-Container">
+                            {/* ── RIGHT: Images (SLIDE animation) ── */}
+                            <div className={`Categories-Images-Container ${imagesClass}`}>
                                 <div className="Categories-Image-1">
                                     <img src={selectedData.image1} alt={selectedData.title} />
                                 </div>
@@ -135,10 +203,16 @@ export default function Categories() {
                                     <img src={selectedData.image2} alt={selectedData.title} />
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
-                    <button onClick={nextSlide} className="Slider-Button next-button" aria-label="Next slide">
+                    {/* ── Next Button ── */}
+                    <button
+                        onClick={nextSlide}
+                        className="Slider-Button next-button"
+                        aria-label="Next slide"
+                    >
                         <FaChevronRight />
                     </button>
                 </div>

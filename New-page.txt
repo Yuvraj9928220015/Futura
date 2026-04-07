@@ -1,0 +1,355 @@
+jsx
+
+import React from 'react';
+import './Sustainability.css';
+
+export default function Sustainability() {
+    return (
+        <>
+            <div className="sustainability">
+                <div className="sustainability-banner">
+
+                    {/* Believe */}
+                    <div className="Believe">
+                        <div id='Believe-container' className="container">
+                            <div className="Believe-Section">
+                                <div className="Believe-Section-1">
+                                    <div className="Believe-main-Section-1">
+                                        <img src="/sustainability-new-image.jpeg" alt="" />
+                                        <div className='Believe-main-Section-logo'><img src="/Futura-new-logo.png" alt="" /></div>
+                                        <div className='Believe-main-Section-content'><img src="/Sustainability-text-1.png" alt="" /></div>
+                                    </div>
+                                    <div className="Believe-main-Section-2">
+                                        <img src="/0001.png" alt="" />
+                                    </div>
+                                </div>
+                                <div className="Believe-Section-2">
+                                    <div className="Believe-main-Section-3">
+                                        <div className="Believe-main-Section-list">
+                                            <ul>
+                                                <li>CSR</li>
+                                                <li>Sustainable Product</li>
+                                            </ul>
+                                        </div>
+                                        <div className="Believe-main-Section-title">
+                                            Building responsibly today, <br /> for a better tomorrow.
+                                        </div>
+                                        <div className="Believe-main-Section-Subtitle">
+                                            At Mayur, sustainability is not a trend — it is a long‑term commitment embedded into our products, processes, and people‑first initiatives.
+                                        </div>
+                                        <div className="Believe-main-Section-btn"><button>Download Report</button></div>
+                                    </div>
+                                    <div className="Believe-main-Section-4">
+                                        <div className="Compact-title">UN Global Compact (UNGC) Commitment</div>
+                                        <div className="Compact-subtitle">Aligned with global goals. Accountable to the future.</div>
+                                        <div className="Compact-des">Mayur has been a proud member of the United Nations Global <br /> Compact since 2020.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                {/* Corporate section - slides over Believe */}
+                <div className="Corporate">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-6">
+                                <div className="Corporate-Box-1">
+                                    <div className="Corporate-Box-title">Corporate Social Responsibility</div>
+                                    <div className="Corporate-Box-Subtitle">Responsibility beyond business. Impact beyond numbers.</div>
+                                    <div className="Corporate-Box-des">
+                                        At Mayur, CSR is an integral part of our identity. Our initiatives are focused on environmental stewardship,
+                                        social development, and long‑term community impact.
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <div className="Corporate-Box-2">
+                                     <div className='Corporate-Box-image'>
+                                         <img src="/0003.png" alt="" />
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
+
+
+
+
+
+
+CSS
+
+
+/* Sustainability Component Styles */
+.sustainability {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* ✅ STICKY — neeche wala section iske upar aayega */
+.sustainability-banner {
+    background-image: url(/public/sustainability-Banner-1.png);
+    width: 100%;
+    /* background-attachment: fixed; */
+    padding: 100px 0px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.Believe-banner {
+    background-attachment: fixed;
+    width: 100%;
+    /* height: 105px; */
+    background: #ffffff1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Believe-Section {
+    margin: 100px;
+    border-radius: 20px;
+    width: 100%;
+    height: 90vh;
+    background-color: #ffffff52;
+    display: flex;
+    border: 1px solid #ffffff36;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    padding: 10px;
+    background-attachment: fixed;
+}
+
+.Believe {
+    padding: 10px 40px;
+}
+
+.Believe-Section-1 {
+    width: 35%;
+    height: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.Believe-Section-1 img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.4s ease;
+}
+
+.Believe-Section-1 img:hover {
+    transform: scale(1.1);
+}
+
+.Believe-Section-2 {
+    width: 65%;
+    height: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.Believe-main-Section-1 {
+    position: relative;
+    width: 100%;
+    height: 70%;
+    border: 1px solid #ffffff36;
+    border-radius: 20px;
+}
+
+.Believe-main-Section-3 {
+    position: relative;
+    width: 100%;
+    height: 70%;
+    border: 1px solid #ffffff36;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.Believe-main-Section-logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+
+.Believe-main-Section-content {
+    position: absolute;
+    top: 55%;
+    left: 0px;
+}
+
+.Believe-main-Section-2 {
+    width: 100%;
+    height: 30%;
+    border-radius: 20px;
+    border: 1px solid #ffffff36;
+    background-color: white;
+    padding: 20px;
+}
+
+.Believe-main-Section-4 {
+    width: 100%;
+    height: 50%;
+    padding: 50px;
+    border-radius: 20px;
+    border: 1px solid #ffffff36;
+    background-image: url(/public/new.jpg);
+}
+
+.Believe-main-Section-1 img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.Believe-main-Section-list ul {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 30px;
+    padding: 40px;
+    color: #363636;
+    text-transform: uppercase;
+    list-style: none;
+}
+
+.Believe-main-Section-list ul li {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.Believe-main-Section-title {
+    padding: 30px 80px;
+    line-height: 45px;
+    font-size: 40px;
+}
+
+.Believe-main-Section-btn {
+    margin-top: 0px;
+    padding: 50px 76px;
+}
+
+.Believe-main-Section-btn button {
+    text-transform: uppercase;
+    padding: 10px 20px;
+    font-weight: 500;
+    border: 1px solid white;
+    background-color: #4b6205;
+    color: white;
+    border-radius: 50px;
+}
+
+.Believe-main-Section-content img {
+    width: 90%;
+    left: 30px;
+    bottom: 40px;
+}
+
+.Believe-main-Section-Subtitle {
+    padding: 0px 80px;
+    margin-top: 30px;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.Believe-main-Section-2 img {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.Compact-title {
+    line-height: 40px;
+    font-size: 40px;
+    color: white;
+}
+
+.Compact-subtitle {
+    margin-top: 20px;
+    font-size: 21px;
+    color: white;
+    font-style: italic;
+    padding: 10px 0px;
+}
+
+.Compact-des {
+    font-size: 19px;
+    color: white;
+}
+
+/* ✅ CORPORATE — z-index 2 se Believe ke upar slide karega */
+.Corporate {
+    position: relative;
+    z-index: 2;
+    background-image: url(/public/sustainability-Banner-3.png);
+    width: 100%;
+    height: 100vh;
+    background-repeat: no-repeat;
+    /* background-color: #fc0909; */
+    padding: 60px 0px;
+}
+
+.Corporate-Box-1 {
+    width: 100%;
+    height: 800px;
+    padding: 30px 30px;
+    /* background-color: #363636; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.Corporate-Box-2 {
+    width: 100%;
+    height: 800px;
+    padding: 30px 30px;
+    background-color: #4a6104;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Corporate-Box-title {
+    font-size: 40px;
+
+}
+
+.Corporate-Box-Subtitle {
+    font-size: 27px;
+    line-height: 35px;
+    padding: 15px 0px;
+}
+
+.Corporate-Box-des {
+    font-size: 18px;
+    line-height: 26px;
+}
+
+.Corporate-Box-image img {
+    width: 90%;
+}

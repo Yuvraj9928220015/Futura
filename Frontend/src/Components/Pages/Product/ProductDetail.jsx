@@ -5,7 +5,19 @@ import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icon
 
 import "./ProductDetail.css"
 
-const API_URL = "http://82.25.91.73:8000/api/products";
+// ✅ FIXED: Correct API URL (same as Product.jsx)
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in/api/products';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in';
+
+// ✅ FIXED: Image URL helper (same as Product.jsx)
+const getImageUrl = (imagePath) => {
+    if (!imagePath) return "/no-image.png";
+    const cleanedPath = imagePath.replace(/\\/g, '/');
+    if (cleanedPath.startsWith('http')) {
+        return cleanedPath;
+    }
+    return `${BASE_URL}/${cleanedPath}`;
+};
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -18,7 +30,6 @@ const ProductDetail = () => {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(null);
-
     const [currentVariantSlide, setCurrentVariantSlide] = useState(0);
 
     useEffect(() => {
@@ -26,10 +37,17 @@ const ProductDetail = () => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch(`${API_URL}/${id}`);
+                // ✅ FIXED: Using correct API_URL
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                });
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch product');
+                    throw new Error(`Failed to fetch product: ${response.status} ${response.statusText}`);
                 }
 
                 const data = await response.json();
@@ -69,7 +87,8 @@ const ProductDetail = () => {
             id: index + 3,
             type: "product",
             title: `${product.title} - View ${index + 3}`,
-            image: `http://localhost:8000/${img}`
+            // ✅ FIXED: Using getImageUrl instead of localhost
+            image: getImageUrl(img)
         }))
         : [
             {
@@ -130,7 +149,6 @@ const ProductDetail = () => {
         setSelectedSwatchIndex(null);
     };
 
-    // Reset to default (no variant)
     const handleDefaultSelect = () => {
         setSelectedVariantIndex(null);
         setSelectedImageIndex(0);
@@ -149,7 +167,6 @@ const ProductDetail = () => {
         }
     };
 
-    // NEW: Variant slider controls
     const nextVariantSlide = () => {
         if (currentVariantSlide < totalVariantSlides - 1) {
             setCurrentVariantSlide((prev) => prev + 1);
@@ -164,7 +181,8 @@ const ProductDetail = () => {
 
     const getMainImage = () => {
         if (currentImages && currentImages.length > 0) {
-            return `http://localhost:8000/${currentImages[selectedImageIndex]}`;
+            // ✅ FIXED: Using getImageUrl instead of localhost
+            return getImageUrl(currentImages[selectedImageIndex]);
         }
         return null;
     };
@@ -172,7 +190,8 @@ const ProductDetail = () => {
     const getBottomSampleImages = () => {
         if (currentImages && currentImages.length > 0) {
             const lastFour = currentImages.slice(-4);
-            return lastFour.map(img => `http://localhost:8000/${img}`);
+            // ✅ FIXED: Using getImageUrl instead of localhost
+            return lastFour.map(img => getImageUrl(img));
         }
 
         return [
@@ -242,7 +261,6 @@ const ProductDetail = () => {
 
     const bottomSampleImages = getBottomSampleImages();
 
-    // NEW: Get all variant items (default + variants)
     const getAllVariantItems = () => {
         const items = [];
 
@@ -282,7 +300,8 @@ const ProductDetail = () => {
                                     {(selectedSwatchIndex !== null && selectedSwatch) ? (
                                         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                                             <img
-                                                src={`http://localhost:8000/${selectedSwatch}`}
+                                                // ✅ FIXED: Using getImageUrl
+                                                src={getImageUrl(selectedSwatch)}
                                                 alt={`Swatch ${selectedSwatchIndex + 1}`}
                                                 style={{
                                                     width: '100%',
@@ -349,75 +368,49 @@ const ProductDetail = () => {
                                     )}
                                 </div>
 
-                                 {/* Image Gallery Slider Section */}
-                            <div className="product-detail-gallery-slider">
-                                <div className="gallery-slider-header">
-                                    <div className="slider-controls">
-                                        <button
-                                            className="slider-arrow prev-arrow"
-                                            onClick={prevSlide}
-                                            disabled={currentSlide === 0}
-                                        >
-                                            <MdChevronLeft />
-                                        </button>
-                                        {/* <span className="slide-indicator">
-                                            {currentSlide + 1} / {Math.max(1, totalSlides - itemsPerSlide + 1)}
-                                        </span> */}
-                                           <div className="gallery-slider-container">
-                                    <div
-                                        className="gallery-slides"
-                                        style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}
-                                    >
-                                        {galleryImages.map((image, index) => (
-                                            <div key={image.id} className="gallery-slide">
+                                {/* Image Gallery Slider Section */}
+                                <div className="product-detail-gallery-slider">
+                                    <div className="gallery-slider-header">
+                                        <div className="slider-controls">
+                                            <button
+                                                className="slider-arrow prev-arrow"
+                                                onClick={prevSlide}
+                                                disabled={currentSlide === 0}
+                                            >
+                                                <MdChevronLeft />
+                                            </button>
+                                            <div className="gallery-slider-container">
                                                 <div
-                                                    className="gallery-item"
-                                                    onClick={() => handleThumbnailClick(index)}
-                                                    style={{ cursor: 'pointer' }}
+                                                    className="gallery-slides"
+                                                    style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}
                                                 >
-                                                    <img
-                                                        src={image.image}
-                                                        alt={image.title}
-                                                        className="gallery-img"
-                                                    />
+                                                    {galleryImages.map((image, index) => (
+                                                        <div key={image.id} className="gallery-slide">
+                                                            <div
+                                                                className="gallery-item"
+                                                                onClick={() => handleThumbnailClick(index)}
+                                                                style={{ cursor: 'pointer' }}
+                                                            >
+                                                                <img
+                                                                    src={image.image}
+                                                                    alt={image.title}
+                                                                    className="gallery-img"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
                                             </div>
-                                        ))}
+                                            <button
+                                                className="slider-arrow next-arrow"
+                                                onClick={nextSlide}
+                                                disabled={currentSlide >= totalSlides - itemsPerSlide}
+                                            >
+                                                <MdChevronRight />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                                        <button
-                                            className="slider-arrow next-arrow"
-                                            onClick={nextSlide}
-                                            disabled={currentSlide >= totalSlides - itemsPerSlide}
-                                        >
-                                            <MdChevronRight />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* <div className="gallery-slider-container">
-                                    <div
-                                        className="gallery-slides"
-                                        style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}
-                                    >
-                                        {galleryImages.map((image, index) => (
-                                            <div key={image.id} className="gallery-slide">
-                                                <div
-                                                    className="gallery-item"
-                                                    onClick={() => handleThumbnailClick(index)}
-                                                    style={{ cursor: 'pointer' }}
-                                                >
-                                                    <img
-                                                        src={image.image}
-                                                        alt={image.title}
-                                                        className="gallery-img"
-                                                    />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div> */}
-                            </div>
 
                                 {/* Thumbnail with Swatch Overlay */}
                                 <div className="product-detail-thumbnail-row">
@@ -431,7 +424,8 @@ const ProductDetail = () => {
                                         {getMainImage() && currentImages && currentImages.length > 1 ? (
                                             <>
                                                 <img
-                                                    src={`http://localhost:8000/${currentImages[1]}`}
+                                                    // ✅ FIXED: Using getImageUrl
+                                                    src={getImageUrl(currentImages[1])}
                                                     alt="Second Image"
                                                     style={{
                                                         width: "100%",
@@ -452,7 +446,8 @@ const ProductDetail = () => {
                                                         overflow: 'hidden'
                                                     }}>
                                                         <img
-                                                            src={`http://localhost:8000/${selectedSwatch}`}
+                                                            // ✅ FIXED: Using getImageUrl
+                                                            src={getImageUrl(selectedSwatch)}
                                                             alt="Swatch Overlay Thumbnail"
                                                             style={{
                                                                 width: '100%',
@@ -487,57 +482,6 @@ const ProductDetail = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Image Gallery Slider Section */}
-                            {/* <div className="product-detail-gallery-slider">
-                                <div className="gallery-slider-header">
-                                    <div className="slider-controls">
-                                        <button
-                                            className="slider-arrow prev-arrow"
-                                            onClick={prevSlide}
-                                            disabled={currentSlide === 0}
-                                        >
-                                            <MdChevronLeft />
-                                        </button>
-                                        <span className="slide-indicator">
-                                            {currentSlide + 1} / {Math.max(1, totalSlides - itemsPerSlide + 1)}
-                                        </span>
-                                        <button
-                                            className="slider-arrow next-arrow"
-                                            onClick={nextSlide}
-                                            disabled={currentSlide >= totalSlides - itemsPerSlide}
-                                        >
-                                            <MdChevronRight />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="gallery-slider-container">
-                                    <div
-                                        className="gallery-slides"
-                                        style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}
-                                    >
-                                        {galleryImages.map((image, index) => (
-                                            <div key={image.id} className="gallery-slide">
-                                                <div
-                                                    className="gallery-item"
-                                                    onClick={() => handleThumbnailClick(index)}
-                                                    style={{ cursor: 'pointer' }}
-                                                >
-                                                    <img
-                                                        src={image.image}
-                                                        alt={image.title}
-                                                        className="gallery-img"
-                                                    />
-                                                    <div>
-                                                        {index + 3}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div> */}
 
                             {/* Bottom Sample Images */}
                             <div id="colClass-thumbnail-box" className="row">
@@ -604,31 +548,10 @@ const ProductDetail = () => {
 
                                 {/* SWATCH SECTION */}
                                 <div className="product-detail-color-section">
-                                    {/* NEW: VARIANT SELECTION SECTION WITH SLIDER */}
+                                    {/* VARIANT SELECTION SECTION WITH SLIDER */}
                                     {product?.variants && product.variants.length > 0 && (
                                         <div className="variant-slider-section">
                                             <div className="variant-header">
-                                                <h3 style={{
-                                                    fontSize: '1.3rem',
-                                                    fontWeight: 'bold',
-                                                    marginBottom: '15px',
-                                                    color: '#333',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '10px'
-                                                }}>
-                                                    <span style={{
-                                                        backgroundColor: '#ff6b35',
-                                                        color: 'white',
-                                                        padding: '5px 12px',
-                                                        borderRadius: '8px',
-                                                        fontSize: '0.9rem'
-                                                    }}>
-                                                        {totalVariants}
-                                                    </span>
-                                                    Available Variants
-                                                </h3>
-
                                                 {totalVariantSlides > 1 && (
                                                     <div className="variant-slider-controls">
                                                         <button
@@ -668,7 +591,8 @@ const ProductDetail = () => {
                                                             >
                                                                 {item.images && item.images.length > 1 ? (
                                                                     <img
-                                                                        src={`http://localhost:8000/${item.images[1]}`}
+                                                                        // ✅ FIXED: Using getImageUrl
+                                                                        src={getImageUrl(item.images[1])}
                                                                         alt={item.name}
                                                                         style={{
                                                                             width: '100%',
@@ -679,7 +603,7 @@ const ProductDetail = () => {
                                                                         }}
                                                                         onError={(e) => {
                                                                             if (item.images && item.images.length > 0) {
-                                                                                e.target.src = `http://localhost:8000/${item.images[0]}`;
+                                                                                e.target.src = getImageUrl(item.images[0]);
                                                                             } else {
                                                                                 e.target.style.display = 'none';
                                                                             }
@@ -687,7 +611,8 @@ const ProductDetail = () => {
                                                                     />
                                                                 ) : item.images && item.images.length > 0 ? (
                                                                     <img
-                                                                        src={`http://localhost:8000/${item.images[0]}`}
+                                                                        // ✅ FIXED: Using getImageUrl
+                                                                        src={getImageUrl(item.images[0])}
                                                                         alt={item.name}
                                                                         style={{
                                                                             width: '100%',
@@ -853,7 +778,7 @@ const ProductDetail = () => {
                                                             <img src="/flamesafe1.png" alt="" />
                                                             <div className="ophelia-title">FLAMMABLE</div>
                                                         </div>
-                                                        <div className="Anti-Flamesafe"><img src="/5.png" alt="" /> <b>Anti flammable:</b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260</div>
+                                                        <div className="Anti-Flamesafe"><img src="/Untitled-2.png" alt="" /> <b>Anti flammable:</b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260</div>
                                                         <div className="ophelia-description">
                                                             {product.Flammable}
                                                         </div>

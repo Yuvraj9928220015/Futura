@@ -1,31 +1,47 @@
 import './Marine.css';
-import { useState, useRef } from 'react';
-import { Play, Pause } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
+const MARINE_PRODUCTS = [
+    {
+        title: 'Apollo',
+        image: '/acbf4.jpg',
+        description: 'Premium marine upholstery engineered for vessels that demand the highest standards of comfort and resilience.',
+    },
+    {
+        title: 'Marine Revolution',
+        image: '/Mayur-1.jpg',
+        description: 'Next-gen marine fabric with cutting-edge weaving technology and a rich color palette inspired by global oceanic trends.',
+    },
+    {
+        title: 'Americana',
+        image: '/Mayur-2.jpg',
+        description: 'Classic American boating heritage meets supple hand-feel and rugged marine performance.',
+    },
+    {
+        title: 'Xtreme',
+        image: '/Mayur-4.jpg',
+        description: 'Engineered for the most demanding marine environments — built to never fade, crack, or peel.',
+    },
+];
 
 function Marine() {
-    const [isVideoPlaying, setIsVideoPlaying] = useState(true);
-    const videoRef = useRef(null);
+    const navigate = useNavigate();
 
-    const toggleVideoPlayback = () => {
-        if (videoRef.current) {
-            if (isVideoPlaying) {
-                videoRef.current.pause();
-            } else {
-                videoRef.current.play();
-            }
-            setIsVideoPlaying(!isVideoPlaying);
-        }
+    // ✅ Exact same logic as Navbar.jsx handleCategoryClick
+    const handleCategoryClick = (e, item) => {
+        e.preventDefault();
+        const slug = item.toLowerCase().replace(/\s+/g, '-');
+        navigate(`/product?category=${slug}`);
     };
-
-    console.log(toggleVideoPlayback);
 
     return (
         <>
             <div className="Automotive">
+                <div className="performance-Banner-container-line"></div>
+
+                {/* ── Hero Banner ── */}
                 <div className="About">
                     <div className="About-Banner">
-                        {/* <img src="/marine-2.png" alt="" /> */}
                         <video
                             src="/Marine-Video-2.mp4"
                             autoPlay
@@ -34,18 +50,16 @@ function Marine() {
                             playsInline
                             className="About-Banner-video"
                         />
-                        <div className="About-Banner-overley">
+                        <div className="Marine-Banner-overley">
                             <div className="About-title">Marine</div>
                             <div className="About-des">Built for Waves. Styled for the World</div>
                         </div>
                     </div>
                 </div>
 
-                {/* Product Ranges Section */}
+                {/* ── Segment Overview ── */}
                 <div className="Product-Ranges-Section">
-                    <div className="Section-Header">
-
-                    </div>
+                    <div className="Section-Header"></div>
                     <div className="container-fluid">
                         <div data-aos="fade-right" className="featured-grid">
                             <div className="featured-item">
@@ -56,10 +70,11 @@ function Marine() {
                             <div className="featured-item">
                                 <div className="Contract-Box content-box">
                                     <div className="Contract-main-Box">
-                                        {/* <span className="Contract-subtitle">Premium Quality</span> */}
                                         <h3 className="Contract-title">Segment Overview</h3>
                                         <p className="Contract-des">
-                                            With close research into the latest design trends for marine applications, we create materials that reflect contemporary styling and performance expectations for marine upholsteries across the globe
+                                            With close research into the latest design trends for marine applications, we create
+                                            materials that reflect contemporary styling and performance expectations for marine
+                                            upholsteries across the globe
                                         </p>
                                         <div className="feature-list">
                                             <div className="feature-item">✓ Advanced coating technology</div>
@@ -72,13 +87,18 @@ function Marine() {
                             <div className="featured-item">
                                 <div className="Contract-Box content-box">
                                     <div className="Contract-main-Box">
-                                        {/* <span className="Contract-subtitle">Performance Design</span> */}
                                         <h3 className="Contract-title">Futura Materials for the Marine Segment</h3>
                                         <p className="Contract-des">
-                                            Backed by world-class technology, our wide-ranging collection is developed to withstand demanding marine conditions. The materials are UV stable and offer brilliant durability, making them highly suitable for marine upholstery environments
+                                            Backed by world-class technology, our wide-ranging collection is developed to withstand
+                                            demanding marine conditions. The materials are UV stable and offer brilliant durability,
+                                            making them highly suitable for marine upholstery environments
                                         </p>
                                         <div className="feature-list">
-                                            <div className="Contract-des">Our marine collections bring together performance and design, offering materials that align with global marine upholstery needs. Each collection is created to deliver durability, UV stability, and trend-driven aesthetics tailored for marine settings</div>
+                                            <div className="Contract-des">
+                                                Our marine collections bring together performance and design, offering materials that
+                                                align with global marine upholstery needs. Each collection is created to deliver
+                                                durability, UV stability, and trend-driven aesthetics tailored for marine settings
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,115 +112,30 @@ function Marine() {
                     </div>
                 </div>
 
-                {/*  */}
-
-                {/* <div className="Marine-Banner">
-                    <div className="certificate-video">
-                        <video
-                            ref={videoRef}
-                            src="certificate-video.mp4"
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            className="background-video"
-                        />
-
-                        <button
-                            onClick={toggleVideoPlayback}
-                            className="video-control-btn"
-                            aria-label={isVideoPlaying ? 'Pause video' : 'Play video'}
-                        >
-                            {isVideoPlaying ? (
-                                <Pause className="control-icon" />
-                            ) : (
-                                <Play className="control-icon" />
-                            )}
-                        </button>
-
-                        <div className="Marine-Banner-overley">
-                            <div className="Marine-Banner-overley-title">Lorem, ipsum dolor.</div>
-                            <div className="Marine-Banner-overley-des">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione necessitatibus, quos libero laboriosam <br />
-                                harum maxime pariatur sint illum eveniet molestias fugit, quo a voluptas unde? <br />
-                                Aperiam, necessitatibus. Aperiam, dignissimos praesentium.
-                            </div>
-                            <div className="Marine-Banner-overley-but">
-                                <button>READ MORE</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> */}
-
-                {/*  */}
-
+                {/* ── Product Ranges ── */}
                 <div className="Overview">
                     <div className="Section-Header">
-                        <div className='About-Section-Heading'>Product Ranges</div>
+                        <div className="About-Section-Heading">Product Ranges</div>
                     </div>
                     <div data-aos="fade-up" className="container-fluid">
                         <div className="row">
-                            <div className="col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div className="Overview-Box">
-                                    <div className="Overview-Box-image">
-                                        <img src="/acbf4.jpg" alt="" />
-                                    </div>
-                                    <div className="Overview-Box-contant">
-                                        <div className="Overview-Box-contant-title">Apollo</div>
-                                        <div className="Overview-Box-contant-des">
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                            Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos
-                                            repudiandae velit.
+                            {MARINE_PRODUCTS.map(({ title, image, description }) => (
+                                <div key={title} className="col-lg-3 col-md-6 col-sm-12 col-12">
+                                    <div className="Overview-Box">
+                                        <div className="Overview-Box-image">
+                                            <img src={image} alt={title} />
+                                        </div>
+                                        <div className="Overview-Box-contant">
+                                            <div className="Overview-Box-contant-title">{title}</div>
+                                            <div className="Overview-Box-contant-des">{description}</div>
+                                            {/* ✅ Exact same as Navbar handleCategoryClick */}
+                                            <button onClick={(e) => handleCategoryClick(e, title)}>
+                                                View
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div className="Overview-Box">
-                                    <div className="Overview-Box-image">
-                                        <img src="/Mayur-1.jpg" alt="" />
-                                    </div>
-                                    <div className="Overview-Box-contant">
-                                        <div className="Overview-Box-contant-title">Marine Revolution</div>
-                                        <div className="Overview-Box-contant-des">
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                            Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos
-                                            repudiandae velit.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div className="Overview-Box">
-                                    <div className="Overview-Box-image">
-                                        <img src="/Mayur-2.jpg" alt="" />
-                                    </div>
-                                    <div className="Overview-Box-contant">
-                                        <div className="Overview-Box-contant-title">Americana</div>
-                                        <div className="Overview-Box-contant-des">
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                            Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos
-                                            repudiandae velit.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div className="Overview-Box">
-                                    <div className="Overview-Box-image">
-                                        <img src="/Mayur-4.jpg" alt="" />
-                                    </div>
-                                    <div className="Overview-Box-contant">
-                                        <div className="Overview-Box-contant-title">Xtreme</div>
-                                        <div className="Overview-Box-contant-des">
-                                            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                                            Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos
-                                            repudiandae velit.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>

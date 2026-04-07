@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { MdLocationOn } from 'react-icons/md';
 import './Contact.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
 export default function Contact() {
     const [formData, setFormData] = useState({
         title: '',
         firstName: '',
         lastName: '',
         email: '',
-        countryCode: '+91',
         phone: '',
         preferredLanguage: '',
         natureOfEnquiry: '',
@@ -21,10 +22,12 @@ export default function Contact() {
 
     const [newsletterEmail, setNewsletterEmail] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const titles = ['', 'Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Prof.'];
-    const languages = ['', 'English', 'Hindi', 'Arabic', 'French', 'Spanish'];
-    const enquiryNatures = ['', 'General Enquiry', 'Product Information', 'Custom Order', 'Support', 'Partnership'];
+    const titles = ['Mr.', 'Mrs.', 'Ms.', 'Dr.', 'Prof.'];
+    const languages = ['English', 'Hindi', 'Arabic', 'French', 'Spanish'];
+    const enquiryNatures = ['General Enquiry', 'Product Information', 'Custom Order', 'Support', 'Partnership'];
     const countries = ['India', 'USA', 'UK', 'UAE', 'France', 'Germany', 'Australia', 'Singapore'];
 
     const handleInputChange = (e) => {
@@ -33,31 +36,59 @@ export default function Contact() {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+        // Error clear karo jab user type kare
+        if (errorMessage) setErrorMessage('');
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
-        setIsSubmitted(true);
+        setIsLoading(true);
+        setErrorMessage('');
 
-        setTimeout(() => {
-            setIsSubmitted(false);
-            setFormData({
-                title: '',
-                firstName: '',
-                lastName: '',
-                email: '',
-                countryCode: '+91',
-                phone: '',
-                preferredLanguage: '',
-                natureOfEnquiry: '',
-                country: 'India',
-                subject: '',
-                details: '',
-                receiveUpdates: false,
-                agreeToPrivacy: false
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/contact/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
             });
-        }, 3000);
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Server se error message show karo
+                throw new Error(data.message || 'Something went wrong. Please try again.');
+            }
+
+            // ✅ Success
+            setIsSubmitted(true);
+
+            // 4 seconds baad form reset karo
+            setTimeout(() => {
+                setIsSubmitted(false);
+                setFormData({
+                    title: '',
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    preferredLanguage: '',
+                    natureOfEnquiry: '',
+                    country: 'India',
+                    subject: '',
+                    details: '',
+                    receiveUpdates: false,
+                    agreeToPrivacy: false
+                });
+            }, 4000);
+
+        } catch (error) {
+            console.error('❌ Form submit error:', error);
+            setErrorMessage(error.message || 'Network error. Please check your connection and try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleNewsletterSubmit = (e) => {
@@ -88,6 +119,14 @@ export default function Contact() {
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit} className="contact-form">
+
+                            {/* ✅ Error message banner */}
+                            {errorMessage && (
+                                <div className="error-banner">
+                                    ⚠️ {errorMessage}
+                                </div>
+                            )}
+
                             <div className="form-row">
                                 <div className="form-group">
                                     <select
@@ -98,7 +137,7 @@ export default function Contact() {
                                         required
                                     >
                                         <option value="">Title*</option>
-                                        {titles.slice(1).map((title, index) => (
+                                        {titles.map((title, index) => (
                                             <option key={index} value={title}>{title}</option>
                                         ))}
                                     </select>
@@ -160,8 +199,8 @@ export default function Contact() {
                                         onChange={handleInputChange}
                                         className="form-select"
                                     >
-                                        <option value="">Preferred Language*</option>
-                                        {languages.slice(1).map((lang, index) => (
+                                        <option value="">Preferred Language</option>
+                                        {languages.map((lang, index) => (
                                             <option key={index} value={lang}>{lang}</option>
                                         ))}
                                     </select>
@@ -178,7 +217,7 @@ export default function Contact() {
                                         required
                                     >
                                         <option value="">Nature Of Enquiry*</option>
-                                        {enquiryNatures.slice(1).map((nature, index) => (
+                                        {enquiryNatures.map((nature, index) => (
                                             <option key={index} value={nature}>{nature}</option>
                                         ))}
                                     </select>
@@ -232,7 +271,7 @@ export default function Contact() {
                                         className="form-checkbox"
                                     />
                                     <span className="checkbox-text">
-                                        I would like to receive updates from Graff using any of the method(s) that I have provided above. You can unsubscribe at any time.
+                                        I would like to receive updates from Futura Textiles using any of the method(s) that I have provided above. You can unsubscribe at any time.
                                     </span>
                                 </label>
                             </div>
@@ -247,7 +286,9 @@ export default function Contact() {
                                         className="form-checkbox"
                                     />
                                     <span className="checkbox-text">
-                                        * By entering your email, you agree to receive exclusive updates, offers, news, and other communications from Graff. You may unsubscribe at any time by contacting our Client Services Team at <a href="mailto:clientservices.team@graff.com">clientservices.team@graff.com</a>. For more details on how Graff communicates with you and uses your information, please see our <a href="#privacy">Privacy Policy</a>.
+                                        * By entering your email, you agree to receive exclusive updates, offers, news, and other communications from Futura Textiles. You may unsubscribe at any time by contacting our Client Services Team at{' '}
+                                        <a href="mailto:customerservice@futuratextiles.com">customerservice@futuratextiles.com</a>.
+                                        For more details please see our <a href="#privacy">Privacy Policy</a>.
                                     </span>
                                 </label>
                             </div>
@@ -269,8 +310,13 @@ export default function Contact() {
                                 </div>
                             </div>
 
-                            <button type="submit" className="submit-btn">
-                                SEND ENQUIRY
+                            {/* ✅ Loading state button */}
+                            <button
+                                type="submit"
+                                className="submit-btn"
+                                disabled={isLoading}
+                            >
+                                {isLoading ? 'SENDING...' : 'SEND ENQUIRY'}
                             </button>
                         </form>
                     )}
@@ -293,13 +339,13 @@ export default function Contact() {
                     <div className="hq-card">
                         <h3>Phone</h3>
                         <p className="address">(877) 426-8177</p>
-                        <p className="phone">Tel: <a href="tel:+442074937337">(662) 932-8934</a></p>
+                        <p className="phone">Tel: <a href="tel:+16629328934">(662) 932-8934</a></p>
                     </div>
 
                     <div className="hq-card">
                         <h3>Email</h3>
                         <p className="address">customerservice@futuratextiles.com</p>
-                        <p className="phone"><a href="tel:+442074937337">office@futuratextiles.com</a></p>
+                        <p className="phone"><a href="mailto:office@futuratextiles.com">office@futuratextiles.com</a></p>
                     </div>
                 </div>
             </div>
@@ -322,7 +368,7 @@ export default function Contact() {
                     <div className="boutique-info">
                         <div className="boutique-header">
                             <MdLocationOn className="location-pin-icon" />
-                            <p className="boutique-heading">YOUR NEAREST GRAFF BOUTIQUES</p>
+                            <p className="boutique-heading">YOUR NEAREST FUTURA BOUTIQUES</p>
                         </div>
                         <div className="boutique-details">
                             <h2 className="boutique-name"><img src="/Futura-logo.png" alt="" /></h2>

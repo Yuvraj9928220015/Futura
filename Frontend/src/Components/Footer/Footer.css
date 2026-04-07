@@ -155,7 +155,7 @@
 .Footer-Box-2 {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 10px;
     align-items: flex-end;
     justify-content: flex-start;
     width: 100%;
@@ -165,29 +165,34 @@
 }
 
 /* Social Icons */
+/* Social Icons */
 .social-icons {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     margin-bottom: 20px;
 }
 
 .social-mida-icons {
+    width: 100%;
     display: flex;
     justify-content: end;
-    gap: 20px;
+    align-items: center;
+    gap: 0px;
 }
 
-.social-icon {
-    font-size: 30px;
-    color: #d0d0d0;
+.social-mida-icons a {
+    width: 7%;
+}
+
+.social-mida-icons img {
+    width: 100%;
+    transition: transform 0.3s ease;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
-.social-icon:hover {
-    color: white;
-    transform: translateY(-2px);
+.social-mida-icons img:hover {
+    transform: scale(1.2);
 }
 
 /* Social Text */

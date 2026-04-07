@@ -122,6 +122,14 @@
     height: 100%;
 }
 
+.News-About-Section-Heading {
+    font-family: 'Georgia', serif;
+    font-size: 37px;
+    margin-top: 80px;
+    /* margin-bottom: 10px; */
+    text-align: center;
+}
+
 .event-card:hover {
     box-shadow: 0 4px 20px #0000001a;
 }
@@ -371,4 +379,27 @@
     .event-image {
         height: 160px;
     }
+}
+
+
+.About-Banner {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.banner-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.About-Banner-overley {
+    position: relative;
+    z-index: 1;
 }

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Contract.css';
 
 function Contract() {
     const [activeCard, setActiveCard] = useState(null);
     const [statsInView, setStatsInView] = useState(false);
     const statsRef = useRef(null);
+    const navigate = useNavigate();
 
     const productRanges = [
         {
@@ -24,16 +26,9 @@ function Contract() {
             title: "Americana",
             description: "Classic American styling with modern performance. Perfect blend of traditional aesthetics and contemporary functionality.",
             image: "/Mayur-2.jpg"
-        },
-        {
-            id: 4,
-            title: "Polaris",
-            description: "High-performance fabrics engineered for extreme conditions. Superior grip, breathability, and weather resistance.",
-            image: "/Mayur-4.jpg"
         }
     ];
 
-    // Stats data
     const stats = [
         { number: 25, suffix: '+', label: 'Years Experience' },
         { number: 100, suffix: '+', label: 'Fabric Varieties' },
@@ -41,7 +36,13 @@ function Contract() {
         { number: 1000000, suffix: '+', label: 'Happy Customers', isLarge: true }
     ];
 
-    // Intersection Observer for stats animation
+    // ✅ Exact same logic as Navbar.jsx
+    const handleCategoryClick = (e, item) => {
+        e.preventDefault();
+        const slug = item.toLowerCase().replace(/\s+/g, '-');
+        navigate(`/product?category=${slug}`);
+    };
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -53,88 +54,53 @@ function Contract() {
             },
             { threshold: 0.3 }
         );
-
-        if (statsRef.current) {
-            observer.observe(statsRef.current);
-        }
-
-        return () => {
-            if (statsRef.current) {
-                observer.unobserve(statsRef.current);
-            }
-        };
+        if (statsRef.current) observer.observe(statsRef.current);
+        return () => { if (statsRef.current) observer.unobserve(statsRef.current); };
     }, [statsInView]);
 
-    // Counter component for animated numbers
     const AnimatedCounter = ({ target, suffix, isLarge, duration = 2000 }) => {
         const [count, setCount] = useState(0);
 
         useEffect(() => {
             if (!statsInView) return;
-
             let startTime;
             let animationFrame;
-
             const animate = (timestamp) => {
                 if (!startTime) startTime = timestamp;
                 const progress = timestamp - startTime;
                 const percentage = Math.min(progress / duration, 1);
-
-                // Easing function for smooth animation
                 const easeOutQuad = 1 - Math.pow(1 - percentage, 3);
-                const current = Math.floor(easeOutQuad * target);
-
-                setCount(current);
-
-                if (percentage < 1) {
-                    animationFrame = requestAnimationFrame(animate);
-                }
+                setCount(Math.floor(easeOutQuad * target));
+                if (percentage < 1) animationFrame = requestAnimationFrame(animate);
             };
-
             animationFrame = requestAnimationFrame(animate);
-
-            return () => {
-                if (animationFrame) {
-                    cancelAnimationFrame(animationFrame);
-                }
-            };
+            return () => { if (animationFrame) cancelAnimationFrame(animationFrame); };
         }, [statsInView, target, duration]);
 
-        // Format large numbers
         const formatNumber = (num) => {
-            if (isLarge && num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return (num / 1000).toFixed(0) + 'K';
-            }
+            if (isLarge && num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            else if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
             return num;
         };
 
-        return (
-            <span>
-                {isLarge ? formatNumber(count) : count}
-                {suffix}
-            </span>
-        );
+        return <span>{isLarge ? formatNumber(count) : count}{suffix}</span>;
     };
 
     return (
         <>
             <div className="Contract">
                 {/* Hero Banner */}
+                <div className="performance-Banner-container-line"></div>
                 <div className="About">
                     <div className="About-Banner">
                         <video
                             src="/13263261_1440_2560_50fps.mp4"
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
+                            autoPlay muted loop playsInline
                             className="About-Banner-video"
                         />
                         <div className="About-Banner-overlay">
                             <div className="hero-content">
-                                <h1 className="About-title">Contract Furnishing </h1>
+                                <h1 className="About-title">Contract Furnishing</h1>
                                 <p className="About-des">Performance You Feel. Durability You Trust</p>
                             </div>
                         </div>
@@ -156,7 +122,9 @@ function Contract() {
                                     <div className="Contract-main-Box">
                                         <h3 className="Contract-title">Segment Overview</h3>
                                         <p className="Contract-des">
-                                            The furnishing industry is one of the largest consumers of artificial leather, where textures, colors, and overall look & feel play a crucial role. This segment demands materials that combine aesthetic appeal with dependable performance
+                                            The furnishing industry is one of the largest consumers of artificial leather,
+                                            where textures, colors, and overall look & feel play a crucial role. This segment
+                                            demands materials that combine aesthetic appeal with dependable performance
                                         </p>
                                         <div className="feature-list">
                                             <div className="feature-item">✓ Advanced coating technology</div>
@@ -171,10 +139,18 @@ function Contract() {
                                     <div className="Contract-main-Box">
                                         <h3 className="Contract-title">Futura Materials for the Contract Furnishing Segment</h3>
                                         <p className="Contract-des">
-                                            Our portfolio includes a wide range of surfaces suitable for diverse furnishing applications such as Residential, Office, Hospitality, Outdoor, and Healthcare. Each material is developed with a strong focus on high performance, along with essential properties such as resistance to abrasion, cleanability, and anti-flammability
+                                            Our portfolio includes a wide range of surfaces suitable for diverse furnishing
+                                            applications such as Residential, Office, Hospitality, Outdoor, and Healthcare.
+                                            Each material is developed with a strong focus on high performance, along with
+                                            essential properties such as resistance to abrasion, cleanability, and anti-flammability
                                         </p>
                                         <div className="feature-list">
-                                            <div className="Contract-des">The collections within this segment bring together varied textures, colors, and surface finishes tailored specifically for contract furnishing needs. Designed to balance appearance and functionality, these materials offer reliable performance while meeting the visual expectations of modern furnishing spaces</div>
+                                            <div className="Contract-des">
+                                                The collections within this segment bring together varied textures, colors, and
+                                                surface finishes tailored specifically for contract furnishing needs. Designed to
+                                                balance appearance and functionality, these materials offer reliable performance
+                                                while meeting the visual expectations of modern furnishing spaces
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -209,6 +185,12 @@ function Contract() {
                                         <div className="Overview-Box-content">
                                             <h3 className="Overview-Box-content-title">{product.title}</h3>
                                             <p className="Overview-Box-content-des">{product.description}</p>
+                                        </div>
+                                        <div className="Overview-Box-contant">
+                                            {/* ✅ Exact same as Navbar.jsx handleCategoryClick */}
+                                            <button onClick={(e) => handleCategoryClick(e, product.title)}>
+                                                View
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

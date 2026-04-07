@@ -10,55 +10,66 @@ export default function News() {
                 month: "JUN",
                 day: "23"
             },
-            title: "Summer Architecture Workshop",
+            title: "Dubai International Boat Show 2025",
             location: "1015 California Ave, Los Angeles CA",
             time: "7:00 pm — 8:00 pm",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dignissim et turpis non hendrerit. Nunc nec lacinia tellus. Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-            image: "New-Events.jpg"
+            description: "Dubai International Boat Show 2026 is where the global yachting elite come together — a celebration of power, precision, and possibility on the water.",
+            image: "News-image-1.jpg"
         },
         {
             date: {
                 month: "JUL",
                 day: "04"
             },
-            title: "Independence Day Design Meet",
+            title: "IBEX Boat Show 2025",
             location: "1015 California Ave, Los Angeles CA",
             time: "7:00 pm — 8:00 pm",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dignissim et turpis non hendrerit. Nunc nec lacinia tellus. Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-            image: "Mayur-2.jpg"
+            description: "This is my eighth year attending IBEX and I will attend it for all of time. It is the best opportunity to meet with long-time colleagues and new people who have come into the industry",
+            image: "News-image-2.jpg"
         },
         {
             date: {
                 month: "AUG",
                 day: "12"
             },
-            title: "Modern Architecture Exhibition",
+            title: "Dubai International Boat Show 2024",
             location: "1015 California Ave, Los Angeles CA",
             time: "7:00 pm — 8:00 pm",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dignissim et turpis non hendrerit. Nunc nec lacinia tellus. Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-            image: "Mayur-5.jpg"
+            description: "The Dubai International Boat Show (DIBS) will hold its 32nd edition as the Middle East's top celebration of yachts, luxury lifestyles, and watersports from 8 – 12 April 2026. Over the years, DIBS has established itself as a global symbol of innovation and glamour, creating an unmatched stage where craft and creativity join the essence of the sea",
+            image: "News-image-3.jpg"
         },
         {
             date: {
                 month: "SEP",
                 day: "15"
             },
-            title: "Sustainable Design Conference",
+            title: "Heimtextil 2024",
             location: "1015 California Ave, Los Angeles CA",
             time: "7:00 pm — 8:00 pm",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dignissim et turpis non hendrerit. Nunc nec lacinia tellus. Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-            image: "marine-cover-1.jpg"
+            description: "Where trends, design and global business intertwine: Heimtextil is your platform for home and contract textiles and textile design. Experience innovative solutions for the entire interior design: with the Heimtextil Trends 27/28, visionary design by Patricia Urquiola, textile sustainability and order volumes of all sizes.",
+            image: "News-image-4.webp"
         },
         {
             date: {
                 month: "DEC",
                 day: "11"
             },
-            title: "Year End Architecture Showcase",
+            title: "IBEX Boat Show 2024",
+            location: "The International BoatBuilders' Exhibition & Conference",
+            time: "7:00 pm — 8:00 pm",
+            description: "Join 7,500+ of your peers and take advantage of endless opportunities to engage with your community, exchange success stories, close deals, and build relationships that have a lasting impact on your business.",
+            image: "News-image-5.jpg"
+        },
+        {
+            date: {
+                month: "DEC",
+                day: "11"
+            },
+            title: "Mestrade 2024",
             location: "1015 California Ave, Los Angeles CA",
             time: "7:00 pm — 8:00 pm",
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dignissim et turpis non hendrerit. Nunc nec lacinia tellus. Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-            image: "Mayur-3.jpg"
+            description: "Experience the future of marine innovation at Metstrade. This influential event brings together leisure marine professionals from over 135 countries to connect, collaborate and drive commerce across boatbuilding and marine technology.",
+            image: "News-image-6.avif"
         }
     ];
 
@@ -136,16 +147,25 @@ export default function News() {
 
     return (
         <div className="news-container">
-            {/* Hero Section */}
-            <div className="About">
+
+            {/* ✅ Hero Section - Video Banner */}
+            {/* <div className="About">
                 <div className="About-Banner">
-                    <img src="/Mayur-2.jpg" alt="" />
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="banner-video"
+                    >
+                        <source src="/New-video-2.mp4" type="video/mp4" />
+                    </video>
                     <div className="About-Banner-overley">
-                        <div className="About-title">News & Events</div>
+                        <div className="About-title">Event & Exhibition</div>
                         <div className="About-des">Premium coated fabrics for automotive excellence.</div>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Main Content */}
             <div className="container-fluid px-5 py-3">
@@ -153,7 +173,7 @@ export default function News() {
                 <div className="row">
                     <div className="col-12">
                         <div className="Section-Header">
-                            <h2 className="About-Section-Heading">News & Events</h2>
+                            <h2 className="News-About-Section-Heading">Event & Exhibition</h2>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,4 @@
+meenakshi.jeena@mayur.biz
+
+1 animation: zoomInImage 6s ease-in-out forwards; 
+text-shadow: 2px 2px 4px #00000033;

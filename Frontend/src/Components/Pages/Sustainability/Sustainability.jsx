@@ -1,277 +1,459 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Sustainability.css';
 
+/* ============================================================
+   SUSTAINABILITY BOX SLIDER DATA
+   ============================================================ */
+const slides = [
+    {
+        id: '01',
+        tag: 'Sustainable Products',
+        brand: 'Pavo Esse Eco',
+        material: 'PVC‑Based Sustainable Material',
+        subtitle: 'Pavo Esse Eco represents our innovation in responsible PVC solutions',
+        image: '/Sustainability-5.png',
+        highlights: [
+            'Optimized PVC formulation with lower environmental impact',
+            'Long life cycle, reducing replacement and material waste',
+            'Designed to support circular‑economy principles',
+            'Suitable for applications demanding durability and consistency',
+        ],
+    },
+    {
+        id: '02',
+        tag: 'Sustainable Products',
+        brand: 'Unico Esse Eco',
+        material: 'PU‑Based Sustainable Material',
+        subtitle: 'Unico Esse Eco is our step toward cleaner, more conscious polyurethane solutions',
+        image: '/Sustainability-6.png',
+        highlights: [
+            'Sustainable PU formulation focused on reduced carbon footprint',
+            'Lightweight yet high‑performance material',
+            'Supports eco‑conscious manufacturing processes',
+            'Ideal for brands prioritizing sustainability without design compromise',
+        ],
+    },
+];
+
+/* ============================================================
+   MAIN COMPONENT
+   ============================================================ */
 export default function Sustainability() {
+
+    /* ---- State ---- */
+    const [current, setCurrent] = useState(0);
+    const [panelOpen, setPanelOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const isHovering = useRef(false);
+
+    /* ---- Section Refs for Navigation ---- */
+    const corporateRef = useRef(null);
+    const designSectionRef = useRef(null);
+
+    /* ---- Detect Mobile ---- */
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    /* ---- Smooth Scroll Handler ---- */
+    const scrollToSection = (ref) => {
+        if (ref && ref.current) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    /* ---- Navigate ---- */
+    const goTo = (idx) => {
+        if (idx === current) return;
+        setPanelOpen(false);
+        isHovering.current = false;
+        setCurrent(idx);
+    };
+
+    const getRelPos = (idx) => {
+        const n = slides.length;
+        let d = ((idx - current) % n + n) % n;
+        if (d > Math.floor(n / 2)) d -= n;
+        return d;
+    };
+
+    /* ---- Render ---- */
     return (
         <>
             <div className="sustainability">
+
+                {/* ===== BELIEVE / BANNER SECTION ===== */}
                 <div className="sustainability-banner">
-
-                    {/* Believe */}
                     <div className="Believe">
-                        <div className="container-fluid">
+                        <div id='Believe-container' className="container-fluid">
                             <div className="Believe-Section">
-                                <div className="row">
-                                    <div className="col-lg-5 col-md-5 col-sm-12 col-12">
-                                        <div className="Believe-image">
-                                            <img src="/Screenshot 2025-12-15 143413.png" alt="" />
+                                <div className="Believe-Section-1">
+                                    <div className="Believe-main-Section-1">
+                                        <img src="/sustainability-new-image.jpeg" alt="Sustainability" />
+                                        <div className='Believe-main-Section-logo'>
+                                            <img src="/Futura-new-logo.png" alt="Futura Logo" />
+                                        </div>
+                                        <div className='Believe-main-Section-content'>
+                                            <img src="/Sustainability-text-1.png" alt="Sustainability Text" />
                                         </div>
                                     </div>
-                                    <div className="col-lg-7 col-md-7 col-sm-12 col-12">
-                                        <div className="Believe-content">
-                                            <div className="Believe-content-title">Sustainability</div>
-                                            <div className="Believe-content-subtitle">Building responsibly today, for a better tomorrow.</div>
-                                            <div className="Believe-content-des">
-                                                At Mayur, sustainability is not a trend — it is a long‑term commitment embedded into our
-                                                products, processes, and people‑first initiatives.
-                                            </div>
-                                            <div className="Believe-content-btn">
-                                                LEARN MORE
-                                                <div className='Believe-content-btn-line'></div>
-                                            </div>
-                                        </div>
+                                    <div className="Believe-main-Section-2">
+                                        <img src="/0001.png" alt="Sustainability Stats" />
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                                <div className="Believe-Section-2">
+                                    <div className="Believe-main-Section-3">
 
-                    {/* mission */}
-                    {/* <div className="mission">
-                        <div className="mission-Content">
-                            We share B Corp's mission that one day all companies will compete not only to be the best in the world, but the best for the world.
-                        </div>
-                    </div> */}
-
-                    {/* Introduced */}
-                    <div className="Introduced">
-                        {/* <video
-                            className="introduced-bg-video"
-                            src="/18653324.mp4"
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                        /> */}
-                        {/* <img className='introduced-bg-video' src="/DJI_0056.jpeg" alt="" /> */}
-                        <div className="container-fluid introduced-section">
-                            <div className="row">
-                                <div className="col-lg-5 col-md-5 col-sm-12 col-12">
-                                    <div className="Introduced-content">
-                                        <div className="Introduced-content-title">UN Global Compact (UNGC) Commitment
-                                        </div>
-                                        <div className="Believe-content-subtitle">Aligned with global goals. Accountable to the future.
-                                        </div>
-                                        <div className="Introduced-content-line"></div>
-                                        <div className="Introduced-content-des">Mayur has been a proud member of the United Nations Global Compact since 2020.</div>
-                                        <div className="Introduced-content-btn">
-                                            <button>Download Report</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-7 col-md-7 col-sm-12 col-12">
-                                    <div className="Introduced-content-image">
-                                        <div className="Introduced-image-1">
-                                            <img src="ungc(1).png" alt="" />
-                                        </div>
-                                        <div className="Introduced-image-2">
-                                            {/* <img src="/Rectangle-7.png" alt="" /> */}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    {/* Mindful */}
-                    <div data-aos="fade-right" className="Mindful">
-                        <div className="Mindful-wrapper">
-                            <div className="Mindful-image">
-                                <img src="/13.png" alt="Mindful Product" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Provide */}
-
-                    <div className="Provide">
-                        <div className="Provide-subtitle">Corporate Social Responsibility</div>
-                        <div className="Believe-Tilte">Responsibility beyond business. Impact beyond numbers.</div>
-                        <div className="Believe-content-prag">
-                            At Mayur, CSR is an integral part of our identity. Our initiatives are focused on environmental stewardship, <br />
-                            social development, and long‑term community impact.
-                        </div>
-                        <div data-aos="fade-up" className="container-fluid">
-                            <div className="row">
-
-                                <div className="col-lg-3 col-md-3 col-sm-3 col-12">
-                                    <div className="Provide-Box">
-                                        <div id='Provide-Box-Sustain'>
-                                            {/* <img src="/leather-macro.jpg" alt="" /> */}
-                                            <div className="Provide-Box-content">
-                                                <div className="Provide-Box-Sustain-title"> Environmental Responsibility</div>
-                                                <div className="Provide-Box-title">35,000+ Trees Planted Since 2020</div>
-                                                <div className="Provide-Box-des">
-                                                    <ul>
-                                                        <li>Large‑scale plantation drives across multiple regions</li>
-                                                        <li>Long‑term commitment to biodiversity and carbon absorption</li>
-                                                        <li>Continuous monitoring and expansion of green cover</li>
-                                                    </ul>
-                                                </div>
-
-                                                <div className="Provide-Box-title">Carbon Impact Reduction</div>
-                                                <div className="Provide-Box-des">
-                                                    <ul>
-                                                        <li>Focused initiatives to lower emissions across operations</li>
-                                                        <li>Energy‑efficient practices in manufacturing</li>
-                                                        <li>Waste reduction and responsible resource usage</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-6 col-md-6 col-sm-6 col-12">
-                                    <div className="Provide-Box">
-                                        <img src="Wha-8.png" alt="" />
-                                    </div>
-                                </div>
-
-                                <div className="col-lg-3 col-md-3 col-sm-3 col-12">
-                                    <div className="Provide-Box">
-                                        <div id='Provide-Box-Sustain'>
-                                            <div className="Provide-Box-content">
-                                                <div className="Provide-Box-Sustain-title">Social Responsibility</div>
-                                                <div className="Provide-Box-title">Education & Community Development</div>
-                                                <div className="Provide-Box-des">
-                                                    <ul>
-                                                        <li>Active support for educational initiatives Development</li>
-                                                        <li>Community‑focused social programs Community Development</li>
-                                                        <li>Empowering future generations through learning and skill development</li>
-                                                    </ul>
-                                                </div>
-
-                                                <div className="Provide-Box-title">Infrastructure for Sustainability</div>
-                                                <div className="Provide-Box-des">
-                                                    <ul>
-                                                        <li>Installation of bag fillers to reduce packaging waste</li>
-                                                        <li>Process improvements aimed at minimizing material loss</li>
-                                                        <li>Safe and inclusive workplace culture</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    {/* Pearl */}
-                    {/* <div className="Pearl-content">
-                        <div className="Provide-subtitle">Sustainable Products</div>
-                        <div className="Believe-Tilte">Designed for performance. Engineered for the planet.</div>
-                        <div className="Believe-content-prag">
-                            Our sustainable product portfolio focuses on reducing environmental impact without compromising <br /> on quality, durability, or aesthetics.
-                        </div>
-                    </div>
-                    <div className="design-wrapper">
-
-                        <div className="design-section">
-                            <div className="design-image-col">
-                                <img
-                                    src="Creative-1.jpg"
-                                    alt="Interior Design"
-                                    className="design-image"
-                                />
-                            </div>
-                            <div className="design-content-col">
-                                <div className="design-content">
-                                    <div className="design-subtitle-content-1">
-                                        <h3 className="design-subtitle-1">Pavo Esse Eco</h3>
-                                        <h5>PVC‑Based Sustainable Material</h5>
-                                    </div>
-                                    <div className="design-des">
-                                        <p className="design-text-1">
-                                            Pavo Esse Eco represents our innovation in responsible PVC solutions.
-                                        </p>
-                                        <p className="design-text-1">
-                                            <b className='design-text-Highlight'>Key Highlights:</b>
+                                        {/* ===== NAVIGATION LIST — CSR & Sustainable Product ===== */}
+                                        <div className="Believe-main-Section-list">
                                             <ul>
-                                                <li>Optimized PVC formulation with lower environmental impact</li>
-                                                <li>Long life cycle, reducing replacement and material waste</li>
-                                                <li>Designed to support circular‑economy principles</li>
-                                                <li>Suitable for applications demanding durability and consistency</li>
+                                                <li
+                                                    className="nav-li"
+                                                    onClick={() => scrollToSection(corporateRef)}
+                                                    title="Go to Corporate Social Responsibility"
+                                                >
+                                                    CSR
+                                                </li>
+                                                <li
+                                                    className="nav-li"
+                                                    onClick={() => scrollToSection(designSectionRef)}
+                                                    title="Go to Sustainable Product"
+                                                >
+                                                    Sustainable Product
+                                                </li>
                                             </ul>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        </div>
 
-                        <div className="design-section">
-                            <div className="design-content-col design-content-left">
-                                <div className="design-content">
-                                    <div className="design-subtitle-content-2">
-                                        <h3 className="design-subtitle-2">Unico Esse Eco</h3>
-                                        <h6>PU‑Based Sustainable Material</h6>
+                                        <div className="Believe-main-Section-title">
+                                            Building responsibly today,{' '}
+                                            <br className="br-hide" /> for a better tomorrow.
+                                        </div>
+                                        <div className="Believe-main-Section-Subtitle">
+                                            At Mayur, sustainability is not a trend — it is a long‑term
+                                            commitment embedded into our products, processes, and
+                                            people‑first initiatives.
+                                        </div>
+                                        <div className="Believe-main-Section-btn">
+                                            <button className="download-btn">
+                                                <span className="download-btn-text">
+                                                    Sustainability Report
+                                                </span>
+                                                <span className="download-btn-icon">
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2.2"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <path d="M12 3v13" />
+                                                        <path d="M7 12l5 5 5-5" />
+                                                        <path d="M5 20h14" />
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="design-des-2">
-                                        <div className='design-prag'>
-                                            <p className="design-text-2">
-                                                Unico Esse Eco is our step toward cleaner, more conscious polyurethane solutions
-                                            </p>
-                                            <p className="design-text-2">
-                                                <b className='design-text-Highlight'>Key Highlights:</b>
-                                                <ul>
-                                                    <li>Sustainable PU formulation focused on reduced carbon footprint</li>
-                                                    <li>Lightweight yet high‑performance material</li>
-                                                    <li>Supports eco‑conscious manufacturing processes</li>
-                                                    <li>Ideal for brands prioritizing sustainability without design compromise</li>
-                                                </ul>
-                                            </p>
+                                    <div className="Believe-main-Section-4">
+                                        <div className="Compact-title">
+                                            UN Global Compact (UNGC) Commitment
+                                        </div>
+                                        <div className="Compact-subtitle">
+                                            Aligned with global goals. Accountable to the future.
+                                        </div>
+                                        <div className="Compact-des">
+                                            Mayur has been a proud member of the United Nations Global
+                                            Compact since 2020.
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="design-image-col">
-                                <img
-                                    src="1.png"
-                                    alt="Renovation Design"
-                                    className="design-image"
-                                />
-                            </div>
                         </div>
                     </div>
+                </div>
 
+                {/* ===== CORPORATE SECTION — ref attached ===== */}
+                <div className="Corporate" ref={corporateRef}>
+                    <div className="Corporate-wrapper">
 
-                    <div className="about-massage-wrapper">
-                        <div className="about-massage">
-                            <div className="about-massage-content">
-                                <div className="text-content">
-                                    <h1>Our Sustainability Vision</h1>
-                                    <p id='about-massage-descr' className="about-massage-description">
-                                        Growing responsibly. Operating ethically. Delivering sustainably.
-                                        <div className="about-massage-line"></div>
-                                    </p>
-                                    <p className="about-massage-description">
-                                        We believe true growth is achieved when business success goes hand‑in‑hand with environmental care and social responsibility. Our journey continues with innovation, accountability, and a deep commitment to a sustainable future.
-                                    </p>
+                        {/* ---- LEFT ---- */}
+                        <div className="Corporate-left">
+                            <div className="Corporate-heading-row">
+                                <div className="Corporate-green-bar"></div>
+                                <div className="Corporate-left-content">
+                                    <div className="Corporate-Box-title">Corporate Social Responsibility</div>
+                                    <div className="Corporate-Box-Subtitle">
+                                        Responsibility beyond business. Impact beyond numbers.
+                                    </div>
+                                    <div className="Corporate-Box-des">
+                                        At Mayur, CSR is an integral part of our identity. Our initiatives
+                                        are focused on environmental stewardship, social development, and
+                                        long‑term community impact.
+                                    </div>
                                 </div>
                             </div>
-                            <div className="image-container">
-                                <img
-                                    src="Creative-1.jpg"
-                                    alt="Massage room with natural lighting"
-                                />
+
+                            <div className="Corp-cards-row">
+                                {/* Card 01 — INVERTED (starts expanded, shrinks on hover) */}
+                                <div className="corp-card corp-card--inverted">
+                                    <div className="corp-card-inner">
+                                        <div className="corp-card-img">
+                                            <img src="/New-image-4.jpg" alt="Trees Planted" />
+                                        </div>
+                                        <div className="corp-card-body">
+                                            <div className="corp-card-numbers">01.</div>
+                                            <div className="corp-card-bottom">
+                                                <div className="corp-card-icon">
+                                                    <i className="fa fa-tree" aria-hidden="true"></i>
+                                                </div>
+                                                <div className="corp-card-title">35,000+ Trees Planted Since 2020</div>
+                                                <div className="corp-card-desc">
+                                                    <li>
+                                                        Large-scale plantation drives with a long-term commitment
+                                                        to biodiversity, carbon absorption, and continuous
+                                                        expansion of green cover.
+                                                    </li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Card 02 — Featured */}
+                                <div className="corp-card corp-card--featured">
+                                    <div className="corp-card-inner">
+                                        <div className="corp-card-img">
+                                            <img src="/New-image-5.jpg" alt="Carbon Reduction" />
+                                        </div>
+                                        <div className="corp-card-body">
+                                            <div className="corp-card-number">02.</div>
+                                            <div className="corp-card-bottom">
+                                                <div className="corp-card-icon">
+                                                    <i className="fa fa-leaf" aria-hidden="true"></i>
+                                                </div>
+                                                <div className="corp-card-title">Carbon Impact Reduction</div>
+                                                <div className="corp-card-desc">
+                                                    <li>
+                                                        Focused initiatives to reduce emissions through
+                                                        energy-efficient manufacturing, waste reduction, and
+                                                        responsible resource use.
+                                                    </li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Card 03 — Normal */}
+                                <div className="corp-card">
+                                    <div className="corp-card-inner">
+                                        <div className="corp-card-img">
+                                            <img src="/New-image-7.jpg" alt="Education" />
+                                        </div>
+                                        <div className="corp-card-body">
+                                            <div className="corp-card-number">03.</div>
+                                            <div className="corp-card-bottom">
+                                                <div className="corp-card-icon">
+                                                    <i className="fa fa-graduation-cap" aria-hidden="true"></i>
+                                                </div>
+                                                <div className="corp-card-title">Infrastructure for Sustainability</div>
+                                                <div className="corp-card-desc">
+                                                    <li>
+                                                        Installation of bag fillers to reduce packaging waste
+                                                        minimizing material loss through improved processes, and
+                                                        promoting a safe, inclusive workplace
+                                                    </li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div> */}
+
+                        {/* ---- RIGHT ---- */}
+                        <div className="Corporate-right">
+                            <div className="Floating-info-card">
+                                {/* 
+                                    FIX: Card 04 — Changed from corp-card--inverted to plain corp-card
+                                    so it behaves like card 03: small by default, expands on hover.
+                                    Also changed corp-card-numbers to corp-card-number for correct styling.
+                                */}
+                                <div className="corp-card">
+                                    <div className="corp-card-inner">
+                                        <div className="corp-card-img">
+                                            <img src="/New-image-6.jpeg" alt="Education" />
+                                        </div>
+                                        <div className="corp-card-body">
+                                            <div className="corp-card-number">04.</div>
+                                            <div className="corp-card-bottom">
+                                                <div className="corp-card-icon">
+                                                    <i className="fa fa-graduation-cap" aria-hidden="true"></i>
+                                                </div>
+                                                <div className="corp-card-title">
+                                                    Education &amp; Community Development
+                                                </div>
+                                                <div className="corp-card-desc">
+                                                    <li>
+                                                        Supporting education, community programs, and empowering
+                                                        future generations through learning
+                                                    </li>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="Photo-collage">
+                                <div className="Photo-collage-image">
+                                    <img src="/0003.png" alt="Collage Main" />
+                                </div>
+                                <div className="Photo-collage-2">
+                                    <img src="/New-image-9.png" alt="" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+                {/* ===== END CORPORATE ===== */}
+
+
+                {/* ===== PEEK CAROUSEL SLIDER ===== */}
+                <div className="Sustainability-Box-Container">
+                <div className="Sustainability-Product-title">Sustainability Product</div>
+                    <div className="sbs-outer">
+
+                        {/* ---- Carousel Track ---- */}
+                        <div className="sbs-carousel-wrap">
+                            {slides.map((s, i) => {
+                                const pos = getRelPos(i);
+                                const isActive = pos === 0;
+                                const posKey =
+                                    pos === 0 ? 'active' :
+                                        pos === 1 ? 'right' :
+                                            pos === -1 ? 'left' : 'hidden';
+
+                                return (
+                                    <div className="sbs-item-container" key={s.id}>
+                                        <div
+                                            className={`sbs-item sbs-item--${posKey}`}
+                                            onClick={() => {
+                                                if (!isActive) {
+                                                    goTo(i);
+                                                } else if (isMobile) {
+                                                    setPanelOpen(p => !p);
+                                                }
+                                            }}
+                                            onMouseEnter={() => {
+                                                if (isActive && !isMobile) {
+                                                    isHovering.current = true;
+                                                    setPanelOpen(true);
+                                                }
+                                            }}
+                                            onMouseLeave={() => {
+                                                if (isActive && !isMobile) {
+                                                    isHovering.current = false;
+                                                    setPanelOpen(false);
+                                                }
+                                            }}
+                                        >
+                                            {/* Background image */}
+                                            <div
+                                                className="sbs-bg"
+                                                style={{ backgroundImage: `url(${s.image})` }}
+                                            ></div>
+                                            <div className="sbs-bg-dark"></div>
+
+                                            {/* Peek arrow hint (only on peek cards) */}
+                                            {!isActive && (
+                                                <div className={`sbs-peek-arrow sbs-peek-arrow--${posKey}`}>
+                                                    <span>{posKey === 'right' ? '›' : '‹'}</span>
+                                                </div>
+                                            )}
+
+                                            {/* Left Content */}
+                                            <div className={`sbs-left${isActive && panelOpen ? ' sbs-left-shrink' : ''}`}>
+                                                <h2 className="sbs-brand">{s.brand}</h2>
+                                                <p className="sbs-material">{s.material}</p>
+                                                {isActive && isMobile && (
+                                                    <div className="sbs-tap-hint">
+                                                        <span className="sbs-hint-dot"></span>
+                                                        <span>{panelOpen ? 'Tap to close' : 'Tap to explore'}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Right Detail Panel */}
+                                            <div className={`sbs-panel${isActive && panelOpen ? ' sbs-panel-open' : ''}`}>
+                                                <div className="sbs-panel-scroll">
+                                                    <div className="sbs-panel-brand">{s.brand}</div>
+                                                    <div className="sbs-panel-mat">{s.material}</div>
+                                                    <div className="sbs-panel-line"></div>
+                                                    <p className="sbs-panel-sub">{s.subtitle}</p>
+
+                                                    <div className="sbs-kh-row">
+                                                        <span className="sbs-kh-dash"></span>
+                                                        <span className="sbs-kh-text">Key Highlights</span>
+                                                        <span className="sbs-kh-dash"></span>
+                                                    </div>
+
+                                                    <ul className="sbs-list">
+                                                        {s.highlights.map((pt, hi) => (
+                                                            <li
+                                                                key={hi}
+                                                                className={isActive && panelOpen ? 'sbs-list-item-in' : ''}
+                                                                style={{ animationDelay: `${0.06 * hi + 0.2}s` }}
+                                                            >
+                                                                <span className="sbs-dot-bullet"></span>
+                                                                <span>{pt}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+                {/* ===== END PEEK CAROUSEL SLIDER ===== */}
+
+
+                {/* ===== DESIGN SECTION — ref attached ===== */}
+                <div className="design-section" ref={designSectionRef}>
+                    <div className="ds-bg"></div>
+                    <div className="ds-bg-img"></div>
+                    <div className="ds-overlay"></div>
+
+                    {/* ds-right has zoom class applied — CSS handles hover zoom */}
+                    <div className="ds-right ds-right--zoom">
+                        <div className="ds-left">
+                            <div className="ds-label">Sustainable Product</div>
+                            <h2 className="ds-title">
+                                Recycled <span> PET </span><br />Fabric
+                            </h2>
+                            <div className="ds-line"></div>
+                            <div className="ds-subtitle">
+                                Sustainable Base Material from Recycled Plastic Bottles
+                            </div>
+                        </div>
+                        <p className="ds-desc">
+                            Discover an extraordinary range of handpicked products, sourced from the
+                            heart of nature. Every detail crafted with care, every element designed to
+                            elevate your experience.
+                        </p>
+                    </div>
+                </div>
+                {/* ===== END DESIGN SECTION ===== */}
 
             </div>
         </>

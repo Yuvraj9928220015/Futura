@@ -1,1038 +1,2426 @@
-/* Sustainability Component Styles */
+/* ============================================================
+   SUSTAINABILITY — FULL RESPONSIVE CSS
+   ============================================================ */
+
+* {
+    box-sizing: border-box;
+}
+
 .sustainability {
     width: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
+
+/* ============================================================
+   BANNER / BELIEVE SECTION
+   ============================================================ */
 
 .sustainability-banner {
-    background-image: url(/public/sustainability-Banner-1.jpg);
+    background-image: url(/public/sustainability-Banner-1.png);
     width: 100%;
+    padding: 100px 0px;
+    height: 100%;
+    background-repeat: no-repeat;
     background-attachment: fixed;
+    background-size: cover;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
-/* ========== BELIEVE SECTION ========== */
 .Believe {
-    padding: 80px 0;
+    padding: 10px 40px;
 }
 
 .Believe-Section {
-    padding: 0 15px;
-}
-
-.Believe-Tilte {
-    font-weight: 300;
-    padding: 10px 15px;
-    text-align: center;
-    font-size: 28px;
-    color: #fcfcfc;
-    font-style: italic;
-    line-height: 1.4;
-}
-
-.Believe-image {
-    width: 100%;
-    position: relative;
-}
-
-.Believe-image img {
-    width: 100%;
-    border-radius: 4px;
-    height: auto;
-    display: block;
-}
-
-.Believe-content {
+    margin: 100px;
+    border-radius: 20px;
+    height: 90vh;
+    background-color: #ffffff52;
     display: flex;
-    height: 100%;
-    padding: 40px 60px;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.Believe-content-title {
-    font-family: 'Georgia', serif;
-    font-weight: 300;
-    padding: 10px 0;
-    font-size: 60px;
-    text-shadow: 2px 2px 6px #00000099;
-    color: #ffffff;
-    line-height: 1.2;
-}
-
-.Believe-content-subtitle {
-    font-size: 24px;
-    letter-spacing: 1px;
-    color: white;
-    font-weight: 520;
-    padding: 15px 0;
-    font-style: italic;
-    text-shadow: 2px 2px 6px #00000099;
-}
-
-.Believe-content-des {
-    padding: 30px 0;
-    font-size: 18px;
-    color: white;
-    max-width: 100%;
-    text-shadow: 2px 2px 6px #00000099;
-    line-height: 1.6;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-.Believe-content-btn {
-    font-weight: 600;
-    color: white;
-    cursor: pointer;
-    display: inline-block;
-}
-
-.Believe-content-btn-line {
-    width: 70px;
-    height: 2px;
-    background-color: #ffffff;
-    margin-top: 8px;
-}
-
-.Believe-des {
-    color: white;
-    text-align: center;
-    font-size: 18px;
-    padding: 0 15px;
-}
-
-.Believe-content-prag {
-    padding: 15px 20px;
-    font-size: 18px;
-    text-align: center;
-    color: white;
-    max-width: 900px;
-    margin: 0 auto;
-    line-height: 1.6;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-/* ========== INTRODUCED SECTION ========== */
-.Introduced {
-    padding: 10px 50px;
-    position: relative;
-}
-
-.Introduced-content {
-    padding: 20px 40px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    height: 100%;
-}
-
-.Introduced-content-title {
-    padding: 10px 0;
-    font-size: 40px;
-    line-height: 1.2;
-    text-shadow: 2px 2px 6px #00000099;
-    color: #fdfdfd;
-    font-weight: 600;
-}
-
-.Introduced-content-line {
-    width: 80px;
-    height: 2px;
-    background-color: white;
-    margin: 20px 0;
-}
-
-.Introduced-content-des {
-    font-size: 20px;
-    font-weight: 500;
-    padding: 15px 0;
-    color: white;
-    text-shadow: 2px 2px 6px #00000099;
-    line-height: 1.6;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-.Introduced-content-btn button {
-    background-color: transparent;
-    color: #ffffff;
-    padding: 14px 35px;
-    border: 1px solid #ffffff;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    margin-top: 15px;
-}
-
-.Introduced-content-btn button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-.Introduced-content-image {
-    width: 100%;
-    height: 100%;
-    padding: 20px 0;
-}
-
-.Introduced-image-1 img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
-
-/* ========== MINDFUL SECTION ========== */
-.Mindful {
-    width: 100%;
-    margin: 60px 0;
-}
-
-.Mindful-wrapper {
-    position: relative;
-    width: 100%;
-    display: flex;
+    border: 1px solid #ffffff36;
     align-items: center;
+    gap: 10px;
+    justify-content: center;
+    padding: 10px;
 }
 
-.Mindful-image {
-    width: 100%;
-}
-
-.Mindful-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block;
-}
-
-/* ========== PROVIDE / CSR SECTION ========== */
-.Provide {
-    padding: 80px 0;
-}
-
-.Provide-subtitle {
-    text-align: center;
-    font-size: 44px;
-    font-weight: 600;
-    color: white;
-    padding: 0 15px;
-    margin-bottom: 20px;
-}
-
-.Provide-Box {
-    margin-top: 30px;
-    border-radius: 4px;
-    width: 100%;
+.Believe-Section-1 {
+    width: 35%;
+    height: 100%;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    align-items: center;
+    gap: 10px;
     justify-content: center;
-}
-
-.Provide-Box img {
-    width: 100%;
-    border-radius: 4px;
-    height: auto;
-    display: block;
-}
-
-#Provide-Box-Sustain {
-    background-color: white;
-    border-radius: 4px;
-}
-
-.Provide-Box-content {
-    padding: 30px 25px;
-}
-
-.Provide-Box-Sustain-title {
-    text-align: start;
-    width: 100%;
-    padding-bottom: 20px;
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-}
-
-.Provide-Box-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #444;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.Provide-Box-des {
-    font-size: 15px;
-    color: #636363;
-    line-height: 1.6;
-}
-
-.Provide-Box-des ul {
-    padding-left: 20px;
-    margin: 10px 0;
-}
-
-.Provide-Box-des ul li {
-    line-height: 1.8;
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-/* ========== PEARL / SUSTAINABLE PRODUCTS ========== */
-.Pearl-content {
-    padding: 80px 20px 60px;
-}
-
-/* ========== DESIGN WRAPPER / PRODUCTS ========== */
-.design-wrapper {
-    width: 100%;
-    background-color: #f5f5f5;
-}
-
-.design-section {
-    display: flex;
-    width: 100%;
-    min-height: 600px;
-}
-
-.design-image-col {
-    flex: 0 0 50%;
-    width: 50%;
+    align-items: center;
     overflow: hidden;
 }
 
-.design-image {
+.Believe-Section-1 img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.4s ease;
+}
+
+.Believe-Section-1 img:hover {
+    transform: scale(1.1);
+}
+
+.Believe-Section-2 {
+    width: 65%;
+    height: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.Believe-main-Section-1 {
+    position: relative;
+    width: 100%;
+    height: 70%;
+    border: 1px solid #ffffff36;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.Believe-main-Section-1 img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.Believe-main-Section-3 {
+    position: relative;
+    width: 100%;
+    height: 70%;
+    border: 1px solid #ffffff36;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.Believe-main-Section-logo {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    z-index: 2;
+}
+
+.Believe-main-Section-logo img {
+    width: auto;
+    max-width: 120px;
+    height: auto;
+}
+
+.Believe-main-Section-content {
+    position: absolute;
+    top: 55%;
+    left: 0px;
+    z-index: 2;
+}
+
+.Believe-main-Section-content img {
+    width: 90%;
+    left: 30px;
+    bottom: 40px;
+}
+
+.Believe-main-Section-2 {
+    width: 100%;
+    height: 30%;
+    border-radius: 20px;
+    border: 1px solid #ffffff36;
+    background-color: white;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.Believe-main-Section-2 img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.Believe-main-Section-4 {
+    width: 100%;
+    height: 50%;
+    padding: 50px;
+    border-radius: 20px;
+    border: 1px solid #ffffff36;
+    background-image: url(/public/new.jpg);
+    background-size: cover;
+}
+
+/* ============================================================
+   NAV-LI — Clickable Navigation List Items
+   ============================================================ */
+
+.Believe-main-Section-list ul {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 30px;
+    padding: 40px;
+    color: #363636;
+    text-transform: uppercase;
+    list-style: none;
+    margin: 0;
+}
+
+.Believe-main-Section-list ul li {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+/* Clickable nav li */
+.nav-li {
+    cursor: pointer;
+    position: relative;
+    transition: color 0.28s ease, transform 0.22s ease;
+    user-select: none;
+}
+
+.nav-li::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: #4b6205;
+    border-radius: 2px;
+    transition: width 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-li:hover {
+    color: #4b6205;
+    transform: translateY(-2px);
+}
+
+.nav-li:hover::after {
+    width: 100%;
+}
+
+.nav-li:active {
+    transform: translateY(0px) scale(0.96);
+    color: #3a4d04;
+}
+
+/* ============================================================
+   BELIEVE SECTION — rest
+   ============================================================ */
+
+.Believe-main-Section-title {
+    padding: 30px 80px;
+    line-height: 45px;
+    font-size: 40px;
+}
+
+.Believe-main-Section-Subtitle {
+    padding: 0px 80px;
+    margin-top: 30px;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+/* ============================================================
+   DOWNLOAD BUTTON
+   ============================================================ */
+
+.Believe-main-Section-btn {
+    padding: 50px 76px;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    border: 2px solid #4b6205;
+    background-color: #4b6205;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        background-color 0.35s ease,
+        border-color 0.35s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+/* Text part */
+.download-btn-text {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #ffffff;
+    padding: 11px 20px 11px 22px;
+    letter-spacing: 0.5px;
+    transition: color 0.35s ease;
+}
+
+/* Icon circle */
+.download-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    margin-right: 5px;
+    flex-shrink: 0;
+    transition:
+        background-color 0.35s ease,
+        transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.download-btn-icon svg {
+    width: 16px;
+    height: 16px;
+    color: #4b6205;
+    transition: color 0.35s ease, transform 0.35s ease;
+}
+
+/* ---- HOVER STATE ---- */
+.download-btn:hover {
+    background-color: #ffffff;
+    border-color: #4b6205;
+}
+
+.download-btn:hover .download-btn-text {
+    color: #4b6205;
+}
+
+.download-btn:hover .download-btn-icon {
+    background-color: #4b6205;
+}
+
+.download-btn:hover .download-btn-icon svg {
+    color: #ffffff;
+    transform: translateY(2px);
+}
+
+/* ---- ACTIVE / PRESS ---- */
+.download-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.12s ease;
+}
+
+
+
+.Compact-title {
+    line-height: 40px;
+    font-size: 40px;
+    color: white;
+}
+
+.Compact-subtitle {
+    margin-top: 20px;
+    font-size: 21px;
+    color: white;
+    font-style: italic;
+    padding: 10px 0;
+}
+
+.Compact-des {
+    font-size: 19px;
+    color: white;
+}
+
+
+/* ============================================================
+   CORPORATE SECTION
+   ============================================================ */
+
+.Corporate {
+    position: relative;
+    z-index: 2;
+    background-image: url(/public/sustainability-Banner-3.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    padding: 70px 0 90px;
+    min-height: 100vh;
+    scroll-margin-top: 80px;
+}
+
+.Corporate-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 50px;
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.Corporate-left {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.Corporate-heading-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.Corporate-green-bar {
+    background-color: #4b6205;
+    width: 10px;
+    min-height: 220px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.Corporate-left-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 6px;
+}
+
+.Corporate-Box-title {
+    font-size: 38px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+}
+
+.Corporate-Box-Subtitle {
+    font-size: 20px;
+    color: #4b6205;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.Corporate-Box-des {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.75;
+    max-width: 500px;
+}
+
+.Corp-cards-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    flex-wrap: nowrap;
+}
+
+.corp-card {
+    width: 155px;
+    height: 295px;
+    border-radius: 22px;
+    background: #ffffff;
+    border: 1px solid #e2e2da;
+    overflow: hidden;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 12px #00000012;
+    transition:
+        width 0.52s cubic-bezier(0.4, 0, 0.2, 1),
+        height 0.52s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.32s ease;
+    position: relative;
+}
+
+.corp-card:hover {
+    width: 270px;
+    height: 430px;
+    box-shadow: 0 20px 56px #4b62052e;
+    z-index: 10;
+}
+
+.corp-card--featured {
+    width: 195px;
+    height: 355px;
+    box-shadow: 0 8px 32px #4a610521;
+}
+
+.corp-card--featured:hover {
+    width: 290px;
+    height: 455px;
+}
+
+.corp-card-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.corp-card-img {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 22px 22px 0 0;
+    flex-shrink: 0;
+    opacity: 0;
+    transition:
+        height 0.52s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.4s ease 0.06s;
+}
+
+.corp-card:hover .corp-card-img {
+    height: 46%;
+    opacity: 1;
+}
+
+.corp-card-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
+    border-radius: 22px 22px 0 0;
 }
 
-.design-content-col {
-    flex: 0 0 50%;
-    width: 50%;
-    background-color: #f5f1ed;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 60px 80px;
-}
-
-.design-content-left {
-    justify-content: flex-start;
-}
-
-.design-content {
+.corp-card-body {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 18px 18px 20px;
+    min-height: 0;
+}
+
+.corp-card-number {
+    font-size: 48px;
+    font-weight: 300;
+    color: #c5c5bb;
+    line-height: 1;
+    transition: font-size 0.4s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.corp-card-numbers {
+    font-size: 40px;
+    font-weight: 300;
+    color: #c5c5bb;
+    line-height: 1;
+    transition: font-size 0.4s ease, color 0.3s ease, opacity 0.3s ease;
+}
+
+.corp-card:hover .corp-card-number {
+    font-size: 24px;
+    color: #4b6205;
+    opacity: 0.65;
+}
+
+.corp-card-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.corp-card-icon {
+    font-size: 18px;
+    color: #4b6205;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s ease 0.22s, transform 0.3s ease 0.22s;
+}
+
+.corp-card:hover .corp-card-icon {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.corp-card-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.35;
+}
+
+.corp-card:hover .corp-card-title {
+    font-size: 18.5px;
+}
+
+.corp-card-desc {
+    font-size: 12.5px;
+    color: #555;
+    line-height: 1.65;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.45s ease 0.18s, opacity 0.35s ease 0.28s;
+}
+
+.corp-card:hover .corp-card-desc {
+    max-height: 200px;
+    opacity: 1;
+}
+
+.corp-card-desc ul {
+    padding-left: 15px;
+    margin: 4px 0 0;
+    list-style: disc;
+}
+
+.corp-card-desc ul li {
+    list-style: none;
+    margin-bottom: 5px;
+    color: #444;
+}
+
+/* ---- CARD 01 — INVERTED ---- */
+.corp-card--inverted {
+    width: 270px;
+    height: 430px;
+    box-shadow: 0 8px 32px #4b620521;
+}
+
+.corp-card--inverted:hover {
+    width: 155px;
+    height: 295px;
+    box-shadow: 0 2px 12px #00000012;
+}
+
+.corp-card--inverted .corp-card-number {
+    font-size: 24px !important;
+    color: #4b6205 !important;
+    opacity: 0 !important;
+}
+
+.corp-card--inverted:hover .corp-card-number {
+    font-size: 48px !important;
+    color: #c5c5bb !important;
+    opacity: 1 !important;
+}
+
+.corp-card--inverted .corp-card-icon {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.corp-card--inverted:hover .corp-card-icon {
+    opacity: 0 !important;
+    transform: translateY(8px) !important;
+}
+
+.corp-card--inverted .corp-card-title {
+    font-size: 18.5px !important;
+}
+
+.corp-card--inverted:hover .corp-card-title {
+    font-size: 13.5px !important;
+}
+
+.corp-card--inverted .corp-card-desc {
+    max-height: 200px !important;
+    opacity: 1 !important;
+}
+
+.corp-card--inverted:hover .corp-card-desc {
+    max-height: 0 !important;
+    opacity: 0 !important;
+}
+
+.corp-card--inverted .corp-card-img {
+    height: 46% !important;
+    opacity: 1 !important;
+}
+
+.corp-card--inverted:hover .corp-card-img {
+    height: 0 !important;
+    opacity: 0 !important;
+}
+
+.Corporate-right {
+    width: 50%;
+    flex-shrink: 0;
+    position: relative;
+    min-height: 80vh;
+}
+
+.Floating-info-card {
+    position: absolute;
+    top: 8%;
+    right: 0;
+    left: auto;
+    width: 155px;
+    /* matches default corp-card width */
+    border-radius: 22px;
+    z-index: 10;
+    transition: width 0.52s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When its child card is hovered, the container grows too */
+.Floating-info-card:has(.corp-card:hover) {
+    width: 270px;
+}
+
+.Floating-info-card ul {
+    padding-left: 16px;
+    margin: 0;
+    list-style: disc;
+}
+
+.Floating-info-card ul li {
+    font-size: 12.5px;
+    color: #444;
+    line-height: 1.65;
+    margin-bottom: 6px;
+}
+
+.Photo-collage {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
 }
 
-.design-subtitle-1,
-.design-subtitle-2 {
-    font-size: 36px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 2px #00000099;
-    color: #333;
-}
-
-.design-subtitle-1 {
-    text-align: end;
-}
-
-.design-subtitle-2 {
-    text-align: start;
-}
-
-.design-subtitle-content-1 h5,
-.design-subtitle-content-2 h6 {
-    font-size: 18px;
-    font-weight: 500;
-    color: #666;
-    text-shadow: 1px 1px 1px #00000099;
-    margin-bottom: 30px;
-}
-
-.design-subtitle-content-1 h5 {
-    text-align: end;
-}
-
-.design-subtitle-content-2 h6 {
-    text-align: start;
-}
-
-.design-des,
-.design-prag {
+.Photo-collage-image img {
     width: 100%;
-    max-width: 600px;
+    height: auto;
 }
 
-.design-des-2 {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+.Photo-collage-2 {
+    position: absolute;
+    bottom: 4%;
+    right: -10%;
 }
 
-.design-text-1,
-.design-text-2 {
-    font-size: 16px;
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 15px;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-.design-text-Highlight {
-    color: #333;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.design-text-1 ul,
-.design-text-2 ul {
-    padding: 15px 0 15px 25px;
-    margin: 10px 0;
-}
-
-.design-text-1 ul li,
-.design-text-2 ul li {
-    font-size: 16px;
-    color: #666;
-    line-height: 1.8;
-    margin-bottom: 8px;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-/* ========== ABOUT MASSAGE / VISION SECTION ========== */
-.about-massage-wrapper {
-    width: 100%;
-    padding: 60px 0;
-}
-
-.about-massage {
+.Photo-collage-2 img {
     max-width: 100%;
-    margin: 0 auto;
-    display: flex;
-    gap: 0;
+    height: auto;
 }
 
-.about-massage-content {
-    flex: 1;
-    background-color: rgba(27, 31, 27, 0.25);
-    padding: 80px 60px;
-    display: flex;
-    align-items: center;
-    min-height: 500px;
+.collage-img {
+    position: absolute;
+    overflow: hidden;
+    border-radius: 10px;
+    filter: grayscale(100%);
+    transition: filter 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 3px 12px #00000026;
 }
 
-.text-content {
-    max-width: 550px;
+.collage-img:hover {
+    filter: grayscale(0%);
+    transform: scale(1.04);
+    box-shadow: 0 10px 30px #00000038;
+    z-index: 20;
 }
 
-.text-content h1 {
-    font-size: 42px;
-    font-weight: 400;
-    color: #ffffff;
-    margin-bottom: 30px;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-    font-family: 'Georgia', serif;
-    line-height: 1.3;
-}
-
-.text-content .about-massage-description {
-    font-size: 17px;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
-    line-height: 1.8;
-    color: #ffffff;
-    margin-bottom: 20px;
-    letter-spacing: 0.3px;
-    font-weight: 500;
-    font-family: "Quicksand", sans-serif;
-}
-
-#about-massage-descr {
-    font-size: 22px;
-    font-weight: 600;
-    padding-bottom: 10px;
-}
-
-.about-massage-line {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 100px;
-    height: 2px;
-    background-color: #ebebeb;
-}
-
-.image-container {
-    flex: 1;
-    position: relative;
-    min-height: 500px;
-}
-
-.image-container img {
+.collage-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
 }
 
-/* ========================================
-   RESPONSIVE STYLES
-======================================== */
 
-/* Large Tablets & Small Desktops (1024px - 1200px) */
-@media screen and (max-width: 1200px) {
-    .Believe-content {
-        padding: 30px 40px;
+/* ============================================================
+   DESIGN SECTION
+   ============================================================ */
+
+.design-section {
+    position: relative;
+    height: 800px;
+    width: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+    scroll-margin-top: 80px;
+}
+
+.ds-bg-img {
+    position: absolute;
+    inset: 0;
+    background-image: url(/public/Sustainability-4.png);
+    background-size: cover;
+    background-position: center;
+    /* Subtle zoom on section hover */
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.design-section:hover .ds-bg-img {
+    transform: scale(1.04);
+}
+
+.ds-left {
+    position: relative;
+    z-index: 2;
+    max-width: 100%;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.ds-label {
+    font-size: 16px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px #ffffff80;
+}
+
+.ds-line {
+    margin-top: 20px;
+    width: 10%;
+    height: 3px;
+    background-color: #ffffff;
+}
+
+.ds-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 50px;
+    font-weight: 700;
+    color: #f0f4e0;
+    line-height: 1.15;
+    text-shadow: 1px 1px 3px #00000080;
+    margin: 0;
+}
+
+.ds-subtitle {
+    padding: 20px 0px;
+    font-style: italic;
+    font-size: 22px;
+    color: #ffeb00;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px #00000080;
+}
+
+.ds-title span {
+    color: #ffeb00;
+}
+
+/* ============================================================
+   DS-RIGHT — ZOOM EFFECT
+   ============================================================ */
+
+.ds-right {
+    position: relative;
+    z-index: 2;
+    max-width: 44%;
+    padding-left: 32px;
+    padding: 100px 60px;
+    border-radius: 10px 0px 0px 10px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Zoom modifier class */
+.ds-right--zoom {
+    transform-origin: center center;
+    transform: scale(1);
+    transition:
+        transform 0.55s cubic-bezier(0.34, 1.42, 0.64, 1),
+        opacity 0.4s ease;
+    will-change: transform;
+}
+
+/* Zoom in on hover */
+.design-section:hover .ds-right--zoom {
+    transform: scale(1.06);
+}
+
+/* Zoom press feedback */
+.design-section:active .ds-right--zoom {
+    transform: scale(1.02);
+    transition: transform 0.18s ease;
+}
+
+/* ds-desc and ds-left also subtly shift on hover */
+.design-section:hover .ds-left {
+    transform: translateX(-6px);
+    opacity: 0.95;
+}
+
+.design-section:hover .ds-desc {
+    opacity: 0.92;
+}
+
+.ds-desc {
+    font-size: 18px;
+    text-shadow: 1px 1px 3px #00000080;
+    color: #f0f4e0;
+    line-height: 1.5;
+    font-weight: 300;
+    width: 80%;
+    margin: 0 0 20px;
+    transition: opacity 0.4s ease;
+}
+
+/* ============================================================
+   DS CTA / HOVER HINT (existing styles kept)
+   ============================================================ */
+
+.ds-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #b8d830;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.ds-cta-arrow {
+    width: 24px;
+    height: 1px;
+    background: #b8d830;
+    position: relative;
+    transition: width 0.3s ease;
+}
+
+.ds-cta-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -3px;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid #b8d830;
+    border-top: 1.5px solid #b8d830;
+    transform: rotate(45deg);
+}
+
+.ds-hover-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #b4d25099;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.3s ease;
+}
+
+.ds-hover-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #b8d830;
+    animation: ds-pulse 2s infinite;
+}
+
+@keyframes ds-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 
-    .Believe-content-title {
-        font-size: 42px;
-    }
-
-    .Introduced {
-        padding: 60px 30px;
-    }
-
-    .Introduced-content {
-        padding: 20px;
-    }
-
-    .Introduced-content-title {
-        font-size: 28px;
-    }
-
-    .design-content-col {
-        padding: 50px 60px;
-    }
-
-    .design-subtitle-1,
-    .design-subtitle-2 {
-        font-size: 32px;
-    }
-
-    .text-content h1 {
-        font-size: 38px;
+    50% {
+        opacity: 0.4;
+        transform: scale(0.7);
     }
 }
 
-/* Tablets (768px - 1024px) */
-@media screen and (max-width: 1024px) {
-    .sustainability-banner {
-        background-attachment: scroll;
+.ds-popup-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    padding: 0;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.design-section:hover .ds-hover-hint {
+    opacity: 0;
+}
+
+.design-section:hover .ds-popup-overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.ds-box {
+    flex: 1;
+    height: 100%;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    transform: translateY(20px);
+    transition: transform 0.5s ease, box-shadow 0.3s ease;
+}
+
+
+/* ============================================================
+   SUSTAINABILITY BOX CONTAINER (Peek Carousel)
+   ============================================================ */
+
+.Sustainability-Box-Container {
+    width: 100%;
+    background-image: url(/public/sustainability-Banner-1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 0 50px;
+    position: relative;
+    z-index: 2;
+}
+
+.Sustainability-Box-Container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.sbs-outer {
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+}
+
+/* ============================================================
+   CAROUSEL WRAP
+   ============================================================ */
+
+.sbs-carousel-wrap {
+    position: relative;
+    width: 100%;
+    height: 560px;
+    overflow: hidden;
+}
+
+/* ============================================================
+   INDIVIDUAL SLIDE ITEM
+   ============================================================ */
+
+.sbs-item {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    align-items: stretch;
+    border-radius: 26px;
+    overflow: hidden;
+
+    /* ★ BACKGROUND COLOR visible as 10px border/padding around the image ★ */
+    background-color: #ffffff42;
+
+    transition:
+        left 0.62s cubic-bezier(0.4, 0, 0.2, 1),
+        width 0.62s cubic-bezier(0.4, 0, 0.2, 1),
+        height 0.62s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.62s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.50s ease,
+        box-shadow 0.40s ease;
+}
+
+.sbs-item--active {
+    left: 15%;
+    transform: translateX(-4%) translateY(-49%);
+    width: 56%;
+    height: 480px;
+    z-index: 5;
+    opacity: 1;
+    cursor: default;
+}
+
+.sbs-item--right {
+    left: 72%;
+    transform: translateY(-50%);
+    width: 38%;
+    height: 380px;
+    z-index: 3;
+    opacity: 0.72;
+    cursor: pointer;
+}
+
+.sbs-item--left {
+    left: -13%;
+    transform: translateY(-50%);
+    width: 26%;
+    height: 400px;
+    z-index: 3;
+    opacity: 0.72;
+    cursor: pointer;
+}
+
+.sbs-item--hidden {
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 68%;
+    height: 520px;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sbs-item--right:hover,
+.sbs-item--left:hover {
+    opacity: 0.9;
+    box-shadow: 0 28px 80px #000000a6;
+}
+
+/* ============================================================
+   BACKGROUND IMAGE + OVERLAY
+   ============================================================ */
+
+.sbs-bg {
+    position: absolute;
+    inset: 10px;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.65s ease;
+    border-radius: 18px;
+}
+
+.sbs-item--active:hover .sbs-bg {
+    transform: scale(1.04);
+}
+
+.sbs-bg-dark {
+    position: absolute;
+    inset: 10px;
+    background: linear-gradient(125deg,
+            #00000000 0%,
+            #00000000 55%,
+            #0000000e 100%);
+    border-radius: 18px;
+    z-index: 1;
+}
+
+/* ============================================================
+   PEEK ARROW HINT
+   ============================================================ */
+
+.sbs-peek-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 8;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.sbs-item--right:hover .sbs-peek-arrow,
+.sbs-item--left:hover .sbs-peek-arrow {
+    opacity: 1;
+}
+
+.sbs-peek-arrow--right {
+    left: 4px;
+    transform: translateY(-50%);
+}
+
+.sbs-peek-arrow--left {
+    right: 18px;
+    left: auto;
+    transform: translateY(-50%);
+}
+
+.sbs-item--right:hover .sbs-peek-arrow--right {
+    transform: translateY(-50%) scale(1.12);
+}
+
+.sbs-item--left:hover .sbs-peek-arrow--left {
+    transform: translateY(-50%) scale(1.12);
+}
+
+/* ============================================================
+   LEFT CONTENT AREA
+   ============================================================ */
+
+.sbs-left {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 55px 42px;
+    width: 78%;
+    transition: width 0.52s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 14px;
+}
+
+.sbs-left.sbs-left-shrink {
+    width: 60%;
+}
+
+.sbs-tag-pill {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #ffffff;
+    border: 1px solid #b8d83080;
+    background-color: #b9d830ef;
+    padding: 5px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    width: fit-content;
+}
+
+.sbs-num {
+    font-size: 90px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -3px;
+    margin: -10px 0 -20px;
+    font-family: 'Georgia', serif;
+    user-select: none;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+.sbs-brand {
+    text-shadow: 2px 2px 4px #000000;
+    font-size: 48px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.sbs-material {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 500;
+    text-shadow: 2px 2px 4px #000000;
+    font-style: italic;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.sbs-tap-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ffffffb3;
+    margin-top: 6px;
+}
+
+.sbs-hint-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #b8d830;
+    animation: sbsPulse 2s infinite;
+    flex-shrink: 0;
+}
+
+@keyframes sbsPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
     }
 
-    .Believe {
-        padding: 60px 0;
-    }
-
-    .Believe-content {
-        padding: 30px;
-    }
-
-    .Believe-content-title {
-        font-size: 38px;
-    }
-
-    .Believe-content-des {
-        padding: 20px 0;
-        font-size: 17px;
-    }
-
-    .Introduced {
-        padding: 50px 20px;
-    }
-
-    .Introduced-content-title {
-        font-size: 26px;
-    }
-
-    .Provide {
-        padding: 60px 0;
-    }
-
-    .Provide-subtitle {
-        font-size: 36px;
-    }
-
-    .design-section {
-        min-height: 500px;
-    }
-
-    .design-content-col {
-        padding: 40px 50px;
-    }
-
-    .design-subtitle-1,
-    .design-subtitle-2 {
-        font-size: 28px;
-    }
-
-    .about-massage-content {
-        padding: 60px 40px;
-    }
-
-    .text-content h1 {
-        font-size: 36px;
+    50% {
+        opacity: 0.35;
+        transform: scale(0.55);
     }
 }
 
-/* Small Tablets & Large Phones (600px - 768px) */
-@media screen and (max-width: 768px) {
-    .Believe {
-        padding: 40px 0;
-    }
+/* ============================================================
+   RIGHT PANEL
+   ============================================================ */
 
-    .Believe-content {
-        padding: 30px 20px;
-        margin-top: 20px;
-    }
+.sbs-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 0%;
+    z-index: 6;
+    overflow: hidden;
+    border-radius: 0 26px 26px 0;
+    transition: width 0.52s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    .Believe-content-title {
-        font-size: 32px;
-    }
+.sbs-panel.sbs-panel-open {
+    width: 48%;
+}
 
-    .Believe-content-subtitle {
-        font-size: 16px;
-    }
+.sbs-panel-scroll {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding: 48px 32px 48px 30px;
+    background-color: white;
+    border-left: 1px solid #bad93038;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+}
 
-    .Believe-content-des {
-        padding: 20px 0;
-        font-size: 16px;
-    }
+.sbs-panel-scroll::-webkit-scrollbar {
+    display: none;
+}
 
-    .Believe-Tilte {
-        font-size: 24px;
-        padding: 10px;
-    }
+.sbs-panel-brand {
+    font-size: 22px;
+    font-weight: 800;
+    color: #000000;
+    line-height: 1.2;
+    white-space: nowrap;
+}
 
-    .Believe-content-prag {
-        font-size: 16px;
-        padding: 10px 15px;
-    }
+.sbs-panel-mat {
+    font-size: 11px;
+    color: #000000;
+    letter-spacing: 1.5px;
+    font-style: italic;
+    white-space: nowrap;
+}
 
-    .Introduced {
-        padding: 40px 15px;
-    }
+.sbs-panel-line {
+    height: 1px;
+    background: linear-gradient(to right, #b8d83080, transparent);
+    margin: 2px 0;
+}
 
-    .Introduced-content {
-        padding: 20px 10px;
-        margin-bottom: 30px;
-    }
+.sbs-panel-sub {
+    font-size: 13px;
+    color: #000000b3;
+    line-height: 1.70;
+    margin: 0;
+}
 
-    .Introduced-content-title {
-        font-size: 24px;
-    }
+.sbs-kh-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 2px;
+}
 
-    .Introduced-content-des {
-        font-size: 16px;
-    }
+.sbs-kh-text {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #000000;
+    font-weight: 700;
+    white-space: nowrap;
+}
 
-    .Mindful {
-        margin: 40px 0;
-    }
+.sbs-kh-dash {
+    flex: 1;
+    height: 1px;
+    background: #b8d83038;
+}
 
-    .Provide {
-        padding: 50px 0;
-    }
+.sbs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
 
-    .Provide-subtitle {
-        font-size: 30px;
-    }
+.sbs-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12.5px;
+    color: #000000ad;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateX(14px);
+}
 
-    .Provide-Box {
-        margin-top: 20px;
-    }
+.sbs-list li.sbs-list-item-in {
+    animation: sbsListIn 0.42s ease forwards;
+}
 
-    .Provide-Box-content {
-        padding: 25px 20px;
-    }
-
-    .Provide-Box-Sustain-title {
-        font-size: 22px;
-    }
-
-    .Provide-Box-title {
-        font-size: 18px;
-    }
-
-    .Pearl-content {
-        padding: 60px 15px 40px;
-    }
-
-    .design-section {
-        flex-direction: column;
-        min-height: auto;
-    }
-
-    .design-image-col {
-        flex: 0 0 100%;
-        width: 100%;
-        height: 350px;
-    }
-
-    .design-content-col {
-        flex: 0 0 100%;
-        width: 100%;
-        padding: 40px 30px;
-    }
-
-    .design-content-left {
-        padding: 40px 30px;
-    }
-
-    .design-subtitle-1,
-    .design-subtitle-2 {
-        font-size: 28px;
-        text-align: center !important;
-    }
-
-    .design-subtitle-content-1 h5,
-    .design-subtitle-content-2 h6 {
-        text-align: center !important;
-        font-size: 16px;
-    }
-
-    .design-des,
-    .design-prag {
-        max-width: 100%;
-    }
-
-    .design-des-2 {
-        justify-content: center;
-    }
-
-    .about-massage {
-        flex-direction: column;
-    }
-
-    .about-massage-content {
-        padding: 50px 30px;
-        min-height: auto;
-    }
-
-    .text-content {
-        max-width: 100%;
-    }
-
-    .text-content h1 {
-        font-size: 32px;
-    }
-
-    .text-content .about-massage-description {
-        font-size: 16px;
-    }
-
-    #about-massage-descr {
-        font-size: 20px;
-    }
-
-    .image-container {
-        min-height: 400px;
+@keyframes sbsListIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
-/* Mobile Devices (480px - 600px) */
-@media screen and (max-width: 600px) {
-    .Believe-content-title {
-        font-size: 28px;
-    }
-
-    .Believe-content-subtitle {
-        font-size: 15px;
-    }
-
-    .Believe-content-des {
-        font-size: 15px;
-    }
-
-    .Introduced-content-title {
-        font-size: 22px;
-    }
-
-    .Introduced-content-des {
-        font-size: 15px;
-    }
-
-    .Provide-subtitle {
-        font-size: 26px;
-    }
-
-    .Believe-Tilte {
-        font-size: 22px;
-    }
-
-    .Provide-Box-Sustain-title {
-        font-size: 20px;
-    }
-
-    .design-image-col {
-        height: 300px;
-    }
-
-    .design-subtitle-1,
-    .design-subtitle-2 {
-        font-size: 24px;
-    }
-
-    .text-content h1 {
-        font-size: 28px;
-    }
-
-    .image-container {
-        min-height: 350px;
-    }
+.sbs-dot-bullet {
+    width: 5px;
+    height: 5px;
+    min-width: 5px;
+    border-radius: 50%;
+    background: #b8d830;
+    margin-top: 6px;
+    flex-shrink: 0;
 }
 
-/* Small Mobile Devices (360px - 480px) */
-@media screen and (max-width: 480px) {
-    .Believe {
-        padding: 30px 0;
+/* ============================================================
+   NAVIGATION ROW — dots + counter
+   ============================================================ */
+
+.sbs-nav-row {
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 28px;
+    padding-left: 16%;
+}
+
+.sbs-dots {
+    display: flex;
+    gap: 8px;
+}
+
+.sbs-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffffff52;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    border: 1px solid #ffffff33;
+}
+
+.sbs-dot.sbs-dot-on {
+    width: 30px;
+    border-radius: 4px;
+    background: #b8d830;
+    border-color: #b8d830;
+}
+
+.sbs-dot:hover:not(.sbs-dot-on) {
+    background: #b8d83073;
+    border-color: #b8d83073;
+}
+
+.sbs-count {
+    font-size: 14px;
+    color: #ffffff73;
+}
+
+.sbs-cur {
+    font-size: 22px;
+    font-weight: 700;
+    color: #b8d830;
+}
+
+.sbs-sep {
+    color: #ffffff38;
+    margin: 0 2px;
+}
+
+.sbs-tot {
+    font-size: 14px;
+    color: #ffffff52
+}
+
+.Sustainability-Product-title {
+    width: 100%;
+    font-size: 60px;
+    text-align: end;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+}
+
+
+/* ============================================================
+   RESPONSIVE — LARGE DESKTOP (max-width: 1400px)
+   ============================================================ */
+
+@media (max-width: 1400px) {
+    .Believe-Section {
+        margin: 60px;
     }
 
-    .Believe-content {
-        padding: 20px 15px;
+    .Believe-main-Section-title {
+        font-size: 34px;
+        padding: 20px 50px;
+        line-height: 40px;
     }
 
-    .Believe-content-title {
-        font-size: 24px;
-    }
-
-    .Believe-content-subtitle {
-        font-size: 14px;
-        padding: 10px 0;
-    }
-
-    .Believe-content-des {
-        padding: 15px 0;
-        font-size: 14px;
-    }
-
-    .Believe-Tilte {
-        font-size: 20px;
-    }
-
-    .Believe-content-prag {
-        font-size: 14px;
-    }
-
-    .Introduced {
-        padding: 30px 10px;
-    }
-
-    .Introduced-content {
-        padding: 15px 5px;
-    }
-
-    .Introduced-content-title {
-        font-size: 20px;
-    }
-
-    .Introduced-content-des {
-        font-size: 14px;
-    }
-
-    .Introduced-content-btn button {
-        padding: 12px 30px;
-        font-size: 0.85rem;
-    }
-
-    .Provide {
-        padding: 40px 0;
-    }
-
-    .Provide-subtitle {
-        font-size: 22px;
-    }
-
-    .Provide-Box-content {
-        padding: 20px 15px;
-    }
-
-    .Provide-Box-Sustain-title {
-        font-size: 18px;
-        padding-bottom: 15px;
-    }
-
-    .Provide-Box-title {
+    .Believe-main-Section-Subtitle {
+        padding: 0 50px;
         font-size: 16px;
     }
 
-    .Provide-Box-des {
-        font-size: 14px;
+    .Believe-main-Section-btn {
+        padding: 30px 50px;
     }
 
-    .Pearl-content {
-        padding: 50px 10px 30px;
-    }
-
-    .design-image-col {
-        height: 280px;
-    }
-
-    .design-content-col,
-    .design-content-left {
-        padding: 30px 20px;
-    }
-
-    .design-subtitle-1,
-    .design-subtitle-2 {
-        font-size: 22px;
-    }
-
-    .design-subtitle-content-1 h5,
-    .design-subtitle-content-2 h6 {
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
-
-    .design-text-1,
-    .design-text-2 {
-        font-size: 14px;
-    }
-
-    .design-text-Highlight {
-        font-size: 16px;
-    }
-
-    .design-text-1 ul li,
-    .design-text-2 ul li {
+    .download-btn-text {
         font-size: 13px;
     }
 
-    .about-massage-content {
-        padding: 40px 20px;
+    .Compact-title {
+        font-size: 30px;
+        line-height: 34px;
     }
 
-    .text-content h1 {
+    .Compact-subtitle {
+        font-size: 17px;
+    }
+
+    .Compact-des {
+        font-size: 15px;
+    }
+
+    .Believe-main-Section-4 {
+        padding: 30px;
+    }
+
+    .sbs-carousel-wrap {
+        height: 520px;
+    }
+
+    .sbs-item--active {
+        height: 480px;
+    }
+
+    .sbs-item--right,
+    .sbs-item--left {
+        height: 370px;
+    }
+
+    .sbs-item--hidden {
+        height: 480px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET LARGE (max-width: 1200px)
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .sustainability-banner {
+        padding: 60px 0;
+    }
+
+    .Believe {
+        padding: 10px 20px;
+    }
+
+    .Believe-Section {
+        margin: 30px;
+        height: auto;
+        min-height: 80vh;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .Believe-main-Section-1 {
+        height: 55%;
+    }
+
+    .Believe-main-Section-3 {
+        height: 55%;
+    }
+
+    .Believe-main-Section-title {
+        font-size: 28px;
+        padding: 20px 30px;
+        line-height: 36px;
+    }
+
+    .Believe-main-Section-Subtitle {
+        padding: 0 30px;
+        font-size: 15px;
+    }
+
+    .Believe-main-Section-btn {
+        padding: 20px 30px;
+    }
+
+    .Believe-main-Section-list ul {
+        padding: 20px 30px;
+        gap: 20px;
+    }
+
+    .Believe-main-Section-list ul li {
+        font-size: 16px;
+    }
+
+    .Compact-title {
         font-size: 26px;
-        margin-bottom: 20px;
+        line-height: 32px;
     }
 
-    .text-content .about-massage-description {
+    .Compact-subtitle {
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .Compact-des {
         font-size: 14px;
     }
 
-    #about-massage-descr {
-        font-size: 18px;
+    .Believe-main-Section-4 {
+        padding: 24px;
+        height: auto;
     }
 
-    .about-massage-line {
-        width: 80px;
+    .Corporate-wrapper {
+        flex-direction: column;
+        padding: 0 30px;
+        gap: 60px;
     }
 
-    .image-container {
-        min-height: 300px;
+    .Corporate-right {
+        width: 100%;
+        align-self: center;
+        max-width: 500px;
+        min-height: 60vh;
+    }
+
+    .Corporate-Box-title {
+        font-size: 30px;
+    }
+
+    .Corp-cards-row {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .corp-card {
+        width: 148px;
+        height: 275px;
+    }
+
+    .corp-card:hover {
+        width: 255px;
+        height: 400px;
+    }
+
+    .corp-card--featured {
+        width: 185px;
+        height: 325px;
+    }
+
+    .corp-card--featured:hover {
+        width: 270px;
+        height: 420px;
+    }
+
+    .corp-card--inverted {
+        width: 255px;
+        height: 400px;
+    }
+
+    .corp-card--inverted:hover {
+        width: 148px;
+        height: 275px;
+    }
+
+    /* Floating card responsive */
+    .Floating-info-card {
+        width: 148px;
+    }
+
+    .Floating-info-card:has(.corp-card:hover) {
+        width: 255px;
+    }
+
+    .design-section {
+        height: auto;
+        min-height: 500px;
+    }
+
+    .ds-title {
+        font-size: 32px;
+    }
+
+    .ds-right {
+        max-width: 60%;
+        padding: 60px 40px;
+    }
+
+    .sbs-carousel-wrap {
+        height: 500px;
+    }
+
+    .sbs-item--active {
+        height: 460px;
+    }
+
+    .sbs-item--right,
+    .sbs-item--left {
+        height: 355px;
+    }
+
+    .sbs-item--hidden {
+        height: 460px;
+    }
+
+    .sbs-brand {
+        font-size: 38px;
+    }
+
+    .sbs-num {
+        font-size: 72px;
+    }
+
+    .sbs-left {
+        padding: 44px 40px;
+    }
+
+    .sbs-panel.sbs-panel-open {
+        width: 42%;
+    }
+
+    .sbs-panel-scroll {
+        padding: 38px 26px;
     }
 }
 
-/* Extra Small Mobile (320px - 360px) */
-@media screen and (max-width: 360px) {
-    .Believe-content-title {
+/* ============================================================
+   RESPONSIVE — TABLET (max-width: 1024px)
+   ============================================================ */
+
+@media (max-width: 1024px) {
+
+    .Believe-Section {
+        flex-direction: column;
+        margin: 20px;
+        height: auto;
+    }
+
+    .Believe-Section-1,
+    .Believe-Section-2 {
+        width: 100%;
+        height: auto;
+    }
+
+    .Believe-main-Section-1 {
+        height: 280px;
+    }
+
+    .Believe-main-Section-3 {
+        height: auto;
+        min-height: 280px;
+    }
+
+    .Believe-main-Section-2 {
+        height: 120px;
+    }
+
+    .Believe-main-Section-4 {
+        height: auto;
+    }
+
+    .sbs-carousel-wrap {
+        height: 480px;
+    }
+
+    .sbs-item--active {
+        height: 440px;
+    }
+
+    .sbs-item--right,
+    .sbs-item--left {
+        height: 340px;
+    }
+
+    .sbs-item--hidden {
+        height: 440px;
+    }
+
+    .sbs-brand {
+        font-size: 34px;
+    }
+
+    .sbs-num {
+        font-size: 65px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (max-width: 768px)
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .sustainability-banner {
+        padding: 50px 0;
+        position: relative;
+    }
+
+    .Believe {
+        padding: 10px 12px;
+    }
+
+    .Believe-Section {
+        margin: 12px;
+        flex-direction: column;
+        height: auto;
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .Believe-Section-1,
+    .Believe-Section-2 {
+        width: 100%;
+        height: auto;
+    }
+
+    .Believe-main-Section-1 {
+        height: 200px;
+        min-height: unset;
+    }
+
+    .Believe-main-Section-3 {
+        height: auto;
+        min-height: 240px;
+        padding-bottom: 20px;
+    }
+
+    .Believe-main-Section-logo {
+        top: 12px;
+        left: 16px;
+    }
+
+    .Believe-main-Section-logo img {
+        max-width: 80px;
+    }
+
+    .Believe-main-Section-content {
+        top: 50%;
+    }
+
+    .Believe-main-Section-content img {
+        width: 85%;
+    }
+
+    .Believe-main-Section-title {
+        font-size: 20px;
+        padding: 60px 16px 12px;
+        line-height: 28px;
+    }
+
+    .Believe-main-Section-Subtitle {
+        padding: 0 16px;
+        font-size: 13px;
+        margin-top: 10px;
+        line-height: 20px;
+    }
+
+    .Believe-main-Section-btn {
+        padding: 16px;
+    }
+
+    .download-btn-text {
+        font-size: 11px;
+        padding: 9px 14px 9px 16px;
+        letter-spacing: 0.3px;
+    }
+
+    .download-btn-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 4px;
+    }
+
+    .download-btn-icon svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .Believe-main-Section-list ul {
+        padding: 14px 16px;
+        gap: 12px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .Believe-main-Section-list ul li {
+        font-size: 13px;
+    }
+
+    /* Nav li mobile touch feedback */
+    .nav-li:active {
+        color: #4b6205;
+        transform: scale(0.95);
+    }
+
+    .Compact-title {
+        font-size: 20px;
+        line-height: 1.3;
+    }
+
+    .Compact-subtitle {
+        font-size: 14px;
+        margin-top: 8px;
+        padding: 6px 0;
+    }
+
+    .Compact-des {
+        font-size: 13px;
+    }
+
+    .Believe-main-Section-4 {
+        padding: 18px;
+        height: auto;
+    }
+
+    .Believe-main-Section-2 {
+        height: 100px;
+        padding: 10px;
+    }
+
+    .Corporate {
+        padding: 40px 0 60px;
+        min-height: unset;
+    }
+
+    .Corporate-wrapper {
+        padding: 0 16px;
+        gap: 40px;
+    }
+
+    .Corporate-green-bar {
+        min-height: 130px;
+        width: 8px;
+    }
+
+    .Corporate-Box-title {
         font-size: 22px;
     }
 
-    .Believe-Tilte {
+    .Corporate-Box-Subtitle {
+        font-size: 15px;
+    }
+
+    .Corporate-Box-des {
+        font-size: 13px;
+    }
+
+    .Corp-cards-row {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .corp-card,
+    .corp-card--featured {
+        width: calc(50% - 5px) !important;
+        height: 80px !important;
+        border-radius: 16px;
+        flex-shrink: 1;
+    }
+
+    .corp-card:hover,
+    .corp-card--featured:hover {
+        width: calc(50% - 5px) !important;
+        height: 280px !important;
+    }
+
+    .corp-card--inverted {
+        width: calc(50% - 5px) !important;
+        height: 280px !important;
+        border-radius: 16px;
+        flex-shrink: 1;
+    }
+
+    .corp-card--inverted:hover {
+        width: calc(50% - 5px) !important;
+        height: 80px !important;
+    }
+
+    .corp-card-number {
+        font-size: 30px;
+    }
+
+    .corp-card:hover .corp-card-number {
         font-size: 18px;
     }
 
-    .Introduced-content-title {
+    .Corporate-right {
+        width: 100%;
+        max-width: 100%;
+        min-height: auto;
+    }
+
+    /* Floating card — mobile: relative, full width */
+    .Floating-info-card {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        width: 100% !important;
+        margin-bottom: 24px;
+    }
+
+    .Floating-info-card:has(.corp-card:hover) {
+        width: 100% !important;
+    }
+
+    /* Card 04 on mobile — full width like others */
+    .Floating-info-card .corp-card {
+        width: 100% !important;
+        height: 80px !important;
+    }
+
+    .Floating-info-card .corp-card:hover {
+        width: 100% !important;
+        height: 280px !important;
+    }
+
+    .Photo-collage {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+    }
+
+    .Photo-collage-image {
+        position: relative;
+    }
+
+    .Photo-collage-2 {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        margin-top: 12px;
+    }
+
+    /* Design Section — mobile zoom reduced */
+    .design-section {
+        flex-direction: column;
+        height: auto;
+        min-height: 400px;
+        padding: 40px 24px;
+        justify-content: center;
+        gap: 24px;
+    }
+
+    .design-section:hover .ds-right--zoom {
+        transform: scale(1.03);
+    }
+
+    .ds-left,
+    .ds-right {
+        max-width: 100%;
+    }
+
+    .ds-right {
+        border-left: none;
+        border-top: 1px solid #a0c8284d;
+        padding: 24px 0 0;
+        max-width: 100%;
+    }
+
+    .ds-title {
+        font-size: 28px;
+    }
+
+    .ds-subtitle {
+        font-size: 16px;
+    }
+
+    .ds-desc {
+        font-size: 15px;
+        width: 100%;
+    }
+
+    .ds-popup-overlay {
+        flex-direction: column;
+        padding: 20px 16px;
+        gap: 12px;
+        overflow-y: auto;
+    }
+
+    .ds-box {
+        width: 100%;
+        height: auto;
+        min-height: 160px;
+        flex-direction: row;
+        align-items: center;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    /* Slider mobile */
+    .Sustainability-Box-Container {
+        padding: 40px 0 30px;
+    }
+
+    .sbs-outer {
+        width: 92%;
+    }
+
+    .sbs-carousel-wrap {
+        height: 440px;
+    }
+
+    .sbs-item--active {
+        width: 78%;
+        height: 400px;
+    }
+
+    .sbs-item--right {
+        left: 89%;
+        width: 24%;
+        height: 310px;
+    }
+
+    .sbs-item--left {
+        left: -12%;
+        width: 24%;
+        height: 310px;
+    }
+
+    .sbs-item--hidden {
+        width: 78%;
+        height: 400px;
+    }
+
+    .sbs-left {
+        width: 100% !important;
+        padding: 32px 24px 24px;
+        gap: 10px;
+    }
+
+    .sbs-left.sbs-left-shrink {
+        width: 100% !important;
+    }
+
+    .sbs-brand {
+        font-size: 26px;
+    }
+
+    .sbs-num {
+        font-size: 52px;
+        margin: -6px 0 -14px;
+    }
+
+    .sbs-material {
+        font-size: 13px;
+    }
+
+    .sbs-panel {
+        position: absolute !important;
+        top: auto !important;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100% !important;
+        height: 0;
+        border-radius: 0 0 26px 26px;
+        transition: height 0.52s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sbs-panel.sbs-panel-open {
+        width: 100% !important;
+        height: 55%;
+    }
+
+    .sbs-panel-scroll {
+        padding: 20px;
+        gap: 10px;
+        border-left: none;
+        border-top: 1px solid #b8d83033;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .sbs-panel-brand {
+        font-size: 15px;
+        white-space: normal;
+    }
+
+    .sbs-panel-mat {
+        white-space: normal;
+    }
+
+    .sbs-panel-sub {
+        font-size: 11.5px;
+    }
+
+    .sbs-list li {
+        font-size: 11px;
+    }
+
+    .sbs-peek-arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+
+    .sbs-peek-arrow--right {
+        left: 12px;
+    }
+
+    .sbs-peek-arrow--left {
+        right: 12px;
+    }
+
+    .sbs-nav-row {
+        padding-left: 11%;
+        margin-top: 22px;
+    }
+
+    .br-hide {
+        display: none;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE (max-width: 480px)
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .Believe-Section {
+        margin: 8px;
+    }
+
+    .Believe {
+        padding: 10px 8px;
+    }
+
+    .Believe-main-Section-title {
+        font-size: 18px;
+        padding: 50px 12px 10px;
+        line-height: 26px;
+    }
+
+    .Believe-main-Section-Subtitle {
+        padding: 0 12px;
+        font-size: 12px;
+    }
+
+    .Compact-title {
         font-size: 18px;
     }
 
-    .Provide-subtitle {
+    .Compact-subtitle {
+        font-size: 13px;
+    }
+
+    .Compact-des {
+        font-size: 12px;
+    }
+
+    .Corp-cards-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .corp-card,
+    .corp-card--featured,
+    .corp-card--inverted {
+        width: 100% !important;
+        flex-shrink: 1;
+    }
+
+    .corp-card,
+    .corp-card--featured {
+        height: 80px !important;
+        border-radius: 16px;
+    }
+
+    .corp-card--inverted {
+        height: 260px !important;
+    }
+
+    .corp-card:hover,
+    .corp-card--featured:hover {
+        width: 100% !important;
+        height: 280px !important;
+    }
+
+    .corp-card--inverted:hover {
+        width: 100% !important;
+        height: 80px !important;
+    }
+
+    .Floating-info-card .corp-card {
+        height: 80px !important;
+        border-radius: 16px;
+    }
+
+    .Floating-info-card .corp-card:hover {
+        height: 280px !important;
+    }
+
+    .Corporate-Box-title {
         font-size: 20px;
     }
 
-    .design-subtitle-1,
-    .design-subtitle-2 {
-        font-size: 20px;
+    .Corporate-Box-Subtitle {
+        font-size: 14px;
     }
 
-    .text-content h1 {
+    .ds-title {
         font-size: 24px;
     }
 
-    .image-container {
-        min-height: 280px;
+    .ds-subtitle {
+        font-size: 14px;
+    }
+
+    .sbs-carousel-wrap {
+        height: 400px;
+    }
+
+    .sbs-item--active {
+        width: 82%;
+        height: 360px;
+    }
+
+    .sbs-item--right {
+        left: 91%;
+        width: 22%;
+        height: 280px;
+    }
+
+    .sbs-item--left {
+        left: -11%;
+        width: 22%;
+        height: 280px;
+    }
+
+    .sbs-item--hidden {
+        width: 82%;
+        height: 360px;
+    }
+
+    .sbs-brand {
+        font-size: 22px;
+    }
+
+    .sbs-material {
+        font-size: 12px;
+    }
+
+    .sbs-num {
+        font-size: 46px;
+    }
+
+    .sbs-panel.sbs-panel-open {
+        height: 58%;
+    }
+
+    .sbs-left {
+        padding: 28px 20px 20px;
+    }
+
+    .sbs-nav-row {
+        padding-left: 9%;
+        margin-top: 18px;
     }
 }
 
-/* Landscape Mode Fixes for Mobile */
-@media screen and (max-height: 500px) and (orientation: landscape) {
-    .Believe {
-        padding: 30px 0;
+/* ============================================================
+   RESPONSIVE — EXTRA SMALL (max-width: 360px)
+   ============================================================ */
+
+@media (max-width: 360px) {
+
+    .Believe-main-Section-title {
+        font-size: 16px;
+        line-height: 24px;
     }
 
-    .Introduced {
-        padding: 30px 15px;
+    .Believe-main-Section-btn button {
+        font-size: 11px;
+        padding: 7px 12px;
     }
 
-    .Provide {
-        padding: 40px 0;
+    .Corporate-Box-title {
+        font-size: 18px;
     }
 
-    .design-image-col {
-        height: 350px;
+    .ds-title {
+        font-size: 22px;
     }
 
-    .image-container {
-        min-height: 350px;
+    .sbs-carousel-wrap {
+        height: 370px;
     }
-}
 
+    .sbs-item--active {
+        width: 84%;
+        height: 330px;
+    }
 
+    .sbs-item--right {
+        left: 92%;
+        width: 20%;
+        height: 255px;
+    }
 
+    .sbs-item--left {
+        left: -12%;
+        width: 20%;
+        height: 255px;
+    }
 
+    .sbs-item--hidden {
+        width: 84%;
+        height: 330px;
+    }
 
-.introduced-section {
-  position: relative;
-  overflow: hidden;
-  padding: 0px 0;
-}
+    .sbs-brand {
+        font-size: 20px;
+    }
 
-/* Background Video */
-.introduced-bg-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-}
+    .sbs-num {
+        font-size: 40px;
+    }
 
-/* Dark Overlay */
-.introduced-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1;
-}
+    .sbs-tag-pill {
+        font-size: 9px;
+        letter-spacing: 2px;
+        padding: 4px 14px;
+    }
 
-/* Content Above Video */
-.introduced-section .row {
-  position: relative;
-  z-index: 2;
-}
+    .sbs-panel.sbs-panel-open {
+        height: 60%;
+    }
 
-/* Text color safe */
-.Introduced-content,
-.Believe-content-subtitle,
-.Introduced-content-des {
-  color: #fff;
+    .sbs-nav-row {
+        padding-left: 8%;
+    }
 }

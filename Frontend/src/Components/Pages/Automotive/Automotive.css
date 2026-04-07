@@ -318,14 +318,12 @@
 .Overview-Box {
     width: 100%;
     background-color: #ffffff;
-    box-shadow: #63636333 0px 2px 8px 0px;
     border-radius: 4px;
     transition: all 0.3s ease;
 }
 
 .Overview-Box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px #00000026;
 }
 
 .Overview-Box-image {
@@ -366,7 +364,8 @@
 }
 
 .Overview-Box-contant button {
-    padding: 7px 30px;
+    font-size: 13px;
+    padding: 7px 0px;
     border: 2px solid #ff6b6b;
     background: transparent;
     color: #ff6b6b;

@@ -37,39 +37,33 @@ export default function Performance() {
 
         return () => clearInterval(interval);
     }, [slides.length]);
- 
+
     const goToSlide = (index) => {
         setCurrentSlide(index);
     };
-
-    console.log(goToSlide);
 
     const goToPrevSlide = () => {
         setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     };
 
-    console.log(goToPrevSlide);
-
     const goToNextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
     };
-
-    console.log(goToNextSlide);
 
     return (
         <>
             <div className="performance-main-section">
                 {/* Hero Slider Section */}
                 <div className="performance-Banner-container">
+                    <div className="performance-Banner-container-line"></div>
                     <div className="performance-container">
                         <div className="slider-wrapper">
                             {slides.map((slide, index) => (
                                 <div
                                     key={index}
-                                    className={`performance-slide ${index === currentSlide ? "active" : ""
-                                        }`}
+                                    className={`performance-slide ${index === currentSlide ? "active" : ""}`}
                                 >
-                                    {/* 🎥 Background Video */}
+                                    {/* Background Video */}
                                     <video
                                         className="slide-video"
                                         src={slide.bgVideo}
@@ -79,10 +73,7 @@ export default function Performance() {
                                         playsInline
                                     />
 
-                                    {/* Overlay */}
-                                    {/* <div className="slide-overlay"></div> */}
-
-                                    {/* 🔒 Content – NO CHANGE */}
+                                    {/* Content */}
                                     <div className="slide-content">
                                         <div className="content-wrapper">
                                             <h1 className="main-title">{slide.title}</h1>
@@ -94,14 +85,6 @@ export default function Performance() {
                                                     </div>
                                                     <p className="details">{slide.details}</p>
                                                 </div>
-
-                                                {/* <div className="content-wrapper-description">
-                                                    <div className="description-with-spacing">
-                                                        <span className="description">
-                                                            {slide.description}
-                                                        </span>
-                                                    </div>
-                                                </div> */}
                                             </div>
                                         </div>
                                     </div>
@@ -115,7 +98,6 @@ export default function Performance() {
                 <div className="turtle-container">
                     <div className="container-fluid">
                         <div className="row">
-                            {/* <div className="col-lg-1 col-md-1 d-none d-md-block"></div> */}
                             <div className="col-lg-6 col-md-6 col-12">
                                 <div className="turtle-box">
                                     <div className="turtle-box-image">
@@ -182,7 +164,7 @@ export default function Performance() {
                                                     <div><img src="/3.png" alt="Abrasion icon" /></div>
                                                 </div>
                                                 <div className="resistance-container-box-icon-des">
-                                                    Tests & Martindale Depicts resistance power against damage due to abrasion. ASTM D4157 10,000 rubs
+                                                    Tests &amp; Martindale Depicts resistance power against damage due to abrasion. ASTM D4157 10,000 rubs
                                                 </div>
                                             </div>
                                             <div className="resistance-container-box">
@@ -211,7 +193,7 @@ export default function Performance() {
                                     <div className="flamesafe-box-container">
                                         <div className="flamesafe-box-icon">
                                             <div className="flamesafe-box-icon-title">Anti-Flammable</div>
-                                            <img src="/5.png" alt="Fire icon" />
+                                            <img src="/Untitled-2.png" alt="Fire icon" />
                                         </div>
                                         <div id="Flamesafe-Box-des">
                                             The flammability tests which are of utmost importance, Determines the burn resistance capabilities of materials used
@@ -277,7 +259,7 @@ export default function Performance() {
                                         </div>
                                     </div>
                                     <div className="safe-touch-image">
-                                        <img src="/Rectangle-3.png" alt="Safe touch fabric" />
+                                        <img src="/New-image-2.png" alt="Safe touch fabric" />
                                     </div>
                                 </div>
                             </div>
@@ -286,7 +268,7 @@ export default function Performance() {
                                     <div className="resistance-container-box">
                                         <div className="resistance-container-box-icon">
                                             <div className="resistance-container-box-icon-title">Anti-Microbial</div>
-                                            <div><img src="/5.png" alt="Microbial icon" /></div>
+                                            <div><img src="/2.png" alt="" /></div>
                                         </div>
                                         <div className="resistance-container-box-icon-des">
                                             The test of antibacterial, bactericidal, bacteriostatic activity and has been proven effective.
@@ -297,7 +279,7 @@ export default function Performance() {
                                     <div className="resistance-container-box">
                                         <div className="resistance-container-box-icon">
                                             <div className="resistance-container-box-icon-title">Pink Stain</div>
-                                            <div><img src="/5.png" alt="Pink stain icon" /></div>
+                                            <div> <img src="/7.png" alt="" /></div>
                                         </div>
                                         <div className="resistance-container-box-icon-des">
                                             We provides with pink stain free vinyl. A common test method used to assess materials against pink staining,

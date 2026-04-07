@@ -1,8 +1,18 @@
 import { useState, useEffect } from "react";
 import "./ProductList.css";
 
-const API_URL = "http://82.25.91.73:8000/api/products";
-const LOGIN_API_URL = "http://localhost:8000/api/auth/login";
+const API_URL = "https://api.futuratextiles.in/api/products";
+const LOGIN_API_URL = "https://api.futuratextiles.in/api/auth/login";
+const BASE_URL = "https://api.futuratextiles.in";
+
+const getImageUrl = (imagePath) => {
+    if (!imagePath || imagePath === '') return '';
+    const clean = String(imagePath).trim();
+    if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+    if (clean.startsWith('/uploads/')) return `${BASE_URL}${clean}`;
+    if (clean.startsWith('uploads/')) return `${BASE_URL}/${clean}`;
+    return `${BASE_URL}/uploads/${clean}`;
+};
 
 const Navbar = ({ onAddProductClick, onLogout }) => {
     return (
@@ -1234,7 +1244,7 @@ function ProductList() {
                                         <div className="product-card-image">
                                             {displayImages && displayImages.length > 0 && (
                                                 <img
-                                                    src={`http://localhost:8000/${displayImages[0]}`}
+                                                    src={getImageUrl(displayImages[0])}
                                                     alt={product.title}
                                                 />
                                             )}
@@ -1274,7 +1284,7 @@ function ProductList() {
                                                 {product.icons.map((icon, index) => (
                                                     <div key={index} className="product-icon-item">
                                                         <img
-                                                            src={`http://localhost:8000/${icon}`}
+                                                            src={getImageUrl(icon)}
                                                             alt={`Icon ${index + 1}`}
                                                         />
                                                     </div>
@@ -1820,7 +1830,7 @@ function ProductList() {
                                         {existingImages.map((img, index) => (
                                             img !== null ? (
                                                 <div key={`existing-${index}`} className="image-preview-box existing">
-                                                    <img src={`http://localhost:8000/${img}`} alt={`Existing ${index}`} />
+                                                    <img src={getImageUrl(img)} alt={`Existing ${index}`} />
                                                     <div className="image-overlay-actions">
                                                         <label htmlFor={`replace-existing-image-${index}`} className="replace-btn" title="Replace">
                                                             <i className="fas fa-sync-alt"></i>
@@ -1901,6 +1911,59 @@ function ProductList() {
                                     </p>
                                 </div>
 
+                                  {/* =========== */}
+                                  {/* ✅ Icons - Edit (RESTORED) */}
+                                <div className="form-group icon-upload-group">
+                                    <label>Product Icons (Optional, Max 5)</label>
+                                    <div className="icon-input-grid">
+                                        {existingIcons.map((icon, index) => (
+                                            icon !== null ? (
+                                                <div key={`existing-icon-${index}`} className="icon-preview-box existing">
+                                                    <img src={getImageUrl(icon)} alt={`Existing Icon ${index}`} />
+                                                    <div className="icon-overlay-actions">
+                                                        <label htmlFor={`replace-existing-icon-${index}`} className="replace-btn" title="Replace"><i className="fas fa-sync-alt"></i></label>
+                                                        <button type="button" className="remove-icon-btn" onClick={() => handleRemoveExistingIcon(index)}>×</button>
+                                                    </div>
+                                                    <input type="file" id={`replace-existing-icon-${index}`} accept="image/*" onChange={(e) => handleReplaceExistingIconInPlace(index, e)} style={{ display: 'none' }} />
+                                                </div>
+                                            ) : (
+                                                <label key={`existing-icon-${index}`} htmlFor={`add-existing-icon-at-${index}`} className="icon-upload-placeholder empty-slot">
+                                                    <i className="fas fa-upload"></i><span>Add</span>
+                                                    <input type="file" id={`add-existing-icon-at-${index}`} accept="image/*" onChange={(e) => handleReplaceExistingIconInPlace(index, e)} style={{ display: 'none' }} />
+                                                </label>
+                                            )
+                                        ))}
+                                        {editProductIconPreviews.map((preview, index) => (
+                                            preview !== null ? (
+                                                <div key={`new-icon-${index}`} className="icon-preview-box new">
+                                                    <img src={preview} alt={`New Icon ${index}`} />
+                                                    <div className="icon-overlay-actions">
+                                                        <label htmlFor={`replace-edit-new-icon-${index}`} className="replace-btn" title="Replace"><i className="fas fa-sync-alt"></i></label>
+                                                        <button type="button" className="remove-icon-btn" onClick={() => handleRemoveEditNewIcon(index)}>×</button>
+                                                    </div>
+                                                    <input type="file" id={`replace-edit-new-icon-${index}`} accept="image/*" onChange={(e) => handleReplaceEditNewIcon(index, e)} style={{ display: 'none' }} />
+                                                </div>
+                                            ) : (
+                                                <label key={`new-icon-${index}`} htmlFor={`add-edit-new-icon-at-${index}`} className="icon-upload-placeholder empty-slot">
+                                                    <i className="fas fa-upload"></i><span>Add</span>
+                                                    <input type="file" id={`add-edit-new-icon-at-${index}`} accept="image/*" onChange={(e) => handleReplaceEditNewIcon(index, e)} style={{ display: 'none' }} />
+                                                </label>
+                                            )
+                                        ))}
+                                        {(existingIcons.filter(icon => icon !== null).length + editProductIcons.filter(icon => icon !== null).length) < 5 && (
+                                            <label htmlFor="edit-product-icons" className="icon-upload-placeholder">
+                                                <i className="fas fa-plus"></i><span>Add New</span>
+                                            </label>
+                                        )}
+                                        <input type="file" id="edit-product-icons" accept="image/*" onChange={handleEditProductIconChange} multiple style={{ display: 'none' }} />
+                                    </div>
+                                    <p className="icon-count-info">
+                                        Total: {existingIcons.filter(icon => icon !== null).length + editProductIcons.filter(icon => icon !== null).length} / 5 icons
+                                    </p>
+                                </div>
+
+                                {/* =========== */}
+
                                 <div className="form-group variants-section">
                                     <div className="variants-header">
                                         <label>Product Variants (Optional)</label>
@@ -1935,7 +1998,7 @@ function ProductList() {
                                                     {variant.existingImages.map((img, imgIndex) => (
                                                         img !== null ? (
                                                             <div key={`existing-variant-${imgIndex}`} className="variant-image-preview existing">
-                                                                <img src={`http://localhost:8000/${img}`} alt={`Existing ${imgIndex}`} />
+                                                                <img src={getImageUrl(img)} alt={`Existing ${imgIndex}`} />
                                                                 <div className="variant-overlay-actions">
                                                                     <label htmlFor={`replace-edit-variant-existing-${variantIndex}-${imgIndex}`} className="replace-btn" title="Replace">
                                                                         <i className="fas fa-sync-alt"></i>

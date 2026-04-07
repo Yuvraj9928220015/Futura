@@ -94,6 +94,7 @@
     width: 100%;
 }
 
+
 .About-Section-Heading {
     font-family: 'Georgia', serif;
     margin-bottom: 25px;
@@ -248,7 +249,7 @@
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
     gap: 30px;
     margin: 0 auto;
     align-items: stretch;
@@ -275,6 +276,10 @@
     /* Ensures box takes full height */
 }
 
+.Overview-Box-btn button{
+  padding: 100%;
+}
+
 .Overview-Box::before {
     content: '';
     position: absolute;
@@ -292,7 +297,6 @@
 
 .Overview-Box:hover {
     transform: translateY(-10px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
 }
 
 .Overview-Box.active {

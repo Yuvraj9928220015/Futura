@@ -18,12 +18,21 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    position: relative;
+}
+
+.performance-Banner-container-line {
+    position: absolute;
+    background-color: #fffffffb;
+    width: 100%;
+    height: 85px;
+    z-index: 2;
+    top: 20px;
 }
 
 .performance-container {
     position: relative;
     width: 81%;
-    /* width: 100%; */
     height: 80vh;
     min-height: 500px;
     display: flex;
@@ -133,12 +142,14 @@
     color: #ffffff;
     text-shadow: 1px 1px 4px #00000080;
 }
+
 .subtitle-section-line {
     width: 50%;
     margin-bottom: 20px;
     height: 1px;
     background-color: #fcfcfc42;
 }
+
 .details {
     font-size: clamp(14px, 1.8vw, 16px);
     line-height: 1.6;
@@ -213,6 +224,7 @@
 .turtle-box-image {
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 .turtle-box-image img {
@@ -220,6 +232,11 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.turtle-box:hover .turtle-box-image img {
+    transform: scale(1.07);
 }
 
 /* ==================== LONGEVITY SECTION ==================== */
@@ -272,11 +289,23 @@
 .longevity-box-logo img {
     width: 100%;
     height: auto;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.longevity-box-logo:hover img {
+    transform: scale(1.12);
 }
 
 .longevity-box-des {
     flex: 1;
     min-width: 200px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+}
+
+.longevity-box-des:hover {
+    transform: scale(1.04);
 }
 
 .longevity-box-title {
@@ -289,22 +318,26 @@
 .longevity-box-prag {
     font-size: clamp(15px, 2vw, 18px);
     font-weight: 500;
-    color: #666;
     color: #555;
     font-family: "Quicksand", sans-serif;
 }
 
 .resistance-container {
     display: flex;
-    gap: clamp(15px, 2vw, 20px);
+    gap: clamp(15px, 2vw, 40px);
     margin-bottom: clamp(15px, 2vw, 20px);
     flex-wrap: wrap;
-    padding: 0px 10px;
+    padding: 0px 30px;
 }
 
 .resistance-container-box {
     flex: 1;
     min-width: min(100%, 280px);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.resistance-container-box:hover {
+    transform: scale(1.06);
 }
 
 .resistance-container-box-icon {
@@ -316,14 +349,14 @@
 }
 
 .resistance-container-box-icon-title {
-    font-size: clamp(18px, 2.5vw, 27px);
+    font-size: clamp(18px, 2.5vw, 25px);
     letter-spacing: 1px;
     font-weight: 500;
     color: #333;
 }
 
 .resistance-container-box-icon-des {
-    font-size: clamp(14px, 1.8vw, 17px);
+    font-size: clamp(14px, 1.8vw, 16px);
     letter-spacing: 0.5px;
     line-height: 1.6;
     font-weight: 500;
@@ -331,17 +364,15 @@
     font-family: "Quicksand", sans-serif;
 }
 
-#Flamesafe-Box-des {
-    font-weight: 500;
-    color: #555;
-    font-size: 18px;
-    font-family: "Quicksand", sans-serif;
-}
-
 .resistance-container-box-icon img {
     width: clamp(35px, 4vw, 40px);
     height: clamp(35px, 4vw, 40px);
     object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.resistance-container-box:hover .resistance-container-box-icon img {
+    transform: scale(1.1);
 }
 
 .longevity-container hr {
@@ -359,6 +390,11 @@
 .flamesafe-box {
     width: 100%;
     padding: clamp(30px, 5vw, 50px) 20px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.flamesafe-box:hover {
+    transform: scale(1.02);
 }
 
 .flamesafe-box-container {
@@ -380,12 +416,41 @@
     font-size: clamp(20px, 2.8vw, 32px);
     font-weight: 500;
     color: #333;
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        color 0.3s ease;
+}
+
+.flamesafe-box-icon:hover .flamesafe-box-icon-title {
+    transform: scale(1.04);
+    color: #111;
 }
 
 .flamesafe-box-icon img {
     width: clamp(40px, 5vw, 50px);
     height: clamp(40px, 5vw, 50px);
     object-fit: contain;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.flamesafe-box-icon:hover img {
+    transform: scale(1.12);
+}
+
+#Flamesafe-Box-des {
+    font-weight: 500;
+    color: #555;
+    font-size: 18px;
+    font-family: "Quicksand", sans-serif;
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        color 0.3s ease;
+    transform-origin: left center;
+}
+
+#Flamesafe-Box-des:hover {
+    transform: scale(1.03);
+    color: #333;
 }
 
 .flamesafe-box-container>div:last-child {
@@ -396,6 +461,18 @@
 
 .flamesafe-reverse {
     flex-direction: row-reverse;
+}
+
+.flamesafe-reverse .longevity-box-logo {
+    overflow: hidden;
+}
+
+.flamesafe-reverse .longevity-box-logo img {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.flamesafe-reverse .longevity-box-logo:hover img {
+    transform: scale(1.12);
 }
 
 .flamesafe-2 {
@@ -415,6 +492,11 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.flamesafe-2-box:hover img {
+    transform: scale(1.07);
 }
 
 /* ==================== SAFE TOUCH SECTION ==================== */
@@ -444,23 +526,33 @@
     overflow: hidden;
 }
 
-.resistance-image img {
-    width: 100%;
-    height: 380px;
-    object-fit: cover;
-    display: block;
-}
-
 .safe-touch-image img {
     width: 100%;
-    height: auto;
+    height: 61vh;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.safe-touch-image:hover img {
+    transform: scale(1.07);
 }
 
 .resistance-image {
     margin-top: clamp(15px, 2vw, 20px);
     overflow: hidden;
+}
+
+.resistance-image img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.resistance-image:hover img {
+    transform: scale(1.07);
 }
 
 /* ==================== PROTECTIVE SECTION ==================== */
@@ -502,6 +594,11 @@
     height: auto;
     object-fit: cover;
     display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.protective-main-box-image:hover img {
+    transform: scale(1.06);
 }
 
 .protective-main-box-2 {
@@ -672,7 +769,6 @@
 
 /* ==================== RESPONSIVE BREAKPOINTS ==================== */
 
-/* Tablet and below: Longevity container becomes relative */
 @media (max-width: 991px) {
     .performance-container {
         height: 60vh;
@@ -717,7 +813,6 @@
     }
 }
 
-/* Single column layout for longevity section below 550px */
 @media (max-width: 550px) {
     .longevity-container-box {
         padding: clamp(25px, 4vw, 35px) clamp(15px, 3vw, 25px);
@@ -778,7 +873,6 @@
     }
 }
 
-/* Mobile landscape and below */
 @media (max-width: 767px) {
     .performance-container {
         height: 55vh;
@@ -801,7 +895,6 @@
     }
 }
 
-/* Mobile portrait */
 @media (max-width: 575px) {
     .performance-container {
         height: 50vh;
@@ -818,7 +911,6 @@
     }
 }
 
-/* Extra small devices */
 @media (max-width: 479px) {
     .performance-container {
         height: 45vh;
@@ -858,31 +950,50 @@
     will-change: transform, opacity;
 }
 
-
 .performance-slide {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .slide-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 
 .slide-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 1;
+    position: absolute;
+    inset: 0;
+    background: #00000073;
+    z-index: 1;
 }
 
 .slide-content {
-  position: relative;
-  z-index: 2; /* content always on top */
+    position: relative;
+    z-index: 2;
+}
+
+/* ==================== REDUCED MOTION SUPPORT ==================== */
+@media (prefers-reduced-motion: reduce) {
+
+    .turtle-box-image img,
+    .longevity-box-logo img,
+    .resistance-container-box,
+    .resistance-container-box-icon img,
+    .flamesafe-box,
+    .flamesafe-box-icon-title,
+    .flamesafe-box-icon img,
+    #Flamesafe-Box-des,
+    .flamesafe-reverse .longevity-box-logo img,
+    .flamesafe-2-box img,
+    .safe-touch-image img,
+    .resistance-image img,
+    .protective-main-box-image img {
+        transition: none;
+    }
 }

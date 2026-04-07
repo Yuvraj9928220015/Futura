@@ -1,3 +1,9 @@
+/* Prevent horizontal scrollbar during slide animation */
+html,
+body {
+    overflow-x: hidden;
+}
+
 /* CSS Variables for consistency */
 :root {
     --primary-text-color: #374151de;
@@ -9,112 +15,117 @@
     --transition-speed: 0.3s;
 }
 
-/* Reset & Base Styles */
 * {
     box-sizing: border-box;
 }
 
-/* Main Slider Container */
 .Main-slider-container {
-    padding-left: 5vw;
-    margin-left: 0;
+    padding-left: 4vw;
+    margin-left: 26px;
     background-color: #afaaa9;
     width: 100%;
 }
 
+/* NO overflow hidden — slide travels freely from screen edge */
+.slider-outer-clip {
+    width: 100%;
+    border-top: 1px solid #ebecec38;
+    border-bottom: 1px solid rgba(212, 212, 212, 0.1);
+}
+
 .slider-container {
-    border-top: 2px solid var(--light-border);
     position: relative;
     width: 100%;
     margin: 0 auto;
     background-color: #fffdf9;
-    overflow: hidden;
+    /* NO overflow: hidden — JS animation handles positioning from viewport edge */
 }
 
 .slider-content {
     position: relative;
     height: 28rem;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-/* Slide Animations */
-.slide {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    opacity: 0;
-    pointer-events: none;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.slide.active {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-    z-index: 10;
-}
-
-.slide:not(.active) {
-    transform: translateX(100%);
-}
-
-.slide-inner {
-    display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     max-width: 1800px;
+    margin: 0 auto;
     padding: 0 clamp(0.5rem, 2vw, 2rem);
 }
 
-/* Text Content */
-.slide-text-content {
+/* =============================================
+   LEFT SIDE — no transition, instant update
+   ============================================= */
+.static-left-wrapper {
     flex: 1;
     max-width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
     padding-left: clamp(1rem, 5vw, 100px);
     padding-right: clamp(1rem, 3vw, 2rem);
+    z-index: 5;
+}
+
+.static-left-content {
+    width: 100%;
 }
 
 .certification-Product-Box-title {
-    font-size: clamp(1.8rem, 4.5vw, 4.5rem);
-    line-height: 1.1;
+    font-size: clamp(1.8rem, 4.5vw, 4.4rem);
+    line-height: 1;
     font-weight: 100;
     font-family: 'Georgia', serif;
     color: var(--primary-text-color);
     margin-bottom: clamp(1rem, 2vw, 2rem);
-    letter-spacing: -1px;
+    letter-spacing: 1px;
     word-break: break-word;
     hyphens: auto;
 }
 
 p.subtitle {
-    font-size: clamp(0.9rem, 2vw, 1.9rem);
+    font-size: clamp(0.9rem, 2vw, 1.4rem);
     color: var(--secondary-text-color);
     font-weight: 300;
-    line-height: 1.5;
+    max-width: 44%;
+    line-height: 1.1;
 }
 
-/* Certificate Container - Fully Responsive */
-.Certificate-container {
+/* =============================================
+   RIGHT SIDE
+   NO overflow:hidden — JS sets translateX
+   from window.innerWidth so slide enters
+   from actual screen edge
+   ============================================= */
+.animated-right-content {
     flex: 1;
+    width: 50%;
     max-width: 50%;
+    position: relative;
+    height: 28rem;
+    min-height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: clamp(0.5rem, 2vw, 2rem);
+    /* NO overflow: hidden */
 }
 
+/* cert-slide: transform is set inline via JS */
+.cert-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+}
+
+/* Certificate Box */
 .Certificate-container-Box {
     position: relative;
     width: 100%;
@@ -150,7 +161,7 @@ p.subtitle {
 
 .Certificate-container-standard {
     font-size: clamp(1.5rem, 3.5vw, 2rem);
-    font-family: 'Georgia', serif;
+    /* font-family: 'Georgia', serif; */
     margin-bottom: clamp(0.5rem, 2vw, 1.25rem);
     color: var(--primary-text-color);
     line-height: 1.1;
@@ -158,19 +169,19 @@ p.subtitle {
 }
 
 .Certificate-container-description {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
-    margin-top: clamp(0.8rem, 2vw, 1.875rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    margin-top: clamp(0.8rem, 2vw, 0.5rem);
     color: var(--primary-text-color);
     line-height: 1.3;
 }
 
 .Certificate-container-subDescription {
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     color: var(--primary-text-color);
     line-height: 1.3;
 }
 
-/* Navigation arrows */
+/* NAVIGATION ARROWS */
 .nav-arrow {
     position: absolute;
     top: 50%;
@@ -186,13 +197,25 @@ p.subtitle {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffffe6;
+    box-shadow: 0 2px 8px #0000001a;
+}
+
+.certification-btn {
+    padding-top: 20px;
+}
+
+.certification-btn button {
+    padding: 8px 30px;
+    font-weight: 500;
+    /* text-transform: uppercase; */
+    border-radius: 50px;
+    border: 1px solid;
 }
 
 .nav-arrow:hover {
     background-color: var(--white);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px #00000026;
     transform: translateY(-50%) scale(1.05);
 }
 
@@ -201,7 +224,8 @@ p.subtitle {
 }
 
 .nav-arrow.right {
-    right: clamp(0.5rem, 2vw, 1rem);
+    right: clamp(7.5rem, 8vw, 3rem);
+    top: 16rem;
 }
 
 .arrow-icon {
@@ -210,7 +234,7 @@ p.subtitle {
     color: var(--dark-gray);
 }
 
-/* Dots indicator */
+/* DOTS */
 .dots-container {
     position: absolute;
     bottom: clamp(0.8rem, 2vw, 1.5rem);
@@ -240,7 +264,7 @@ p.subtitle {
     background-color: var(--dark-gray);
 }
 
-/* Marine Banner / Video Section */
+/* VIDEO SECTION */
 .Marine-Banner {
     width: 100%;
 }
@@ -259,7 +283,7 @@ p.subtitle {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3);
+    background: #0000004d;
     z-index: 1;
 }
 
@@ -307,7 +331,6 @@ p.subtitle {
    RESPONSIVE BREAKPOINTS
    =============================================== */
 
-/* Extra Small Devices - Mobile Portrait (320px - 480px) */
 @media (max-width: 480px) {
     .Main-slider-container {
         padding-left: 0;
@@ -315,44 +338,46 @@ p.subtitle {
 
     .slider-content {
         height: auto;
-        min-height: 380px;
-        padding: 1.5rem 0.5rem;
-    }
-
-    .slide-inner {
         flex-direction: column;
-        gap: 1.5rem;
-        padding: 0.5rem;
+        padding: 1.5rem 0.5rem;
+        gap: 1rem;
     }
 
-    .slide-text-content {
+    .static-left-wrapper {
+        flex: 0 0 auto;
+        width: 100%;
         max-width: 100%;
+        height: auto;
         text-align: center;
         padding-left: 0;
         padding-right: 0;
+        justify-content: center;
+    }
+
+    .static-left-content {
+        text-align: center;
     }
 
     .certification-Product-Box-title {
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
-        line-height: 1.2;
     }
 
     p.subtitle {
         font-size: 0.9rem;
-        line-height: 1.4;
     }
 
-    /* Certificate Container Mobile */
-    .Certificate-container {
+    .animated-right-content {
+        flex: 0 0 220px;
+        width: 100%;
         max-width: 100%;
+        height: 220px;
+        min-height: 220px;
         padding: 0;
-        margin-top: 1rem;
     }
 
     .Certificate-container-Box {
         max-width: 200px;
-        height: auto;
     }
 
     .certificate-badge-image {
@@ -378,7 +403,6 @@ p.subtitle {
         line-height: 1.1;
     }
 
-    /* Navigation */
     .nav-arrow {
         width: 2rem;
         height: 2rem;
@@ -397,14 +421,12 @@ p.subtitle {
         height: 1rem;
     }
 
-    /* Video */
     .certificate-video {
         height: 50vh;
         min-height: 300px;
     }
 }
 
-/* Small Devices - Mobile Landscape (481px - 767px) */
 @media (min-width: 481px) and (max-width: 767px) {
     .Main-slider-container {
         padding-left: 2vw;
@@ -412,37 +434,41 @@ p.subtitle {
 
     .slider-content {
         height: auto;
-        min-height: 420px;
-        padding: 1.5rem 1rem;
-    }
-
-    .slide-inner {
         flex-direction: column;
-        gap: 2rem;
-        padding: 1rem;
+        padding: 1.5rem 1rem;
+        gap: 1rem;
     }
 
-    .slide-text-content {
+    .static-left-wrapper {
+        flex: 0 0 auto;
+        width: 100%;
         max-width: 100%;
+        height: auto;
         text-align: center;
         padding-left: 0;
         padding-right: 0;
+        justify-content: center;
+    }
+
+    .static-left-content {
+        text-align: center;
     }
 
     .certification-Product-Box-title {
         font-size: 1.8rem;
-        line-height: 1.2;
     }
 
     p.subtitle {
         font-size: 1rem;
-        line-height: 1.4;
     }
 
-    .Certificate-container {
+    .animated-right-content {
+        flex: 0 0 260px;
+        width: 100%;
         max-width: 100%;
+        height: 260px;
+        min-height: 260px;
         padding: 0;
-        margin-top: 1rem;
     }
 
     .Certificate-container-Box {
@@ -461,14 +487,12 @@ p.subtitle {
     .Certificate-container-title,
     .Certificate-container-standard {
         font-size: 1.15rem;
-        line-height: 1.1;
         margin-bottom: 0.3rem;
     }
 
     .Certificate-container-description,
     .Certificate-container-subDescription {
         font-size: 0.8rem;
-        line-height: 1.2;
         margin-top: 0.5rem;
     }
 
@@ -477,61 +501,22 @@ p.subtitle {
     }
 }
 
-/* Medium Mobile Screens - Specific (560px - 640px) */
-@media (min-width: 560px) and (max-width: 640px) {
-    .slider-content {
-        min-height: 400px;
-    }
-
-    .slide-inner {
-        gap: 1.8rem;
-    }
-
-    .certification-Product-Box-title {
-        font-size: 1.75rem;
-    }
-
-    .Certificate-container-Box {
-        max-width: 220px;
-    }
-
-    .certificate-badge-image {
-        max-height: 220px;
-    }
-
-    .Certificate-container-title,
-    .Certificate-container-standard {
-        font-size: 1.05rem;
-    }
-
-    .Certificate-container-description,
-    .Certificate-container-subDescription {
-        font-size: 0.75rem;
-    }
-}
-
-/* Medium Devices - Tablets Portrait (768px - 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
     .Main-slider-container {
         padding-left: 3vw;
     }
 
     .slider-content {
-        height: auto;
-        min-height: 400px;
+        flex-direction: row;
         padding: 2rem;
     }
 
-    .slide-inner {
-        flex-direction: row;
-        gap: 2rem;
-        align-items: center;
-    }
-
-    .slide-text-content {
-        max-width: 48%;
-        text-align: left;
+    .static-left-wrapper {
+        width: 50%;
+        max-width: 50%;
+        height: 100%;
         padding-left: 2rem;
+        justify-content: flex-start;
     }
 
     .certification-Product-Box-title {
@@ -542,8 +527,11 @@ p.subtitle {
         font-size: 1.2rem;
     }
 
-    .Certificate-container {
-        max-width: 45%;
+    .animated-right-content {
+        width: 50%;
+        max-width: 50%;
+        height: 360px;
+        min-height: 360px;
         padding: 0.5rem;
     }
 
@@ -563,7 +551,6 @@ p.subtitle {
     .Certificate-container-title,
     .Certificate-container-standard {
         font-size: 1.4rem;
-        line-height: 1.1;
         margin-bottom: 0.4rem;
     }
 
@@ -571,7 +558,6 @@ p.subtitle {
     .Certificate-container-subDescription {
         font-size: 0.9rem;
         margin-top: 0.6rem;
-        line-height: 1.2;
     }
 
     .certificate-video {
@@ -579,7 +565,6 @@ p.subtitle {
     }
 }
 
-/* Large Devices - Tablets Landscape & Small Desktops (992px - 1199px) */
 @media (min-width: 992px) and (max-width: 1199px) {
     .Main-slider-container {
         padding-left: 4vw;
@@ -589,7 +574,7 @@ p.subtitle {
         height: 24rem;
     }
 
-    .slide-text-content {
+    .static-left-wrapper {
         max-width: 50%;
         padding-left: 3rem;
     }
@@ -602,8 +587,9 @@ p.subtitle {
         font-size: 1.4rem;
     }
 
-    .Certificate-container {
+    .animated-right-content {
         max-width: 48%;
+        height: 24rem;
     }
 
     .Certificate-container-Box {
@@ -621,7 +607,7 @@ p.subtitle {
 
     .Certificate-container-description,
     .Certificate-container-subDescription {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .certificate-video {
@@ -629,13 +615,12 @@ p.subtitle {
     }
 }
 
-/* Desktop - Standard (1200px - 1439px) */
 @media (min-width: 1200px) and (max-width: 1439px) {
     .slider-content {
         height: 26rem;
     }
 
-    .slide-text-content {
+    .static-left-wrapper {
         padding-left: 4rem;
     }
 
@@ -645,6 +630,10 @@ p.subtitle {
 
     p.subtitle {
         font-size: 1.6rem;
+    }
+
+    .animated-right-content {
+        height: 26rem;
     }
 
     .Certificate-container-Box {
@@ -658,7 +647,7 @@ p.subtitle {
 
     .Certificate-container-description,
     .Certificate-container-subDescription {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
     }
 
     .certificate-video {
@@ -666,13 +655,12 @@ p.subtitle {
     }
 }
 
-/* Large Desktop (1440px - 1919px) */
 @media (min-width: 1440px) and (max-width: 1919px) {
     .slider-content {
         height: 28rem;
     }
 
-    .slide-text-content {
+    .static-left-wrapper {
         padding-left: 5rem;
     }
 
@@ -682,6 +670,10 @@ p.subtitle {
 
     p.subtitle {
         font-size: 1.8rem;
+    }
+
+    .animated-right-content {
+        height: 28rem;
     }
 
     .Certificate-container-Box {
@@ -695,7 +687,7 @@ p.subtitle {
 
     .Certificate-container-description,
     .Certificate-container-subDescription {
-        font-size: 1.35rem;
+        font-size: 1.2rem;
     }
 
     .certificate-video {
@@ -703,30 +695,30 @@ p.subtitle {
     }
 }
 
-/* Extra Large Desktop - 4K (1920px+) */
 @media (min-width: 1920px) {
     .slider-content {
         height: 32rem;
-    }
-
-    .slide-inner {
         max-width: 2000px;
     }
 
-    .slide-text-content {
-        padding-left: 6rem;
+    .static-left-wrapper {
+        padding-left: 10rem;
     }
 
     .certification-Product-Box-title {
-        font-size: 4.5rem;
+        font-size: 5rem;
     }
 
     p.subtitle {
-        font-size: 1.9rem;
+        font-size: 1.7rem;
+    }
+
+    .animated-right-content {
+        height: 32rem;
     }
 
     .Certificate-container-Box {
-        max-width: 450px;
+        max-width: 520px;
     }
 
     .certificate-video {
@@ -734,27 +726,34 @@ p.subtitle {
     }
 }
 
-/* Portrait Orientation Specific */
 @media (orientation: portrait) and (max-width: 991px) {
     .slider-content {
-        min-height: 420px;
-        padding: 1.5rem 0.5rem;
-    }
-
-    .slide-inner {
         flex-direction: column;
-        gap: 1.5rem;
+        height: auto;
+        padding: 1.5rem 0.5rem;
+        gap: 1rem;
     }
 
-    .slide-text-content {
+    .static-left-wrapper {
+        flex: 0 0 auto;
+        width: 100%;
         max-width: 100%;
+        height: auto;
         text-align: center;
         padding-left: 0;
-        margin-bottom: 1rem;
+        justify-content: center;
     }
 
-    .Certificate-container {
-        max-width: 100%;
+    .static-left-content {
+        text-align: center;
+    }
+
+    .animated-right-content {
+        flex: 0 0 260px;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 260px !important;
+        min-height: 260px;
         padding: 0;
     }
 
@@ -774,14 +773,12 @@ p.subtitle {
     .Certificate-container-title,
     .Certificate-container-standard {
         font-size: 1.1rem;
-        line-height: 1.1;
         margin-bottom: 0.3rem;
     }
 
     .Certificate-container-description,
     .Certificate-container-subDescription {
         font-size: 0.75rem;
-        line-height: 1.2;
         margin-top: 0.4rem;
     }
 
@@ -791,7 +788,6 @@ p.subtitle {
     }
 }
 
-/* Landscape Orientation - Short Screens */
 @media (orientation: landscape) and (max-height: 600px) {
     .slider-content {
         height: auto;
@@ -799,11 +795,7 @@ p.subtitle {
         padding: 1.5rem 1rem;
     }
 
-    .slide-inner {
-        gap: 1.5rem;
-    }
-
-    .slide-text-content {
+    .static-left-wrapper {
         padding-left: 2rem;
     }
 
@@ -814,6 +806,10 @@ p.subtitle {
 
     p.subtitle {
         font-size: 1rem;
+    }
+
+    .animated-right-content {
+        height: 300px;
     }
 
     .Certificate-container-Box {
@@ -840,7 +836,6 @@ p.subtitle {
     .Certificate-container-subDescription {
         font-size: 0.75rem;
         margin-top: 0.4rem;
-        line-height: 1.1;
     }
 
     .certificate-video {
@@ -852,7 +847,6 @@ p.subtitle {
     }
 }
 
-/* Touch Device Optimizations */
 @media (hover: none) and (pointer: coarse) {
     .nav-arrow {
         width: 2.5rem;
@@ -870,8 +864,8 @@ p.subtitle {
     }
 }
 
-/* High DPI Screens */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
     .certificate-badge-image {
         image-rendering: -webkit-optimize-contrast;
     }

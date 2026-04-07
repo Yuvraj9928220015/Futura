@@ -1,0 +1,80 @@
+1. hover pr logo change to white
+2. IBEX Boat show
+3. Change name Event and Exhibition change name = News & Events
+4. News & Events Remove banner - Add to Home Page Banner
+5. About us Text navigate 
+6. Product section me dropdown add karna h  
+   dropdown list 
+1 Americana
+2 Apollo
+3 Sauve
+4 offroad
+5 poseidon
+6 runabout
+7 matrix
+8 xtreme
+9 auto revolution
+10 marine Revolution
+11 fuerte
+
+7 Add Space in heading product collection add Edit 7 Collections and Add Create Image image pr curser aane pr stop ho jaye 
+8 Sustainbition video add music expolr mut button 
+9 edit Get to Know and button tranf.
+10 Global Standards and Certifications add Space Add this Heading take ref. pdf only certifition image change and curser effect and this section About us Page 
+11 textumuin- curser effect slove effect
+
+
+New 
+backgro
+12 Sustainability page redesign
+13 Download Sustainability Report hover effect
+14 background-attachment: fixed; 
+15 add to sustainability page
+16 Product Page Slider Effect change 
+17 Certifications page Effect change ISO font
+18 csr 
+
+Pavo Esse Eco
+PVC‑Based Sustainable Material
+Pavo Esse Eco represents our innovation in responsible PVC solutions
+                                          
+Key Highlights
+
+Optimized PVC formulation with lower environmental impact
+Long life cycle, reducing replacement and material waste</li>
+Designed to support circular‑economy principles
+Suitable for applications demanding durability and consistency
+
+
+Unico Esse Eco
+PU‑Based Sustainable Material
+Unico Esse Eco is our step toward cleaner, more conscious polyurethane solutions
+
+Key Highlights
+
+Sustainable PU formulation focused on reduced carbon footprint
+Lightweight yet high‑performance material
+Supports eco‑conscious manufacturing processes
+Ideal for brands prioritizing sustainability without design compromise
+
+
+Our Sustainability Vision
+                                 
+Growing responsibly. Operating ethically. Delivering sustainably.
+We believe true growth is achieved when business success goes hand‑in‑hand with environmental care and social responsibility.
+Our journey continues with innovation, accountability, and a deep commitment to a sustainable future.
+
+
+
+
+
+
+
+
+
+
+Education &amp; Community Development
+
+Supporting education, community programs, and empowering
+future generations through learning
+                             

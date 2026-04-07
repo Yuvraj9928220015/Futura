@@ -19,7 +19,6 @@ export default function Focus() {
                                         </div>
                                     </div>
                                 </div>
-                                {/*  */}
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-6">
                                     <div className="Features-Section-Box">
                                         <div className="Features-Section-image">
@@ -30,7 +29,6 @@ export default function Focus() {
                                         </div>
                                     </div>
                                 </div>
-                                {/*  */}
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-6">
                                     <div className="Features-Section-Box">
                                         <div className="Features-Section-image">
@@ -41,7 +39,6 @@ export default function Focus() {
                                         </div>
                                     </div>
                                 </div>
-                                {/*  */}
                                 <div className="col-lg-3 col-md-3 col-sm-6 col-6">
                                     <div className="Features-Section-Box">
                                         <div className="Features-Section-image">
@@ -59,41 +56,42 @@ export default function Focus() {
 
                 {/* Product Section */}
                 <div className="Focus-Product">
-                    <div className="container-fluid">
-                        <div className="row align-items-center">
-                            <div data-aos="fade-right" className="col-lg-8 col-md-7 col-12">
-                                <div className="Focus-Product-Image-Box">
-                                    {/* Video with Image Poster (Image shows first) */}
-                                    <video 
-                                        className="product-video"
-                                        poster="/Runabout-1.png"
-                                        autoPlay 
-                                        loop 
-                                        muted 
-                                        playsInline
-                                    >
-                                        <source src="/Our-Product-video.mp4" type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                            </div>
-                            <div data-aos="fade-left" className="col-lg-4 col-md-5 col-12">
-                                <div className="Focus-Product-Content-Box">
-                                    <div className="Focus-Product-Box-title">
-                                        Get to
-                                        Know
-                                        Our 
-                                        Product
-                                    </div>
-                                    <div className="Explore-Features">
-                                        <button className="explore-btn">Explore Features</button>
-                                    </div>
-                                    <div className="decorative-line"></div>
-                                </div>
-                            </div>
+                    <div className="Focus-Product-Inner">
+
+                        {/* LEFT — Image / Video */}
+                        <div data-aos="fade-right" className="Focus-Product-Media">
+                            <video
+                                className="product-video"
+                                poster="/Runabout-1.png"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                            >
+                                <source src="/Our-Product-video.mp4" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
+
+                        {/* RIGHT — Content */}
+                        <div data-aos="fade-left" className="Focus-Product-Content">
+                            <h2 className="Focus-Product-Title">
+                                Get to<br />
+                                Know<br />
+                                Our<br />
+                                Product
+                            </h2>
+
+                            <a href="/Preformance">
+                                <button className="explore-btn">Explore Features</button>
+                            </a>
+
+                            <div className="decorative-line"></div>
+                        </div>
+
                     </div>
                 </div>
+
             </div>
         </>
     )

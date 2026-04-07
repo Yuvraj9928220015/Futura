@@ -17,6 +17,7 @@
     --nav-height-desktop: 75px;
     --nav-height-mobile: 60px;
     --transition-speed: 0.3s;
+    --product-accent: #c4883a;
 }
 
 /* =============================================
@@ -24,10 +25,9 @@
 ============================================= */
 .Navbar {
     padding: 0;
-    background-color: var(--nav-bg);
     position: fixed;
     width: 100%;
-    top: 50px;
+    top: 30px;
     z-index: 9999;
     transition: background-color var(--transition-speed) ease,
         backdrop-filter var(--transition-speed) ease,
@@ -38,10 +38,10 @@
 
 .Navbar.scrolled {
     background-color: var(--scrolled-bg);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px #0000001a;
     backdrop-filter: none;
     color: var(--scrolled-link);
-    top: 51px;
+    top: 30px;
 }
 
 /* =============================================
@@ -57,6 +57,10 @@
     position: relative;
     box-sizing: border-box;
     transition: padding var(--transition-speed) ease, height var(--transition-speed) ease;
+}
+
+.Navbar_container:hover {
+    background-color: #919191af;
 }
 
 /* =============================================
@@ -82,6 +86,26 @@
     padding: 0;
     gap: 0;
     flex: 1;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+    transition:
+        opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.Navbar_Section:hover .Navbar_list-left,
+.Navbar_Section:hover .Navbar_list-right {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+}
+
+.Navbar.scrolled .Navbar_list-left,
+.Navbar.scrolled .Navbar_list-right {
+    opacity: 1 !important;
+    pointer-events: all !important;
+    transform: translateY(0) !important;
 }
 
 .Navbar_list-right {
@@ -153,10 +177,24 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
     object-fit: contain;
 }
 
+/* Logo visibility states */
+.logo-default.show,
+.logo-hover.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.logo-default.hide,
+.logo-hover.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Keep old class names working if used elsewhere */
 .logo-normal.show,
 .logo-scrolled.show {
     opacity: 1;
@@ -195,16 +233,22 @@
 }
 
 /* =============================================
-   DESKTOP DROPDOWN — MEGA MENU
+   DESKTOP DROPDOWN — COLLECTIONS (Industrial Segments)
+   Now hover-based, same pattern as Product
 ============================================= */
 .dropdown {
     position: relative;
 }
 
+.collections-dropdown-wrapper {
+    position: static;
+}
+
 .mega-dropdown-menu {
     position: fixed;
-    top: 124px;
-    left: 0;
+    top: 48px;
+    /* matches nav height */
+    left: -50px;
     width: 100vw;
     background-color: #a5a5a55e;
     backdrop-filter: blur(12px);
@@ -214,17 +258,14 @@
     box-sizing: border-box;
     border-top: 1px solid #ffffff33;
 
-    /* Closed state */
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-15px);
-    max-height: 0;
-    overflow: hidden;
+    transform: translateY(-10px);
     pointer-events: none;
-    transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-        transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-        max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-        visibility 0.45s ease;
+    transition:
+        opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.35s ease;
 }
 
 .mega-dropdown-menu.open {
@@ -232,11 +273,13 @@
     visibility: visible;
     transform: translateY(0);
     pointer-events: all;
-    max-height: 650px;
-    overflow: visible;
 }
 
-/* Content layout */
+/* Scrolled state: adjust top */
+.Navbar.scrolled .mega-dropdown-menu {
+    top: 48px;
+}
+
 .dropdown-content {
     display: flex;
     width: 100%;
@@ -244,7 +287,7 @@
     justify-content: flex-end;
     gap: 40px;
     margin: 0 auto;
-    animation: fadeInUp 0.45s ease-out;
+    animation: fadeInUp 0.35s ease-out;
 }
 
 @keyframes fadeInUp {
@@ -259,12 +302,11 @@
     }
 }
 
-/* Left links column */
 .dropdown-links {
     flex-shrink: 0;
     width: 200px;
     padding-right: 30px;
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: 1px solid #ffffff26;
 }
 
 .dropdown-links h3 {
@@ -302,7 +344,6 @@
     opacity: 0.8;
 }
 
-/* Image cards grid */
 .dropdown-images {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -328,6 +369,10 @@
     transition: transform 0.4s ease;
 }
 
+.image-card:hover img {
+    transform: scale(1.1);
+}
+
 .image-card .card-text {
     padding: 12px 4px;
     color: #ffffff;
@@ -339,6 +384,144 @@
     margin: 0;
     line-height: 1.4;
     letter-spacing: 0.5px;
+}
+
+/* =============================================
+   PRODUCT MEGA DROPDOWN
+============================================= */
+.product-dropdown-wrapper {
+    position: static;
+}
+
+.product-mega-menu {
+    position: fixed;
+    top: 48px;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 8px 32px #0000001f;
+    z-index: 10000;
+    box-sizing: border-box;
+    border-top: 2px solid #f0f0f0;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition:
+        opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+        visibility 0.35s ease;
+}
+
+.product-mega-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+/* Tabs row */
+.product-tabs {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 60px;
+    background: #fff;
+}
+
+.product-tab-btn {
+    background: none;
+    border: none;
+    padding: 16px 0;
+    margin-right: 40px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #888;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.25s ease;
+    white-space: nowrap;
+}
+
+.product-tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--product-accent);
+    transition: width 0.3s ease;
+}
+
+.product-tab-btn:hover {
+    color: #222;
+}
+
+.product-tab-btn.active {
+    color: var(--product-accent);
+}
+
+.product-tab-btn.active::after {
+    width: 100%;
+}
+
+/* Tab content area */
+.product-tab-content {
+    padding: 30px 60px 36px;
+    background: #fff;
+    position: relative;
+}
+
+/* Individual tab panel */
+.product-tab-panel {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 40px;
+    animation: fadeInUp 0.3s ease;
+}
+
+.product-tab-panel.active {
+    display: grid;
+}
+
+/* Each column list */
+.product-col-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.product-col-list li {
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.product-col-list li:last-child {
+    border-bottom: none;
+}
+
+.product-item-link {
+    display: block;
+    padding: 10px 0;
+    font-size: 14px;
+    color: #444;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.product-item-link:hover {
+    color: var(--product-accent);
+    padding-left: 6px;
+}
+
+/* Scrolled state: adjust top for product menu */
+.Navbar.scrolled .product-mega-menu {
+    top: 49px;
 }
 
 /* =============================================
@@ -368,7 +551,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: #00000080;
     z-index: 9997;
     display: none;
     opacity: 0;
@@ -394,7 +577,7 @@
 }
 
 .mobile-menu-toggle:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline: 2px solid #ffffff99;
     border-radius: 4px;
 }
 
@@ -422,7 +605,6 @@
     background-color: var(--scrolled-link);
 }
 
-/* Animate to X */
 .hamburger.open span:nth-child(1) {
     transform: translateY(7.5px) rotate(45deg);
 }
@@ -442,7 +624,7 @@
 .mobile-menu {
     display: none;
     flex-direction: column;
-    background-color: rgba(10, 10, 10, 0.97);
+    background-color: #0a0a0af7;
     position: fixed;
     top: 0;
     right: -100%;
@@ -450,7 +632,7 @@
     max-width: 360px;
     height: 100vh;
     padding: 80px 0 30px;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+    box-shadow: -4px 0 20px #00000066;
     overflow-y: auto;
     list-style: none;
     margin: 0;
@@ -466,7 +648,7 @@
 
 .mobile-menu>li {
     padding: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    border-bottom: 1px solid #ffffff12;
     animation: slideInRight 0.4s ease-out forwards;
     opacity: 0;
     transform: translateX(20px);
@@ -479,7 +661,6 @@
     }
 }
 
-/* Stagger delays */
 .mobile-menu>li:nth-child(1) {
     animation-delay: 0.08s;
 }
@@ -504,6 +685,10 @@
     animation-delay: 0.33s;
 }
 
+.mobile-menu>li:nth-child(7) {
+    animation-delay: 0.38s;
+}
+
 .mobile-menu .nav-link {
     font-size: 14px;
     letter-spacing: 1.5px;
@@ -515,12 +700,11 @@
 }
 
 .mobile-menu .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: #ffffff0f;
     color: #ffffff;
     padding-left: 30px;
 }
 
-/* Mobile dropdown toggle */
 .dropdown-mobile {
     position: relative;
 }
@@ -541,12 +725,12 @@
 }
 
 .mobile-menu .dropdown-toggle-mobile:hover {
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: #ffffff0f;
 }
 
 .mobile-menu .dropdown-toggle-mobile.active {
     color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: #ffffff0d;
 }
 
 .arrow-mobile-icon {
@@ -560,16 +744,15 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #0000004d;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-        opacity 0.4s ease;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
     opacity: 0;
 }
 
 .mobile-menu-dropdown.show {
-    max-height: 300px;
+    max-height: 1000px;
     opacity: 1;
 }
 
@@ -594,8 +777,34 @@
 
 .mobile-menu-dropdown li a:hover {
     color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: #ffffff14;
     padding-left: 44px;
+}
+
+/* Mobile PRODUCT group labels */
+.mobile-product-group {
+    border-bottom: 1px solid #ffffff10;
+}
+
+.mobile-product-group-label {
+    display: block;
+    padding: 10px 24px 6px 24px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--product-accent);
+    font-weight: 600;
+}
+
+.mobile-product-sublist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-product-sublist li a {
+    padding: 10px 24px 10px 36px !important;
+    font-size: 12.5px !important;
 }
 
 /* =============================================
@@ -633,6 +842,12 @@
     .image-card img {
         height: 260px;
     }
+
+    .product-tabs,
+    .product-tab-content {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
 }
 
 /* =============================================
@@ -647,26 +862,22 @@
         top: 0 !important;
     }
 
-    /* Hide desktop nav */
     .Navbar_list-left,
     .Navbar_list-right {
-        display: none;
+        display: none !important;
     }
 
-    /* Show hamburger */
     .mobile-menu-toggle {
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    /* Container height for tablet */
     .Navbar_container {
         padding: 0 30px;
         height: var(--nav-height-mobile);
     }
 
-    /* Center logo on tablet */
     .Navbar_logo {
         position: absolute;
         left: 50%;
@@ -687,8 +898,8 @@
         transform: none;
     }
 
-    /* Hide desktop mega dropdown */
-    .mega-dropdown-menu {
+    .mega-dropdown-menu,
+    .product-mega-menu {
         display: none !important;
     }
 
@@ -817,11 +1028,14 @@
     .Navbar,
     .Navbar_container,
     .mega-dropdown-menu,
+    .product-mega-menu,
     .mobile-menu,
     .image-card,
     .image-card img,
     .nav-link,
-    .hamburger span {
+    .hamburger span,
+    .Navbar_list-left,
+    .Navbar_list-right {
         transition: none !important;
         animation: none !important;
     }
