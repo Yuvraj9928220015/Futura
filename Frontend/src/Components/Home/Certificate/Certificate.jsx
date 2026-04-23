@@ -72,7 +72,7 @@ const Certificate = () => {
     }
   ];
 
-  // ─── Animation (same as original) ────────────────────────────
+  // ─── Animation ────────────────────────────────────────────────
   const animateTo = (startX, onDone) => {
     const duration = 650;
     const startTime = performance.now();
@@ -94,7 +94,7 @@ const Certificate = () => {
     animFrameRef.current = requestAnimationFrame(step);
   };
 
-  // ─── Core slide changer (same logic as original) ─────────────
+  // ─── Core slide changer ───────────────────────────────────────
   const changeSlide = useCallback((newIndex, direction) => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -140,16 +140,16 @@ const Certificate = () => {
     };
   }, [startAutoplay]);
 
-  // ─── Hover: pause / resume ────────────────────────────────────
-  const handleMouseEnter = () => {
+  // ─── Hover: pause only on certificate card ────────────────────
+  const handleCertMouseEnter = () => {
     isPausedRef.current = true;
   };
 
-  const handleMouseLeave = () => {
+  const handleCertMouseLeave = () => {
     isPausedRef.current = false;
   };
 
-  // ─── Navigation — resets autoplay timer on click ──────────────
+  // ─── Navigation ───────────────────────────────────────────────
   const nextSlide = () => {
     changeSlide((currentSlide + 1) % certifications.length, 'next');
     startAutoplay();
@@ -166,7 +166,7 @@ const Certificate = () => {
     startAutoplay();
   };
 
-  // ─── Video toggle (original) ──────────────────────────────────
+  // ─── Video toggle ─────────────────────────────────────────────
   const toggleVideoPlayback = () => {
     if (videoRef.current) {
       isVideoPlaying ? videoRef.current.pause() : videoRef.current.play();
@@ -180,15 +180,10 @@ const Certificate = () => {
     <>
       <div className="Main-slider-container">
         <div className="slider-outer-clip">
-          {/* onMouseEnter/Leave on slider-container to pause/resume autoplay */}
-          <div
-            className="slider-container"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
+          <div className="slider-container">
             <div className="slider-content">
 
-              {/* LEFT: instant update, no animation */}
+              {/* LEFT: static, no animation, NO hover pause */}
               <div className="static-left-wrapper">
                 <div className="static-left-content">
                   <h1 className="certification-Product-Box-title">{cert.maintitle}</h1>
@@ -199,8 +194,12 @@ const Certificate = () => {
                 </div>
               </div>
 
-              {/* RIGHT: JS-driven translateX from viewport edge */}
-              <div className="animated-right-content">
+              {/* RIGHT: certificate card — hover HERE pauses autoplay */}
+              <div
+                className="animated-right-content"
+                onMouseEnter={handleCertMouseEnter}
+                onMouseLeave={handleCertMouseLeave}
+              >
                 <div
                   className="cert-slide"
                   style={{ transform: `translateX(${translateX}px)` }}

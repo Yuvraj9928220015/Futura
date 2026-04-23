@@ -1,7 +1,7 @@
-import Header from "./Components/Header/Header"
+// import Header from "./Components/Header/Header"
 import Footer from "./Components/Footer/Footer"
-import Home from "./Components/Home/Home"
-import Navbar from "./Components/Navbar/Navbar"
+// import Home from "./Components/Home/Home"
+// import Navbar from "./Components/Navbar/Navbar"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import About from "./Components/Pages/About/About";
 import Automotive from "./Components/Pages/Automotive/Automotive";
@@ -16,6 +16,10 @@ import Preformance from "./Components/Pages/Performance/Preformance";
 import ProductList from "./Components/Dashboard/ProductList/ProductList";
 import Sustainability from "./Components/Pages/Sustainability/Sustainability";
 import GlobalPresence from "./Components/Pages/GlobalPresence/GlobalPresence";
+import Homepage from "./Components/Homepage/Home";
+import HeaderNew from "./Components/HeaderNew/Header";
+import NavbarNew from "./Components/NavbarNew/Navbar";
+import PopupForm from "./Components/Pages/PopupForm/PopupForm";
 
 
 function App() {
@@ -27,10 +31,14 @@ function App() {
     <>
 
       <BrowserRouter>
-        <Header />
-        <Navbar />
+        {/* <Header /> */}
+        <HeaderNew />
+        {/* <Navbar /> */}
+        <NavbarNew />
+        <PopupForm />
         <Routes>
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          <Route path="/" element={<Homepage />} />
           <Route path="/about" element={<About />} />
           <Route path="/automotive" element={<Automotive />} />
           <Route path="/marine" element={<Marine />} />

@@ -99,9 +99,10 @@ function Contract() {
                             className="About-Banner-video"
                         />
                         <div className="About-Banner-overlay">
-                            <div className="hero-content">
+                            <div className="Contract-hero-content">
                                 <h1 className="About-title">Contract Furnishing</h1>
                                 <p className="About-des">Performance You Feel. Durability You Trust</p>
+                                <div className="Contract-hero-content-line"></div>
                             </div>
                         </div>
                     </div>

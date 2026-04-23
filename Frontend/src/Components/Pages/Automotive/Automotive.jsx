@@ -38,8 +38,11 @@ function Automotive() {
                             className="About-Banner-video"
                         />
                         <div className="About-Banner-overlay">
-                            <div className="About-title">Automotive</div>
-                            <div className="About-des">Engineered Comfort. Enhanced Interiors</div>
+                            <div className="Contract-hero-content">
+                                <h1 className="About-title">Automotive</h1>
+                                <p className="About-des">Performance You Feel. Durability You Trust</p>
+                                <div className="Contract-hero-content-line"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

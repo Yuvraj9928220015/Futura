@@ -6,6 +6,18 @@ const variantSchema = new mongoose.Schema({
         required: [true, 'Variant name is required'],
         trim: true
     },
+    // ✅ COLOR per Variant
+    color: {
+        type: String,
+        default: "",
+        trim: true
+    },
+    // ✅ GRAIN per Variant
+    grain: {
+        type: String,
+        default: "",
+        trim: true
+    },
     images: {
         type: [String],
         required: [true, 'At least one variant image is required'],
@@ -42,6 +54,17 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'Product price is required'],
         min: [0, 'Price cannot be negative']
+    },
+    // ✅ Product-level color (default / base color)
+    color: {
+        type: String,
+        default: "",
+        trim: true
+    },
+    grain: {
+        type: String,
+        default: "",
+        trim: true
     },
     image: {
         type: [String],

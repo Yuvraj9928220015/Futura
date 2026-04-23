@@ -6,11 +6,6 @@ export default function Banner() {
     const videoRefs = useRef([]);
     const slides = [
         {
-            video: '/New-video-2.mp4',
-            title: 'Weather Ready Material',
-            subtitle: 'Explore More',
-        },
-        {
             image: '/MATRIX-Banner.png',
             title: 'Matrix Collection',
             subtitle: 'View Collection',
@@ -34,6 +29,11 @@ export default function Banner() {
             image: '/Contract-Furnishing-Banner.png',
             title: 'Contract Furnishing',
             subtitle: 'View Collection',
+        },
+        {
+            video: '/New-video-2.mp4',
+            title: 'Weather Ready Material',
+            subtitle: 'Explore More',
         },
     ];
 

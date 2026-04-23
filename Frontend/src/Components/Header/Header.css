@@ -3,12 +3,13 @@
 }
 
 .header {
-    background-color: #5a6570;
+    background-color: #7993ac;
     color: white;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    /* border-bottom: 4px solid white; */
     z-index: 25000;
     font-family: Arial, sans-serif;
     padding: 0px 0;

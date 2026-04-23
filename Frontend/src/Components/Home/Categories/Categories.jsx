@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';   // ✅ ADD THIS
 import './Categories.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
@@ -52,60 +53,28 @@ const categoryData = {
         image1: 'Runabout-New-image-1.png',
         image2: 'Runabout-New-image-2.JPG',
     },
-    // 'Auto Revolution': {
-    //     latest: 'NEW RELEASE',
-    //     title: 'Auto Revolution',
-    //     description: 'Auto Revolution synthetic leather is resistant to weather, abrasions, UV radiations and biological fluids. They can be characterized by a wide range of thickness, embossing, colors, patterns and color fastness. Mostly used for automotive and trucking surfaces.',
-    //     image1: 'Auto_Revolution-image.png',
-    //     image2: 'Auto_Revolution-image-1.JPG',
-    // },
-    // 'Marien Revolution': {
-    //     latest: 'SPRING COLLECTION',
-    //     title: 'Marien Revolution',
-    //     description: 'Marien Revolution passes the flammability tests which are of utmost importance. Determines the burn resistance capabilities of materials used in Marine, contract furnishing and healthcare. Passes fire-test-response standard.',
-    //     image1: '1eb.jpg',
-    //     image2: 'In-grid-2.webp',
-    // },
-    // 'Promo Revolution': {
-    //     latest: 'SPECIAL EDITION',
-    //     title: 'Promo Revolution',
-    //     description: 'From steering wheels to door trims, our designs enable the automotive interior industry to choose materials for next generation. Promo Rev strive for a cleaner and more sustainable design, with appealing, long-lasting materials for automotive interior surfaces.',
-    //     image1: 'image-2.png',
-    //     image2: 'Apollo-3.png',
-    // },
-    // Extreme: {
-    //     latest: 'ATHLETIC WEAR',
-    //     title: 'Extreme',
-    //     description: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout makes it extremely comfortable to cover automotive and marine surfaces.',
-    //     image1: '1eb.jpg',
-    //     image2: 'In-grid-2.webp',
-    // },
 };
 
 export default function Categories() {
     const categoryNames = Object.keys(categoryData);
+    const navigate = useNavigate();
 
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-
     const [displayIndex, setDisplayIndex] = useState(0);
-
     const [contentAnim, setContentAnim] = useState('idle');
     const [imagesAnim, setImagesAnim] = useState('idle');
-
     const isAnimating = useRef(false);
 
     const changeSlide = (newIndex, direction) => {
         if (isAnimating.current) return;
         isAnimating.current = true;
 
-        // ── Phase 1: EXIT ──
         setContentAnim('exit');
         setImagesAnim(direction === 'next' ? 'exit-left' : 'exit-right');
 
         setTimeout(() => {
             setDisplayIndex(newIndex);
             setCurrentSlideIndex(newIndex);
-
             setContentAnim('enter');
             setImagesAnim(direction === 'next' ? 'enter-right' : 'enter-left');
 
@@ -133,7 +102,12 @@ export default function Categories() {
         changeSlide(index, direction);
     };
 
-    // Auto-play
+    // ✅ ADD THIS — same slug logic as Navbar
+    const handleReadMore = () => {
+        const slug = selectedData.title.toLowerCase().replace(/\s+/g, '-');
+        navigate(`/product?category=${slug}`);
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
             const newIndex = (currentSlideIndex + 1) % categoryNames.length;
@@ -144,7 +118,6 @@ export default function Categories() {
 
     const selectedData = categoryData[categoryNames[displayIndex]];
 
-    // ── Map state → CSS class ──
     const contentClass = {
         idle: '',
         exit: 'content-exit',
@@ -171,7 +144,6 @@ export default function Categories() {
             <div className="Categories-Container">
                 <div className="Slider-Wrapper">
 
-                    {/* ── Prev Button ── */}
                     <button
                         onClick={prevSlide}
                         className="Slider-Button prev-button"
@@ -180,21 +152,19 @@ export default function Categories() {
                         <FaChevronLeft />
                     </button>
 
-                    {/* ── Slider Content ── */}
                     <div className="Slider-Content-Container">
                         <div className="Categories-Content-Box">
 
-                            {/* ── LEFT: Text Content (FADE only) ── */}
                             <div className={`Categories-Box-content ${contentClass}`}>
                                 <div className="Categories-Box-Latest">{selectedData.latest}</div>
                                 <div className="Categories-Box-title">{selectedData.title}</div>
                                 <div className="Categories-Box-des">{selectedData.description}</div>
                                 <div className="Categories-Box-but">
-                                    <button>READ MORE →</button>
+                                    {/* ✅ onClick added here */}
+                                    <button onClick={handleReadMore}>READ MORE →</button>
                                 </div>
                             </div>
 
-                            {/* ── RIGHT: Images (SLIDE animation) ── */}
                             <div className={`Categories-Images-Container ${imagesClass}`}>
                                 <div className="Categories-Image-1">
                                     <img src={selectedData.image1} alt={selectedData.title} />
@@ -207,7 +177,6 @@ export default function Categories() {
                         </div>
                     </div>
 
-                    {/* ── Next Button ── */}
                     <button
                         onClick={nextSlide}
                         className="Slider-Button next-button"

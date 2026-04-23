@@ -8,6 +8,7 @@ const MARINE_PRODUCTS = [
         description: 'Premium marine upholstery engineered for vessels that demand the highest standards of comfort and resilience.',
     },
     {
+
         title: 'Marine Revolution',
         image: '/Mayur-1.jpg',
         description: 'Next-gen marine fabric with cutting-edge weaving technology and a rich color palette inspired by global oceanic trends.',
@@ -50,9 +51,12 @@ function Marine() {
                             playsInline
                             className="About-Banner-video"
                         />
-                        <div className="Marine-Banner-overley">
-                            <div className="About-title">Marine</div>
-                            <div className="About-des">Built for Waves. Styled for the World</div>
+                        <div className="About-Banner-overlay">
+                            <div className="Contract-hero-content">
+                                <h1 className="About-title">Marine</h1>
+                                <p className="About-des">Performance You Feel. Durability You Trust</p>
+                                <div className="Contract-hero-content-line"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

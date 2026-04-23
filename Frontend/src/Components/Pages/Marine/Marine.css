@@ -38,7 +38,6 @@
 
 .About-title {
     font-size: 48px;
-    margin-bottom: 15px;
 }
 
 .About-des {
@@ -96,7 +95,7 @@
 }
 
 .About-Section-Heading {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Gotu', sans-serif;
     font-size: 40px;
     margin-bottom: 10px;
 }
@@ -290,7 +289,7 @@
 .Marine-Banner-overley {
     width: 100%;
     position: absolute;
-    top: 50%;
+    top: 90%;
     text-align: center;
 }
 

@@ -40,20 +40,30 @@
     height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: end;
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(0, 0, 0, 0.4) 60%,
+            rgba(0, 0, 0, 0.1) 70%,
+            transparent 100%);
 }
 
-.hero-content {
+.Contract-hero-content {
     text-align: center;
     color: white;
     max-width: 1000px;
-    padding: 0 20px;
+    padding: 100px 20px;
     animation: fadeInUp 1s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .About-title {
+    font-family: 'Gotu', sans-serif;
     font-size: clamp(2.5rem, 6vw, 4rem);
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     background: linear-gradient(135deg, #ffffff, #f0f0f0);
     background-clip: text;
     -webkit-background-clip: text;
@@ -61,10 +71,18 @@
 }
 
 .About-des {
+    font-family: 'Gotu', sans-serif;
+    font-style: italic;
     font-size: clamp(1.1rem, 2vw, 1.3rem);
     margin-bottom: 30px;
     opacity: 0.9;
     line-height: 1.6;
+}
+
+.Contract-hero-content-line {
+    width: 20%;
+    height: 3px;
+    background-color: #ffffff;
 }
 
 .cta-button {
@@ -90,13 +108,14 @@
     max-width: 800px;
     margin: 0 auto;
 }
+
 .About-Banner-video {
     width: 100%;
 }
 
 
 .About-Section-Heading {
-    font-family: 'Georgia', serif;
+   font-family: 'Gotu', sans-serif;
     margin-bottom: 25px;
     position: relative;
 }
@@ -276,8 +295,8 @@
     /* Ensures box takes full height */
 }
 
-.Overview-Box-btn button{
-  padding: 100%;
+.Overview-Box-btn button {
+    padding: 100%;
 }
 
 .Overview-Box::before {

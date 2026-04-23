@@ -1,7 +1,7 @@
 /* Footer Main Container */
 .Footer {
     /* background-color: #6e7b88; */
-    background-color: #5a6570;
+    background-color: #7a6b64;
     color: white;
     width: 100%;
     padding: 30px 60px;
@@ -11,7 +11,7 @@
 }
 
 .Footer-Top {
-    background-color: #d9d9d8;
+    background-color: #ebeae5;
     width: 100%;
     height: 60px;
 }
@@ -53,7 +53,7 @@
     font-size: 18px;
     font-weight: 400;
     margin-bottom: 5px;
-    color: #e0e0e0;
+    color: #ffffff;
     /* font-family: 'Roboto', sans-serif; */
     letter-spacing: 0.5px;
 }
@@ -63,13 +63,13 @@
     align-items: center;
     margin-bottom: 0px;
     font-size: 14px;
-    color: #d0d0d0;
+    color: #ffffff;
 }
 
 .contact-icon {
     margin-right: 8px;
     font-size: 20px;
-    color: #a0a0a0;
+    color: #ffffff;
 }
 
 .contact-item span {
@@ -88,7 +88,7 @@
     font-size: 16px;
     font-weight: 400;
     margin-bottom: 6px;
-    color: #e0e0e0;
+    color: #ffffff;
     letter-spacing: 0.5px;
 }
 
@@ -96,7 +96,7 @@
     display: flex;
     align-items: flex-start;
     font-size: 14px;
-    color: #d0d0d0;
+    color: #ffffff;
     line-height: 1.4;
 }
 
@@ -104,7 +104,7 @@
     margin-right: 8px;
     margin-top: 2px;
     font-size: 18px;
-    color: #a0a0a0;
+    color: #ffffff;
     flex-shrink: 0;
 }
 

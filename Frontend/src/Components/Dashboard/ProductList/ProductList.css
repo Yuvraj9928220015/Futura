@@ -1234,7 +1234,6 @@
     }
 }
 
-
 /* ========================================
    COLOR SWATCHES SECTION STYLES
    ======================================== */
@@ -1381,11 +1380,6 @@
     }
 }
 
-
-
-/*  */
-
-/* Variant Styles */
 .product-variants-section {
     margin: 15px 0;
     padding: 15px;
@@ -1613,4 +1607,117 @@
         width: 100%;
         justify-content: center;
     }
+}
+
+.product-grains-section {
+    padding: 10px 14px 0;
+}
+
+.grains-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin: 0 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.grains-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.grain-btn {
+    padding: 5px 12px;
+    border: 1.5px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.grain-btn:hover {
+    border-color: #888;
+    background: #f5f5f5;
+}
+
+.grain-btn.active {
+    border-color: #222;
+    background: #222;
+    color: #fff;
+}
+
+/* Grain form items in modal */
+.grain-item {
+    border: 1.5px solid #c8a96e;
+    background: #fffcf6;
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 14px;
+}
+
+.grain-variants-container {
+    border: 1px solid #e0d5c0;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 10px;
+    background: #fff;
+}
+
+.grain-variants-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.grain-variants-header label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+
+.grain-variant-item {
+    border: 1px dashed #d0c8b8;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fafaf8;
+}
+
+.grain-variant-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.add-variant-btn.small {
+    font-size: 11px;
+    padding: 4px 10px;
+}
+
+.remove-variant-btn.small {
+    font-size: 11px;
+    padding: 3px 8px;
+    background: none;
+    border: 1px solid #e99;
+    color: #c44;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.no-variants-hint {
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
 }

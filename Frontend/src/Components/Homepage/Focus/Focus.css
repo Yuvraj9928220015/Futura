@@ -1,0 +1,750 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&display=swap');
+
+/* ==================== Base ==================== */
+* {
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.Focus-main-container {
+    padding: 0px 20px;
+    padding-top: 40px;
+    background-color: #ffffff;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ==================== Features Section ==================== */
+.Features-Section {
+    padding: 0px 30px;
+    width: 100%;
+}
+
+.Focus {
+    width: 100%;
+    padding: 50px 20px;
+    background-color: #ffffff;
+    margin-bottom: 40px;
+}
+
+.Features-Section-Box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 16px 8px;
+    border-radius: 8px;
+    transition: background-color 0.5s ease;
+}
+
+.Features-Section-text {
+    text-align: center;
+    font-size: 24px;
+    font-family: "Cormorant Garamond", serif;
+    line-height: 25px;
+    transition: color 0.3s ease;
+}
+
+.Features-Section-Box:hover .Features-Section-text {
+    color: #1a1a1a;
+}
+
+.Features-Section-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+}
+
+.Features-Section-Box:hover .Features-Section-image {
+    transform: scale(1.25);
+}
+
+.Features-Section-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* ==================== Latest Stories Section ==================== */
+.Latest-Stories-Section {
+    padding: 40px 30px 100px 30px;
+    background-color: #ffffff;
+}
+
+.Latest-Stories-Heading {
+    font-family: 'Gotu', sans-serif;
+    font-size: clamp(30px, 5vw, 30px);
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0 0 32px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+}
+
+/* ===== Small Story Cards ===== */
+.Story-Cards-Stack {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.Story-Card {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+    cursor: pointer;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.Story-Card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.Story-Card:nth-child(2) {
+    animation-delay: 0.22s;
+}
+
+.Story-Card-Thumb {
+    flex: 0 0 220px;
+    width: 220px;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.Story-Card-Thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform 0.4s ease;
+}
+
+.Story-Card:hover .Story-Card-Thumb img {
+    transform: scale(1.05);
+}
+
+.Story-Card-Body {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.Story-Card-Date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    color: #888;
+}
+
+.Story-Card-Title {
+    font-family: 'Gotu', sans-serif;
+    font-size: 50px;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0;
+    transition: color 0.2s ease;
+}
+
+.Story-Card:hover .Story-Card-Title {
+    color: #555;
+}
+
+.Story-Card-SubTitle {
+    font-family: 'Gotu', sans-serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 500;
+    color: #333;
+    margin: 4px 0 6px 0;
+}
+
+.Story-Card-container {
+    padding-top: 80px;
+}
+
+.Story-Card-Des {
+    font-size: 18px;
+    color: #666;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.Story-Card-excerpt {
+    font-family: 'Gotu', sans-serif;
+    font-size: 60px;
+    color: #0a0a0a;
+    line-height: 1;
+    margin: 0;
+}
+
+.Story-Card-explore {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 26px;
+    border-radius: 50px;
+    border: 1.5px solid #1a1a1a;
+    background-color: transparent;
+    color: #1a1a1a;
+    font-family: 'Gotu', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    width: fit-content;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.Story-Card:hover .Story-Card-explore {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border-color: #1a1a1a;
+}
+
+/* =====================================================
+   FEATURED SLIDER  —  FIXED
+   ===================================================== */
+.Featured-Slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 390px;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    /* ✅ GPU-accelerate the whole slider */
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.Featured-Slider-Viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 390px;
+    border-radius: 20px;
+    overflow: hidden;
+    /* ✅ Clip perfectly so no flash outside bounds */
+    isolation: isolate;
+}
+
+/* ── Every slide sits in the same spot ── */
+.Featured-Slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    /* ✅ Default: hidden until given an animation class */
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.Featured-Slide-Img {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+    /* ✅ Prevent flicker on image load */
+    backface-visibility: hidden;
+}
+
+.Featured-Slide video.Featured-Slide-Img {
+    background-color: #000;
+}
+
+.Featured-Card-Overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 70px 28px 50px 28px;
+    background: linear-gradient(to top, #000000cc 0%, #00000066 55%, transparent 100%);
+    border-radius: 0 0 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.Featured-Card-Date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Gotu', sans-serif;
+    font-size: 13px;
+    color: #ffffffd1;
+}
+
+.Featured-Card-Title {
+    font-family: 'Georgia', 'Playfair Display', serif;
+    font-size: clamp(17px, 2vw, 25px);
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.35;
+    margin: 0;
+}
+
+.Featured-Video-Badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #ffffff2e;
+    border: 1px solid #ffffff66;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 12px;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    width: fit-content;
+}
+
+.Featured-Video-Badge svg {
+    width: 11px;
+    height: 11px;
+    flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────
+   SLIDE TRANSITION ANIMATIONS  —  FIXED
+   
+   KEY FIX: 
+   • Active slide → fully visible, no animation
+   • Enter slide  → slides IN from right/left,   z-index 3 (on top)
+   • Exit slide   → slides OUT to left/right,    z-index 2 (below)
+   • animation-fill-mode: forwards keeps final
+     keyframe state so no flash back
+──────────────────────────────────────────── */
+
+/* Active — just sits there, fully visible */
+.slide-active {
+    z-index: 1;
+    opacity: 1;
+    transform: translateX(0);
+    animation: none;
+}
+
+/* ── NEXT direction: new slide enters from RIGHT ── */
+.slide-enter-next {
+    z-index: 3;
+    animation: slideEnterFromRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-exit-next {
+    z-index: 2;
+    opacity: 1;
+    /* ✅ start visible so exit is smooth */
+    animation: slideExitToLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ── PREV direction: new slide enters from LEFT ── */
+.slide-enter-prev {
+    z-index: 3;
+    animation: slideEnterFromLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-exit-prev {
+    z-index: 2;
+    opacity: 1;
+    /* ✅ start visible so exit is smooth */
+    animation: slideExitToRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ── Keyframes ── */
+@keyframes slideEnterFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0.8;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideEnterFromLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0.8;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideExitToLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-100%);
+        opacity: 0.4;
+    }
+}
+
+@keyframes slideExitToRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0.4;
+    }
+}
+
+/* ─── Arrows ─── */
+.Slider-Arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #ffffff8c;
+    background: #00000047;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.Slider-Arrow:hover {
+    background: #0000009e;
+    border-color: #ffffffe6;
+    transform: translateY(-50%) scale(1.08);
+}
+
+.Slider-Arrow--prev {
+    left: 14px;
+}
+
+.Slider-Arrow--next {
+    right: 14px;
+}
+
+/* ─── Dots ─── */
+.Slider-Dots {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.Slider-Dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffffff73;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+    padding: 0;
+}
+
+.Slider-Dot.active {
+    background: #ffffff;
+    width: 24px;
+    border-radius: 4px;
+    transform: none;
+}
+
+.Slider-Dot--video {
+    background: #ffffff8c;
+    position: relative;
+}
+
+.Slider-Dot--video::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    border-left: 4px solid #ffffffe6;
+}
+
+.Slider-Dot--video.active {
+    background: #ffffffe6;
+    width: 24px;
+    border-radius: 4px;
+}
+
+.Slider-Dot--video.active::after {
+    border-left-color: #00000099;
+}
+
+.Story-Card-explore a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Correct hover */
+.Story-Card-explore:hover a {
+    color: white;
+}
+
+/* ==================== Responsive ==================== */
+@media (min-width: 1200px) {
+    .Story-Card-Thumb {
+        flex: 0 0 400px;
+        width: 400px;
+        height: 216px;
+    }
+
+    .Featured-Slider,
+    .Featured-Slider-Viewport {
+        min-height: 430px;
+    }
+
+    .Featured-Slide-Img {
+        min-height: 430px;
+    }
+
+    .Features-Section-image img {
+        width: 70%;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 992px) {
+    .Story-Card-Thumb {
+        flex: 0 0 180px;
+        width: 180px;
+        height: 140px;
+    }
+
+    .Features-Section-image img {
+        width: 75%;
+    }
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+    .Latest-Stories-Section {
+        padding: 30px 15px 60px 15px;
+    }
+
+    .Story-Card-Thumb {
+        flex: 0 0 160px;
+        width: 160px;
+        height: 120px;
+    }
+
+    .Featured-Slider,
+    .Featured-Slider-Viewport {
+        min-height: 320px;
+    }
+
+    .Featured-Slide-Img {
+        min-height: 320px;
+    }
+
+    .Focus {
+        padding: 60px 15px;
+    }
+
+    .Features-Section {
+        padding: 0px 15px;
+    }
+
+    .Features-Section-image img {
+        width: 85%;
+    }
+}
+
+@media (max-width: 767px) and (min-width: 576px) {
+    .Latest-Stories-Section {
+        padding: 20px 10px 40px 10px;
+    }
+
+    .Story-Card-Thumb {
+        flex: 0 0 140px;
+        width: 140px;
+        height: 110px;
+    }
+
+    .Featured-Slider,
+    .Featured-Slider-Viewport {
+        min-height: 270px;
+    }
+
+    .Featured-Slide-Img {
+        min-height: 270px;
+    }
+
+    .Focus {
+        padding: 40px 10px;
+    }
+
+    .Features-Section {
+        padding: 0px 10px;
+    }
+
+    .Features-Section-image img {
+        width: 90%;
+    }
+}
+
+@media (max-width: 575px) {
+    .Focus-main-container {
+        padding: 15px 5px;
+    }
+
+    .Focus {
+        padding: 30px 5px;
+        margin-bottom: 20px;
+    }
+
+    .Features-Section {
+        padding: 0px 5px;
+    }
+
+    .Latest-Stories-Section {
+        padding: 16px 5px 36px 5px;
+    }
+
+    .Story-Card {
+        gap: 14px;
+    }
+
+    .Story-Card-Thumb {
+        flex: 0 0 120px;
+        width: 120px;
+        height: 95px;
+    }
+
+    .Story-Card-Title {
+        font-size: 15px;
+    }
+
+    .Story-Card-excerpt {
+        font-size: 13px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .Story-Card-explore {
+        font-size: 12px;
+        padding: 8px 18px;
+    }
+
+    .Featured-Slider,
+    .Featured-Slider-Viewport {
+        min-height: 240px;
+    }
+
+    .Featured-Slide-Img {
+        min-height: 240px;
+    }
+
+    .Features-Section-text {
+        font-size: 19px;
+        letter-spacing: 1px;
+    }
+
+    .Features-Section-Box:hover .Features-Section-image {
+        transform: scale(1.15);
+    }
+
+    .Slider-Arrow {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (max-width: 399px) {
+    .Story-Card-Thumb {
+        flex: 0 0 100px;
+        width: 100px;
+        height: 80px;
+    }
+
+    .Featured-Slider,
+    .Featured-Slider-Viewport {
+        min-height: 200px;
+    }
+
+    .Featured-Slide-Img {
+        min-height: 200px;
+    }
+
+    .Features-Section-text {
+        font-size: 16px;
+    }
+
+    .Slider-Arrow {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* ==================== Animations ==================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== Print ==================== */
+@media print {
+    .Focus-main-container {
+        padding: 20px;
+        background-color: white;
+    }
+
+    .Featured-Slide-Img {
+        height: auto;
+        max-height: 300px;
+    }
+
+    .Slider-Arrow,
+    .Slider-Dots {
+        display: none;
+    }
+}

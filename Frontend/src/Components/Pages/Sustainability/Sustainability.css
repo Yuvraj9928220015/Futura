@@ -160,7 +160,7 @@
 }
 
 /* ============================================================
-   NAV-LI — Clickable Navigation List Items
+   NAV-LI
    ============================================================ */
 
 .Believe-main-Section-list ul {
@@ -180,7 +180,6 @@
     font-weight: 500;
 }
 
-/* Clickable nav li */
 .nav-li {
     cursor: pointer;
     position: relative;
@@ -219,6 +218,7 @@
    ============================================================ */
 
 .Believe-main-Section-title {
+    font-family: 'Gotu', sans-serif;
     padding: 30px 80px;
     line-height: 45px;
     font-size: 40px;
@@ -256,7 +256,6 @@
     white-space: nowrap;
 }
 
-/* Text part */
 .download-btn-text {
     font-size: 14px;
     font-weight: 500;
@@ -267,7 +266,6 @@
     transition: color 0.35s ease;
 }
 
-/* Icon circle */
 .download-btn-icon {
     display: flex;
     align-items: center;
@@ -290,7 +288,6 @@
     transition: color 0.35s ease, transform 0.35s ease;
 }
 
-/* ---- HOVER STATE ---- */
 .download-btn:hover {
     background-color: #ffffff;
     border-color: #4b6205;
@@ -309,13 +306,10 @@
     transform: translateY(2px);
 }
 
-/* ---- ACTIVE / PRESS ---- */
 .download-btn:active {
     transform: scale(0.97);
     transition: transform 0.12s ease;
 }
-
-
 
 .Compact-title {
     line-height: 40px;
@@ -344,7 +338,9 @@
 .Corporate {
     position: relative;
     z-index: 2;
-    background-image: url(/public/sustainability-Banner-3.png);
+    /* background-image: url(/public/sustainability-Banner-3.png); */
+    background-color: transparent;
+    /* background-color: #000000; */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -352,6 +348,10 @@
     padding: 70px 0 90px;
     min-height: 100vh;
     scroll-margin-top: 80px;
+}
+.Corporate-bg {
+    width: 100%;
+    background-image: url(/public/sustainability-Banner-3.png);
 }
 
 .Corporate-wrapper {
@@ -394,7 +394,8 @@
 }
 
 .Corporate-Box-title {
-    font-size: 38px;
+    font-size: 35px;
+    font-family: 'Gotu', sans-serif;
     font-weight: 700;
     color: #1a1a1a;
     line-height: 1.2;
@@ -579,7 +580,73 @@
     color: #444;
 }
 
-/* ---- CARD 01 — INVERTED ---- */
+.corp-card--always-open {
+    width: 270px;
+    height: 430px;
+    box-shadow: 0 8px 32px #4b620521;
+}
+
+.corp-card--always-open:hover {
+    width: 270px;
+    height: 430px;
+    box-shadow: 0 20px 56px #4b62052e;
+    z-index: 10;
+}
+
+.corp-card--always-open .corp-card-img {
+    height: 46%;
+    opacity: 1;
+}
+
+.corp-card--always-open:hover .corp-card-img {
+    height: 46%;
+    opacity: 1;
+}
+
+.corp-card--always-open .corp-card-number {
+    font-size: 50px;
+    color: #4b6205;
+    opacity: 0.65;
+}
+
+.corp-card--always-open .corp-card-numbers {
+    font-size: 50px;
+    color: #4b6205;
+    opacity: 0.65;
+}
+
+.corp-card--always-open:hover {
+    font-size: 50px;
+}
+
+.corp-card--always-open .corp-card-icon {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.corp-card--always-open:hover .corp-card-icon {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.corp-card--always-open .corp-card-title {
+    font-size: 18.5px;
+}
+
+.corp-card--always-open:hover .corp-card-title {
+    font-size: 18.5px;
+}
+
+.corp-card--always-open .corp-card-desc {
+    max-height: 200px;
+    opacity: 1;
+}
+
+.corp-card--always-open:hover .corp-card-desc {
+    max-height: 200px;
+    opacity: 1;
+}
+
 .corp-card--inverted {
     width: 270px;
     height: 430px;
@@ -652,16 +719,14 @@
 .Floating-info-card {
     position: absolute;
     top: 8%;
-    right: 0;
+    right: -20%;
     left: auto;
-    width: 155px;
-    /* matches default corp-card width */
+    width: 270px;
     border-radius: 22px;
     z-index: 10;
     transition: width 0.52s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* When its child card is hovered, the container grows too */
 .Floating-info-card:has(.corp-card:hover) {
     width: 270px;
 }
@@ -695,11 +760,11 @@
 .Photo-collage-2 {
     position: absolute;
     bottom: 4%;
-    right: -10%;
+    right: -16%;
 }
 
 .Photo-collage-2 img {
-    max-width: 100%;
+    max-width: 70%;
     height: auto;
 }
 
@@ -727,11 +792,6 @@
     display: block;
 }
 
-
-/* ============================================================
-   DESIGN SECTION
-   ============================================================ */
-
 .design-section {
     position: relative;
     height: 800px;
@@ -751,7 +811,6 @@
     background-image: url(/public/Sustainability-4.png);
     background-size: cover;
     background-position: center;
-    /* Subtle zoom on section hover */
     transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -806,10 +865,6 @@
     color: #ffeb00;
 }
 
-/* ============================================================
-   DS-RIGHT — ZOOM EFFECT
-   ============================================================ */
-
 .ds-right {
     position: relative;
     z-index: 2;
@@ -820,7 +875,6 @@
     transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-/* Zoom modifier class */
 .ds-right--zoom {
     transform-origin: center center;
     transform: scale(1);
@@ -830,18 +884,15 @@
     will-change: transform;
 }
 
-/* Zoom in on hover */
 .design-section:hover .ds-right--zoom {
     transform: scale(1.06);
 }
 
-/* Zoom press feedback */
 .design-section:active .ds-right--zoom {
     transform: scale(1.02);
     transition: transform 0.18s ease;
 }
 
-/* ds-desc and ds-left also subtly shift on hover */
 .design-section:hover .ds-left {
     transform: translateX(-6px);
     opacity: 0.95;
@@ -861,10 +912,6 @@
     margin: 0 0 20px;
     transition: opacity 0.4s ease;
 }
-
-/* ============================================================
-   DS CTA / HOVER HINT (existing styles kept)
-   ============================================================ */
 
 .ds-cta {
     display: inline-flex;
@@ -986,6 +1033,7 @@
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
+    /* flex-direction: column; */
     align-items: center;
     justify-content: center;
     padding: 70px 0 50px;
@@ -1002,6 +1050,40 @@
     pointer-events: none;
 }
 
+.Sustainability-Product-title {
+    width: 100%;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px #000000;
+    font-family: 'Gotu', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+
+.sbs-title-line {
+    position: absolute;
+    /* top: 10px; */
+    bottom: 37%;
+    left: 21%;
+    z-index: 1;
+    width: 160px;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    margin: 12px auto 32px;
+    box-shadow: 0 0 10px #b8d83066;
+}
+
+/* ============================================================
+   DECORATIVE LINE — below "Sustainability Product" title
+   ============================================================ */
+
+
+/* ============================================================
+   OUTER + CAROUSEL
+   ============================================================ */
+
 .sbs-outer {
     width: 100%;
     margin: 0 auto;
@@ -1010,20 +1092,11 @@
     padding: 10px;
 }
 
-/* ============================================================
-   CAROUSEL WRAP
-   ============================================================ */
-
 .sbs-carousel-wrap {
     position: relative;
     width: 100%;
     height: 560px;
-    overflow: hidden;
 }
-
-/* ============================================================
-   INDIVIDUAL SLIDE ITEM
-   ============================================================ */
 
 .sbs-item {
     position: absolute;
@@ -1032,10 +1105,7 @@
     align-items: stretch;
     border-radius: 26px;
     overflow: hidden;
-
-    /* ★ BACKGROUND COLOR visible as 10px border/padding around the image ★ */
     background-color: #ffffff42;
-
     transition:
         left 0.62s cubic-bezier(0.4, 0, 0.2, 1),
         width 0.62s cubic-bezier(0.4, 0, 0.2, 1),
@@ -1046,9 +1116,9 @@
 }
 
 .sbs-item--active {
-    left: 15%;
+    left: 2%;
     transform: translateX(-4%) translateY(-49%);
-    width: 56%;
+    width: 68%;
     height: 480px;
     z-index: 5;
     opacity: 1;
@@ -1091,10 +1161,6 @@
     box-shadow: 0 28px 80px #000000a6;
 }
 
-/* ============================================================
-   BACKGROUND IMAGE + OVERLAY
-   ============================================================ */
-
 .sbs-bg {
     position: absolute;
     inset: 10px;
@@ -1111,17 +1177,10 @@
 .sbs-bg-dark {
     position: absolute;
     inset: 10px;
-    background: linear-gradient(125deg,
-            #00000000 0%,
-            #00000000 55%,
-            #0000000e 100%);
+    background: linear-gradient(125deg, #00000000 0%, #00000000 55%, #0000000e 100%);
     border-radius: 18px;
     z-index: 1;
 }
-
-/* ============================================================
-   PEEK ARROW HINT
-   ============================================================ */
 
 .sbs-peek-arrow {
     position: absolute;
@@ -1167,24 +1226,20 @@
     transform: translateY(-50%) scale(1.12);
 }
 
-/* ============================================================
-   LEFT CONTENT AREA
-   ============================================================ */
-
 .sbs-left {
     position: relative;
     z-index: 5;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 55px 42px;
-    width: 78%;
+    justify-content: end;
+    padding: 55px 32px;
+    width: 80%;
     transition: width 0.52s cubic-bezier(0.4, 0, 0.2, 1);
-    gap: 14px;
+    gap: 0px;
 }
 
 .sbs-left.sbs-left-shrink {
-    width: 60%;
+    width: 47%;
 }
 
 .sbs-tag-pill {
@@ -1214,9 +1269,10 @@
 
 .sbs-brand {
     text-shadow: 2px 2px 4px #000000;
-    font-size: 48px;
-    font-weight: 800;
+    font-size: 40px;
+    font-weight: 600;
     color: #ffffff;
+    font-family: 'Gotu', sans-serif;
     line-height: 1.1;
     margin: 0;
     letter-spacing: -0.5px;
@@ -1266,10 +1322,6 @@
     }
 }
 
-/* ============================================================
-   RIGHT PANEL
-   ============================================================ */
-
 .sbs-panel {
     position: absolute;
     top: 0;
@@ -1283,7 +1335,7 @@
 }
 
 .sbs-panel.sbs-panel-open {
-    width: 48%;
+    width: 58%;
 }
 
 .sbs-panel-scroll {
@@ -1396,10 +1448,6 @@
     flex-shrink: 0;
 }
 
-/* ============================================================
-   NAVIGATION ROW — dots + counter
-   ============================================================ */
-
 .sbs-nav-row {
     border: 1px solid;
     display: flex;
@@ -1454,15 +1502,7 @@
 
 .sbs-tot {
     font-size: 14px;
-    color: #ffffff52
-}
-
-.Sustainability-Product-title {
-    width: 100%;
-    font-size: 60px;
-    text-align: end;
-    color: white;
-    text-shadow: 2px 2px 4px #000000;
+    color: #ffffff52;
 }
 
 
@@ -1644,19 +1684,19 @@
         height: 420px;
     }
 
-    .corp-card--inverted {
+    /* always-open responsive */
+    .corp-card--always-open {
         width: 255px;
         height: 400px;
     }
 
-    .corp-card--inverted:hover {
-        width: 148px;
-        height: 275px;
+    .corp-card--always-open:hover {
+        width: 255px;
+        height: 400px;
     }
 
-    /* Floating card responsive */
     .Floating-info-card {
-        width: 148px;
+        width: 255px;
     }
 
     .Floating-info-card:has(.corp-card:hover) {
@@ -1878,7 +1918,6 @@
         font-size: 13px;
     }
 
-    /* Nav li mobile touch feedback */
     .nav-li:active {
         color: #4b6205;
         transform: scale(0.95);
@@ -1955,16 +1994,17 @@
         height: 280px !important;
     }
 
-    .corp-card--inverted {
+    /* always-open mobile */
+    .corp-card--always-open {
         width: calc(50% - 5px) !important;
         height: 280px !important;
         border-radius: 16px;
         flex-shrink: 1;
     }
 
-    .corp-card--inverted:hover {
+    .corp-card--always-open:hover {
         width: calc(50% - 5px) !important;
-        height: 80px !important;
+        height: 280px !important;
     }
 
     .corp-card-number {
@@ -1981,7 +2021,6 @@
         min-height: auto;
     }
 
-    /* Floating card — mobile: relative, full width */
     .Floating-info-card {
         position: relative;
         top: auto;
@@ -1995,13 +2034,12 @@
         width: 100% !important;
     }
 
-    /* Card 04 on mobile — full width like others */
-    .Floating-info-card .corp-card {
+    .Floating-info-card .corp-card--always-open {
         width: 100% !important;
-        height: 80px !important;
+        height: 280px !important;
     }
 
-    .Floating-info-card .corp-card:hover {
+    .Floating-info-card .corp-card--always-open:hover {
         width: 100% !important;
         height: 280px !important;
     }
@@ -2024,7 +2062,6 @@
         margin-top: 12px;
     }
 
-    /* Design Section — mobile zoom reduced */
     .design-section {
         flex-direction: column;
         height: auto;
@@ -2080,9 +2117,17 @@
         gap: 12px;
     }
 
-    /* Slider mobile */
     .Sustainability-Box-Container {
         padding: 40px 0 30px;
+    }
+
+    .Sustainability-Product-title {
+        font-size: 36px;
+    }
+
+    .sbs-title-line {
+        width: 60px;
+        margin: 10px auto 24px;
     }
 
     .sbs-outer {
@@ -2248,20 +2293,11 @@
     }
 
     .corp-card,
-    .corp-card--featured,
-    .corp-card--inverted {
-        width: 100% !important;
-        flex-shrink: 1;
-    }
-
-    .corp-card,
     .corp-card--featured {
+        width: 100% !important;
         height: 80px !important;
         border-radius: 16px;
-    }
-
-    .corp-card--inverted {
-        height: 260px !important;
+        flex-shrink: 1;
     }
 
     .corp-card:hover,
@@ -2270,18 +2306,26 @@
         height: 280px !important;
     }
 
-    .corp-card--inverted:hover {
+    /* always-open small mobile */
+    .corp-card--always-open {
         width: 100% !important;
-        height: 80px !important;
+        height: 260px !important;
+        border-radius: 16px;
+        flex-shrink: 1;
     }
 
-    .Floating-info-card .corp-card {
-        height: 80px !important;
+    .corp-card--always-open:hover {
+        width: 100% !important;
+        height: 260px !important;
+    }
+
+    .Floating-info-card .corp-card--always-open {
+        height: 260px !important;
         border-radius: 16px;
     }
 
-    .Floating-info-card .corp-card:hover {
-        height: 280px !important;
+    .Floating-info-card .corp-card--always-open:hover {
+        height: 260px !important;
     }
 
     .Corporate-Box-title {
@@ -2298,6 +2342,15 @@
 
     .ds-subtitle {
         font-size: 14px;
+    }
+
+    .Sustainability-Product-title {
+        font-size: 30px;
+    }
+
+    .sbs-title-line {
+        width: 50px;
+        margin: 8px auto 20px;
     }
 
     .sbs-carousel-wrap {
@@ -2374,6 +2427,16 @@
 
     .ds-title {
         font-size: 22px;
+    }
+
+    .Sustainability-Product-title {
+        font-size: 26px;
+    }
+
+    .sbs-title-line {
+        width: 44px;
+        height: 2px;
+        margin: 8px auto 18px;
     }
 
     .sbs-carousel-wrap {

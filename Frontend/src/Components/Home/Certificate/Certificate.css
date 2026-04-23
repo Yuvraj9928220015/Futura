@@ -76,7 +76,7 @@ body {
     font-size: clamp(1.8rem, 4.5vw, 4.4rem);
     line-height: 1;
     font-weight: 100;
-    font-family: 'Georgia', serif;
+    font-family: 'Gotu', sans-serif;
     color: var(--primary-text-color);
     margin-bottom: clamp(1rem, 2vw, 2rem);
     letter-spacing: 1px;

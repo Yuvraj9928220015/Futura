@@ -9,7 +9,6 @@
     width: 100%;
     height: 600px;
     margin-bottom: 15px;
-    /* box-shadow: 0 2px 8px #0000001a; */
     transition: background-color 0.3s ease;
 }
 
@@ -250,19 +249,20 @@
 }
 
 .product-detail-header {
-    margin-bottom: 45px;
+    margin-bottom: 40px;
 }
 
 .Characteristics-content {
     padding: 10px 0px;
 }
 
-.product-title {
-    text-transform: capitalize;
-    font-size: 2rem;
+h1.product-title {
+    /* color: red; */
+    font-family: 'Gotu', sans-serif;
+    font-size: 3rem;
     font-weight: 300;
-    color: #292929;
-    margin-bottom: 10px;
+    color: #131313;
+    /* margin-bottom: 10px; */
 }
 
 .product-price {
@@ -298,30 +298,33 @@
 }
 
 .product-detail-brand {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .brand-name {
-    color: #000000;
-    font-size: 1rem;
-    letter-spacing: 1px;
+    text-transform: capitalize;
+    font-size: 2.6rem;
+    font-weight: 300;
+    color: #292929;
+    font-family: 'Gotu', sans-serif;
 }
 
 .product-detail-features {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .feature-tag {
     background-color: #f0f0f0;
     padding: 5px 10px;
     border-radius: 15px;
-    font-size: 0.9rem;
+    font-size: 12px;
     color: #666;
     margin-right: 10px;
 }
 
 .product-detail-select-use {
     margin-bottom: 25px;
+    font-family: 'Gotu', sans-serif;
     font-size: 1rem;
 }
 
@@ -329,7 +332,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 48px;
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -380,6 +383,8 @@
 .multiple-swatches {
     font-size: 0.9rem;
     color: #666;
+    display: flex;
+    gap: 10px;
     cursor: pointer;
 }
 
@@ -409,25 +414,59 @@
 }
 
 .ophelia-title {
-    font-size: 20px;
+    font-size: 16px;
     margin-top: 10px;
     padding: 7px 0px;
-    font-weight: 600;
-    color: #313131;
+    letter-spacing: 1px;
+    color: #5f5f5f;
+}
+
+.Anti-Flamesafe-container {
+    padding-left: 40px;
+}
+
+.Turtle-Life-container {
+    padding-left: 40px;
+}
+
+.Anti-Flamesafe {
+    line-height: 23px;
+    text-align: justify;
+    font-size: 14px;
+    /* letter-spacing: 1px; */
+    color: #7F7770;
 }
 
 .Anti-Flamesafe b {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .readmore-icon {
     font-size: 25px;
 }
 
+.ophelia-title-icon i {
+    font-size: 30px;
+    color: black;
+}
+
 .readmore-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.Prodduct-extra-text {
+    margin-top: 25px;
+}
+
+.readmore-content p {
+    font-size: 18px;
+    font-family: 'Gotu', sans-serif;
+    color: #464441;
+    font-weight: 500;
 }
 
 .TURTLE-LIFE-Hending {
@@ -451,13 +490,30 @@
     box-shadow: 0 2px 5px #0000001a;
 }
 
+#Pink-Stain-container {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.Pink-Stain-container-content {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.Pink-Stain b {
+    color: black;
+}
+
 .ophelia-description {
     line-height: 23px;
     text-align: justify;
-    font-size: 15px;
-    letter-spacing: 1px;
-    color: #7F7770;
-
+    font-size: 14px;
+    /* letter-spacing: 1px; */
+    color: #2b2a2a;
+    padding-left: 39px;
+    padding-bottom: 10px;
 }
 
 .color-swatch:hover {
@@ -546,6 +602,7 @@
     width: 6%;
 }
 
+/* ✅ FIXED: turtle-life-content base styles - img size controlled via inline style */
 .turtle-life-content {
     display: flex;
     padding-top: 10px;
@@ -553,8 +610,12 @@
     gap: 10px;
 }
 
+/* ✅ FIXED: Uniform icon size for toggle section headers */
 .turtle-life-content img {
-    width: 8%;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .order-sample-btn {
@@ -583,10 +644,12 @@
     padding: 10px 0px;
     align-items: center;
     color: #303030;
+    margin-top: 75px;
 }
 
 .About-Product-title {
     font-size: 18px;
+    font-family: 'Gotu', sans-serif;
     color: #464441;
     font-weight: 600;
 }
@@ -605,7 +668,7 @@
     line-height: 23px;
     padding: 10px 0px;
     text-align: justify;
-    letter-spacing: 1px;
+    /* letter-spacing: 1px; */
     color: #7F7770;
 }
 
@@ -621,6 +684,7 @@
     color: #5f5f5f;
 }
 
+/* ✅ FIXED: Bottom icon-placeholder also uniform */
 .icon-placeholder {
     width: 50px;
     height: 50px;
@@ -628,10 +692,21 @@
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.icon-placeholder img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
 }
 
 .product-detail-image-box {
     padding-right: 60px;
+}
+
+.readmore-container {
+    padding-top: 70px;
 }
 
 /* RESPONSIVE DESIGN */
@@ -721,7 +796,6 @@
         flex-direction: column;
     }
 
-    /* Gallery Slider Mobile */
     .product-detail-gallery-slider {
         margin: 15px 0;
         padding: 10px;
@@ -809,7 +883,6 @@
         gap: 10px;
     }
 
-    /* Gallery Slider Very Small Screens */
     .gallery-slide {
         grid-template-columns: 1fr;
     }
@@ -867,7 +940,6 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* Ultra Small Mobile */
     .product-detail-gallery-slider {
         padding: 8px;
     }
@@ -936,7 +1008,6 @@
     animation: slideInFromRight 0.6s ease forwards;
 }
 
-/* Hover Effects for Better UX */
 .gallery-image::before {
     content: '';
     position: absolute;
@@ -954,7 +1025,6 @@
     opacity: 1;
 }
 
-/* Loading States */
 .gallery-image.loading {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
@@ -984,17 +1054,16 @@
     }
 }
 
-
 /* Variant Slider Styles */
 .variant-slider-section {
-    margin-bottom: 25px;
+    margin-bottom: 60px;
 }
 
 .variant-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
     gap: 10px;
 }
@@ -1002,6 +1071,8 @@
 .variant-slider-controls {
     display: flex;
     align-items: center;
+    justify-content: end;
+    width: 100%;
     gap: 12px;
 }
 
@@ -1043,6 +1114,7 @@
 .variant-slider-container {
     overflow: hidden;
     width: 100%;
+    margin-top: 30px;
 }
 
 .variant-slides {
@@ -1058,14 +1130,14 @@
 
 .variant-card {
     height: 100%;
+    transition: 0.5s;
 }
 
 .variant-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(4px);
     box-shadow: 0 4px 12px #00000026 !important;
 }
 
-/* Responsive Variants Slider */
 @media (max-width: 1200px) {
     .variant-slide-item {
         flex: 0 0 25%;
@@ -1085,6 +1157,7 @@
 
     .variant-header {
         flex-direction: column;
+        justify-content: start;
         align-items: flex-start;
     }
 

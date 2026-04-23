@@ -23,27 +23,32 @@ const CATEGORY_HIERARCHY = {
     'Offroading': []
 };
 
-const DEFAULT_FILTERS = {
-    color: [
-        { value: 'beige', label: 'Beige', count: 0 }, { value: 'black', label: 'Black', count: 0 },
-        { value: 'blue', label: 'Blue', count: 0 }, { value: 'brown', label: 'Brown', count: 0 },
-        { value: 'grey', label: 'Grey', count: 0 }, { value: 'green', label: 'Green', count: 0 },
-        { value: 'orange', label: 'Orange', count: 0 }, { value: 'pink', label: 'Pink', count: 0 },
-        { value: 'purple', label: 'Purple', count: 0 }, { value: 'red', label: 'Red', count: 0 },
-        { value: 'silver', label: 'Silver', count: 0 }, { value: 'white', label: 'White', count: 0 }
-    ],
-    performance: [
-        { value: 'high-performance', label: 'High Performance', count: 0 },
-        { value: 'medium-performance', label: 'Medium Performance', count: 0 },
-        { value: 'standard', label: 'Standard', count: 0 },
-        { value: 'premium', label: 'Premium', count: 0 },
-        { value: 'eco-friendly', label: 'Eco-Friendly', count: 0 }
-    ],
-    features: [
-        { value: 'waterproof', label: 'Waterproof', count: 0 }, { value: 'durable', label: 'Durable', count: 0 },
-        { value: 'lightweight', label: 'Lightweight', count: 0 }, { value: 'scratch-resistant', label: 'Scratch Resistant', count: 0 },
-        { value: 'easy-to-clean', label: 'Easy to Clean', count: 0 }, { value: 'uv-resistant', label: 'UV Resistant', count: 0 }
-    ]
+// ─── Helper: normalize a color string to a slug ───
+const colorToSlug = (c) => c.trim().toLowerCase().replace(/\s+/g, '-');
+
+// ─── Helper: best-effort CSS color from a color label / hex ───
+const colorToCss = (label) => {
+    if (!label) return '#CCCCCC';
+    const t = label.trim();
+    // If it's already a hex / rgb / hsl, use directly
+    if (/^#[0-9a-fA-F]{3,8}$/.test(t) || /^rgb/i.test(t) || /^hsl/i.test(t)) return t;
+    // Named-color map (extend as needed)
+    const map = {
+        beige: '#F5F5DC', black: '#1a1a1a', blue: '#0066CC', brown: '#8B4513',
+        'cool neutrals': 'linear-gradient(135deg,#B8B8B8,#D3D3D3)',
+        green: '#2E8B57', grey: '#808080', gray: '#808080',
+        metallic: 'linear-gradient(135deg,#C0C0C0,#E8E8E8 50%,#C0C0C0)',
+        'multi color': 'linear-gradient(135deg,#FF0000,#FF7F00 14%,#FFFF00 28%,#00FF00 42%,#0000FF 57%,#4B0082 71%,#9400D3 85%,#FF0000)',
+        orange: '#FF8C00', pink: '#FF69B4', purple: '#9370DB', red: '#DC143C',
+        silver: '#C0C0C0', teal: '#008B8B',
+        'warm neutrals': 'linear-gradient(135deg,#D2B48C,#F5DEB3)',
+        white: '#FFFFFF', yellow: '#FFD700', navy: '#001F5B', 'navy blue': '#001F5B',
+        tan: '#D2B48C', ivory: '#FFFFF0', charcoal: '#36454F', gold: '#FFD700',
+        maroon: '#800000', cream: '#FFFDD0', coral: '#FF6B6B', turquoise: '#40E0D0',
+        'dark brown': '#4A2C2A', 'light grey': '#D3D3D3', 'light gray': '#D3D3D3',
+        'dark grey': '#555555', 'dark gray': '#555555',
+    };
+    return map[t.toLowerCase()] || '#CCCCCC';
 };
 
 const TruncatedText = ({ text, maxLength = 100 }) => {
@@ -302,14 +307,13 @@ const CategoryPriorityModal = ({ categories, priorityOrder, onSave, onClose }) =
    MAIN PRODUCT PAGE
 ══════════════════════════════════════════════════════════════ */
 const Product = () => {
-    // ✅ NEW: Read URL query params (e.g. ?category=americana from navbar click)
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilters, setSelectedFilters] = useState({
         parentCategory: null,
         category: [],
-        color: [],
+        color: [],        // array of color slugs (e.g. ['navy-blue', 'red'])
         performance: [],
         features: []
     });
@@ -318,9 +322,10 @@ const Product = () => {
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [dynFilters, setDynFilters] = useState({
-        category: [], color: DEFAULT_FILTERS.color, performance: DEFAULT_FILTERS.performance, features: DEFAULT_FILTERS.features
-    });
+
+    // ── Dynamic filters derived from backend data ──
+    // colorMap: slug → { label: string, cssColor: string, count: number }
+    const [colorMap, setColorMap] = useState(new Map());
 
     // ── Category Priority State ──
     const [categoryPriorityOrder, setCategoryPriorityOrder] = useState([]);
@@ -329,23 +334,20 @@ const Product = () => {
 
     useEffect(() => { fetchProducts(); }, []);
 
-    // ✅ NEW: When URL ?category param changes, apply it as a filter
-    // This runs after products are loaded OR when the URL changes
+    // Apply ?category= URL param after products load
     useEffect(() => {
         const categoryParam = searchParams.get('category');
         if (categoryParam) {
             setSelectedFilters(prev => ({
                 ...prev,
                 parentCategory: null,
-                category: [categoryParam]   // e.g. ['americana'] or ['auto-revolution']
+                category: [categoryParam]
             }));
-            // Scroll to product grid smoothly
             setTimeout(() => {
                 const grid = document.querySelector('.products-content');
                 if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 300);
         } else {
-            // No category param → clear category filter
             setSelectedFilters(prev => ({ ...prev, parentCategory: null, category: [] }));
         }
     }, [searchParams]);
@@ -369,42 +371,87 @@ const Product = () => {
         finally { setLoading(false); }
     };
 
+    // ─────────────────────────────────────────────────────────────────
+    // buildDynFilters — extract real colors from product.color AND
+    // product.variants[*].color, deduplicate, sort alphabetically
+    // ─────────────────────────────────────────────────────────────────
     const buildDynFilters = (products) => {
-        const o = {
-            category: new Map(),
-            color: new Map(DEFAULT_FILTERS.color.map(c => [c.value, { ...c, count: 0 }])),
-            performance: new Map(DEFAULT_FILTERS.performance.map(p => [p.value, { ...p, count: 0 }])),
-            features: new Map(DEFAULT_FILTERS.features.map(f => [f.value, { ...f, count: 0 }])),
+        // colorMap: slug → { label, cssColor, count }
+        const cmap = new Map();
+
+        const addColor = (rawColor) => {
+            if (!rawColor || typeof rawColor !== 'string') return;
+            const parts = rawColor.includes(',')
+                ? rawColor.split(',').map(c => c.trim()).filter(Boolean)
+                : [rawColor.trim()];
+
+            parts.forEach(colorStr => {
+                if (!colorStr) return;
+                const slug = colorToSlug(colorStr);
+                if (cmap.has(slug)) {
+                    cmap.get(slug).count += 1;
+                } else {
+                    cmap.set(slug, {
+                        slug,
+                        label: colorStr,            // preserve original casing
+                        cssColor: colorToCss(colorStr),
+                        count: 1
+                    });
+                }
+            });
         };
-        products.forEach(p => {
-            const cat = p.category || 'Uncategorized';
-            const cv = cat.toLowerCase().replace(/\s+/g, '-');
-            o.category.set(cv, { value: cv, label: cat, count: (o.category.get(cv)?.count || 0) + 1 });
-            if (p.color) {
-                const cols = Array.isArray(p.color) ? p.color : p.color.split(',').map(c => c.trim());
-                cols.forEach(c => { if (!c) return; const v = c.toLowerCase().replace(/\s+/g, '-'); const e = o.color.get(v); e ? e.count++ : o.color.set(v, { value: v, label: c, count: 1 }); });
-            }
-            if (p.performance) { const v = p.performance.toLowerCase().replace(/\s+/g, '-'); const e = o.performance.get(v); e ? e.count++ : o.performance.set(v, { value: v, label: p.performance, count: 1 }); }
-            if (p.features) {
-                const fa = Array.isArray(p.features) ? p.features : [p.features];
-                fa.forEach(f => { const v = f.toLowerCase().replace(/\s+/g, '-'); const e = o.features.get(v); e ? e.count++ : o.features.set(v, { value: v, label: f, count: 1 }); });
+
+        products.forEach(product => {
+            // Product-level color
+            if (product.color) addColor(product.color);
+
+            // Variant-level colors
+            if (Array.isArray(product.variants)) {
+                product.variants.forEach(v => {
+                    if (v.color) addColor(v.color);
+                });
             }
         });
-        const srt = map => Array.from(map.values()).sort((a, b) => a.label.localeCompare(b.label));
-        setDynFilters({ category: srt(o.category), color: srt(o.color), performance: srt(o.performance), features: srt(o.features) });
+
+        // Sort alphabetically by label
+        const sorted = new Map(
+            [...cmap.entries()].sort((a, b) => a[1].label.localeCompare(b[1].label))
+        );
+        setColorMap(sorted);
+    };
+
+    // ─────────────────────────────────────────────────────────────────
+    // productMatchesColor — returns true if any of the selectedColors
+    // match the product's own color OR any of its variant colors
+    // ─────────────────────────────────────────────────────────────────
+    const productMatchesColor = (product, selectedColors) => {
+        if (selectedColors.length === 0) return true;
+
+        const normalize = (str) =>
+            str ? str.split(',').map(c => colorToSlug(c.trim())).filter(Boolean) : [];
+
+        const productColors = normalize(product.color);
+        const variantColors = Array.isArray(product.variants)
+            ? product.variants.flatMap(v => normalize(v.color))
+            : [];
+
+        const allColors = [...productColors, ...variantColors];
+        return selectedColors.some(sc => allColors.includes(sc));
     };
 
     const toggle = (s) => setExpanded(p => ({ ...p, [s]: !p[s] }));
     const handleParent = (cat) => setSelectedFilters(p => ({ ...p, parentCategory: p.parentCategory === cat ? null : cat, category: [] }));
 
-    // ✅ UPDATED: When user manually changes category filter, also update URL param
     const handleFilter = (type, val) => {
         setSelectedFilters(prev => {
-            const cur = type === 'category' ? prev.category : prev[type];
+            // ── Color: single-select only — click same = deselect, click new = replace ──
+            if (type === 'color') {
+                const next = prev.color.includes(val) ? [] : [val];
+                return { ...prev, color: next };
+            }
+            const cur = prev[type] || [];
             const next = cur.includes(val) ? cur.filter(v => v !== val) : [...cur, val];
-            const updated = type === 'category' ? { ...prev, category: next } : { ...prev, [type]: next };
-
-            // Sync URL when category filter changes
+            const updated = { ...prev, [type]: next };
             if (type === 'category') {
                 if (next.length === 1) {
                     setSearchParams({ category: next[0] }, { replace: true });
@@ -416,7 +463,6 @@ const Product = () => {
         });
     };
 
-    // ✅ UPDATED: clearAll also clears URL params
     const clearAll = () => {
         setSelectedFilters({ parentCategory: null, category: [], color: [], performance: [], features: [] });
         setSearchTerm('');
@@ -427,6 +473,7 @@ const Product = () => {
     const filtered = allProducts.filter(p => {
         const s = searchTerm.toLowerCase();
         const ms = !searchTerm || p.title?.toLowerCase().includes(s) || p.description?.toLowerCase().includes(s);
+
         const pc = (p.category || 'uncategorized').toLowerCase().replace(/\s+/g, '-');
         const po = p.category || 'Uncategorized';
         let mc = true;
@@ -439,13 +486,18 @@ const Product = () => {
         } else if (selectedFilters.category.length > 0) {
             mc = selectedFilters.category.includes(pc);
         }
-        const cols = Array.isArray(p.color)
-            ? p.color.map(c => c.toLowerCase().replace(/\s+/g, '-'))
-            : (p.color ? p.color.split(',').map(c => c.trim().toLowerCase().replace(/\s+/g, '-')) : []);
-        const mc2 = selectedFilters.color.length === 0 || selectedFilters.color.some(sc => cols.includes(sc));
-        const mp = selectedFilters.performance.length === 0 || selectedFilters.performance.includes((p.performance || '').toLowerCase().replace(/\s+/g, '-'));
-        const fa = Array.isArray(p.features) ? p.features.map(f => f.toLowerCase().replace(/\s+/g, '-')) : (p.features ? [p.features.toLowerCase().replace(/\s+/g, '-')] : []);
+
+        // ✅ Color filter: match product.color OR any variant.color
+        const mc2 = productMatchesColor(p, selectedFilters.color);
+
+        const mp = selectedFilters.performance.length === 0 ||
+            selectedFilters.performance.includes((p.performance || '').toLowerCase().replace(/\s+/g, '-'));
+
+        const fa = Array.isArray(p.features)
+            ? p.features.map(f => f.toLowerCase().replace(/\s+/g, '-'))
+            : (p.features ? [p.features.toLowerCase().replace(/\s+/g, '-')] : []);
         const mf = selectedFilters.features.length === 0 || selectedFilters.features.some(sf => fa.includes(sf));
+
         return ms && mc && mc2 && mp && mf;
     });
 
@@ -460,29 +512,32 @@ const Product = () => {
     });
 
     const activeCount = () => {
-        let n = selectedFilters.category.length + selectedFilters.color.length + selectedFilters.performance.length + selectedFilters.features.length;
+        let n = selectedFilters.category.length + selectedFilters.color.length +
+            selectedFilters.performance.length + selectedFilters.features.length;
         if (selectedFilters.parentCategory) n++;
         return n;
     };
 
-    // ✅ NEW: Active category label for display (e.g. "Showing: Americana")
     const activeCategoryLabel = () => {
         if (selectedFilters.category.length === 1) {
             const slug = selectedFilters.category[0];
-            const match = dynFilters.category.find(c => c.value === slug);
+            // Try to find label from category filters derived from products
+            const allCatSlugs = allProducts.map(p => ({
+                slug: (p.category || '').toLowerCase().replace(/\s+/g, '-'),
+                label: p.category || ''
+            }));
+            const match = allCatSlugs.find(c => c.slug === slug);
             return match ? match.label : slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         }
         return null;
     };
 
-    const swatch = (name) => {
-        const m = { 'beige': '#F5F5DC', 'black': '#000000', 'blue': '#0066CC', 'brown': '#8B4513', 'cool neutrals': 'linear-gradient(135deg,#B8B8B8,#D3D3D3)', 'green': '#2E8B57', 'grey': '#808080', 'metallic': 'linear-gradient(135deg,#C0C0C0,#E8E8E8 50%,#C0C0C0)', 'multi color': 'linear-gradient(135deg,#FF0000,#FF7F00 14%,#FFFF00 28%,#00FF00 42%,#0000FF 57%,#4B0082 71%,#9400D3 85%,#FF0000)', 'orange': '#FF8C00', 'pink': '#FF69B4', 'purple': '#9370DB', 'red': '#DC143C', 'silver': '#C0C0C0', 'teal': '#008B8B', 'warm neutrals': 'linear-gradient(135deg,#D2B48C,#F5DEB3)', 'white': '#FFFFFF', 'yellow': '#FFD700' };
-        return m[name.toLowerCase().trim()] || '#CCCCCC';
-    };
-
     const subCount = (_, sub) => allProducts.filter(p =>
         (p.category || '').toLowerCase().replace(/\s+/g, '-') === sub.toLowerCase().replace(/\s+/g, '-') || p.category === sub
     ).length;
+
+    // ── Sorted color list for sidebar ──
+    const sortedColors = Array.from(colorMap.values());
 
     return (
         <div className="product-wrapper">
@@ -491,7 +546,6 @@ const Product = () => {
                 <div className="Product-Container-title">
                     <span>Our Collections</span>
 
-                    {/* ✅ NEW: Show active category breadcrumb from navbar click */}
                     {activeCategoryLabel() && (
                         <div style={{
                             display: 'flex', alignItems: 'center', gap: '8px',
@@ -569,6 +623,7 @@ const Product = () => {
                             </div>
                         )}
 
+                        {/* ── Industrial Segments ── */}
                         <div className="filter-section">
                             <div className="filter-header" onClick={() => toggle('category')}>
                                 <h4>Industrial Segments</h4>
@@ -606,6 +661,7 @@ const Product = () => {
                             </div>
                         </div>
 
+                        {/* ── Color Filter — 100% from backend ── */}
                         <div className="filter-section">
                             <div className="filter-header" onClick={() => toggle('color')}>
                                 <h4>Color</h4>
@@ -613,50 +669,52 @@ const Product = () => {
                             </div>
                             <div className={`filter-dropdown${expanded.color ? ' expanded' : ''}`}>
                                 <div className="filter-options">
-                                    {dynFilters.color.map(opt => (
-                                        <label key={opt.value} className="filter-checkbox color-filter-checkbox">
-                                            <input type="checkbox" value={opt.value} checked={selectedFilters.color.includes(opt.value)} onChange={() => handleFilter('color', opt.value)} />
-                                            <span className="Product-checkmark" />
-                                            <span className="Product-color-swatch" style={{ background: swatch(opt.label), border: opt.label.toLowerCase() === 'white' ? '1px solid #ccc' : '1px solid #0000001a' }} />
-                                            <span className="filter-label">{opt.label} ({opt.count})</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="filter-section">
-                            <div className="filter-header" onClick={() => toggle('performance')}>
-                                <h4>Performance</h4>
-                                {expanded.performance ? <FiMinus size={20} /> : <GoPlus size={20} />}
-                            </div>
-                            <div className={`filter-dropdown${expanded.performance ? ' expanded' : ''}`}>
-                                <div className="filter-options">
-                                    {dynFilters.performance.map(opt => (
-                                        <label key={opt.value} className="filter-checkbox">
-                                            <input type="checkbox" value={opt.value} checked={selectedFilters.performance.includes(opt.value)} onChange={() => handleFilter('performance', opt.value)} />
-                                            <span className="Product-checkmark" />
-                                            <span className="filter-label">{opt.label} ({opt.count})</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="filter-section">
-                            <div className="filter-header" onClick={() => toggle('features')}>
-                                <h4>Features</h4>
-                                {expanded.features ? <FiMinus size={20} /> : <GoPlus size={20} />}
-                            </div>
-                            <div className={`filter-dropdown${expanded.features ? ' expanded' : ''}`}>
-                                <div className="filter-options">
-                                    {dynFilters.features.map(opt => (
-                                        <label key={opt.value} className="filter-checkbox">
-                                            <input type="checkbox" value={opt.value} checked={selectedFilters.features.includes(opt.value)} onChange={() => handleFilter('features', opt.value)} />
-                                            <span className="Product-checkmark" />
-                                            <span className="filter-label">{opt.label} ({opt.count})</span>
-                                        </label>
-                                    ))}
+                                    {sortedColors.length === 0 && (
+                                        <p style={{ fontSize: '0.8rem', color: '#999', padding: '4px 0' }}>
+                                            {loading ? 'Loading colors…' : 'No colors found'}
+                                        </p>
+                                    )}
+                                    {sortedColors.map(opt => {
+                                        const isChecked = selectedFilters.color.includes(opt.slug);
+                                        return (
+                                            <label
+                                                key={opt.slug}
+                                                className="filter-checkbox color-filter-checkbox"
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name="color-filter"
+                                                    value={opt.slug}
+                                                    checked={isChecked}
+                                                    onChange={() => handleFilter('color', opt.slug)}
+                                                    onClick={() => { if (isChecked) handleFilter('color', opt.slug); }}
+                                                    style={{ accentColor: opt.cssColor.startsWith('linear') ? '#4f6ef7' : opt.cssColor }}
+                                                />
+                                                <span
+                                                    className="Product-color-swatch"
+                                                    style={{
+                                                        background: opt.cssColor,
+                                                        border: opt.label.toLowerCase() === 'white'
+                                                            ? '1.5px solid #ccc'
+                                                            : '1.5px solid #0000001a',
+                                                        display: 'inline-block',
+                                                        width: '16px',
+                                                        height: '16px',
+                                                        borderRadius: '50%',
+                                                        flexShrink: 0,
+                                                        verticalAlign: 'middle',
+                                                    }}
+                                                />
+                                                <span className="filter-label">
+                                                    {opt.label}
+                                                    <span style={{ color: '#999', marginLeft: '4px', fontSize: '0.78em' }}>
+                                                        ({opt.count})
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
@@ -670,6 +728,46 @@ const Product = () => {
 
                     {/* ── Products Grid ── */}
                     <div className="products-content">
+                        {/* ✅ Active color chip — single selection */}
+                        {selectedFilters.color.length > 0 && (() => {
+                            const slug = selectedFilters.color[0];
+                            const info = colorMap.get(slug);
+                            if (!info) return null;
+                            return (
+                                <div style={{
+                                    display: 'flex', flexWrap: 'wrap', gap: '8px',
+                                    marginBottom: '16px', alignItems: 'center'
+                                }}>
+                                    <span style={{ fontSize: '0.82rem', color: '#666', fontWeight: 600 }}>Color:</span>
+                                    <span style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                        background: '#f0f4ff', border: '1.5px solid #c7d2fe',
+                                        borderRadius: '20px', padding: '3px 10px 3px 6px',
+                                        fontSize: '0.8rem', fontWeight: 600, color: '#3730a3'
+                                    }}>
+                                        <span style={{
+                                            width: '12px', height: '12px', borderRadius: '50%',
+                                            background: info.cssColor,
+                                            border: '1px solid #00000026',
+                                            display: 'inline-block', flexShrink: 0
+                                        }} />
+                                        {info.label}
+                                        <button
+                                            onClick={() => setSelectedFilters(prev => ({ ...prev, color: [] }))}
+                                            style={{
+                                                background: 'none', border: 'none', cursor: 'pointer',
+                                                padding: '0', color: '#6366f1', display: 'flex',
+                                                alignItems: 'center', marginLeft: '2px'
+                                            }}
+                                            title="Remove color filter"
+                                        >
+                                            <X size={12} />
+                                        </button>
+                                    </span>
+                                </div>
+                            );
+                        })()}
+
                         {loading ? (
                             <div style={{ textAlign: 'center', padding: '3rem', fontSize: '1.2rem', color: '#666' }}>Loading products...</div>
                         ) : sortedFiltered.length === 0 ? (
@@ -679,44 +777,93 @@ const Product = () => {
                             </div>
                         ) : (
                             <div className="projects-grid-new">
-                                {sortedFiltered.map(product => (
-                                    <div key={product._id} className="Projects-Box-new">
-                                        <div className="project-image-wrapper">
-                                            <Link to={`/ProductDetail/${product._id}`} className="project-image-link">
-                                                <img
-                                                    src={product.image?.length > 0 ? getImageUrl(product.image[0]) : "https://via.placeholder.com/400x300?text=No+Image"}
-                                                    alt={product.title || 'Product'}
-                                                    className="project-image"
-                                                    onError={e => { e.target.src = "https://via.placeholder.com/400x300?text=No+Image"; }}
-                                                />
-                                                <div className="project-overlay" />
-                                            </Link>
-                                        </div>
-                                        <div className="project-content">
-                                            <div className="Projects-Box-main-heading">
-                                                <Link to={`/ProductDetail/${product._id}`} className="project-title-link">
-                                                    {product.title || 'Untitled Product'}
+                                {sortedFiltered.map(product => {
+                                    // ── Find which variant to display based on active color filter ──
+                                    // Priority: first variant whose color slug matches any selected color
+                                    let activeVariant = null;
+                                    if (selectedFilters.color.length > 0 && Array.isArray(product.variants)) {
+                                        activeVariant = product.variants.find(v =>
+                                            v.color && selectedFilters.color.includes(colorToSlug(v.color))
+                                        ) || null;
+                                    }
+
+                                    // If active variant found → use its images, else fallback to product images
+                                    const displayImages = (activeVariant && activeVariant.images?.length > 0)
+                                        ? activeVariant.images
+                                        : (product.image || []);
+
+                                    const displayImage = displayImages.length > 0
+                                        ? getImageUrl(displayImages[0])
+                                        : "https://via.placeholder.com/400x300?text=No+Image";
+
+                                    // Color info for the active variant badge
+                                    const variantColorInfo = activeVariant?.color
+                                        ? colorMap.get(colorToSlug(activeVariant.color))
+                                        : null;
+
+                                    return (
+                                        <div key={product._id} className="Projects-Box-new">
+                                            <div className="project-image-wrapper" style={{ position: 'relative' }}>
+                                                <Link to={`/ProductDetail/${product._id}`} className="project-image-link">
+                                                    <img
+                                                        src={displayImage}
+                                                        alt={product.title || 'Product'}
+                                                        className="project-image"
+                                                        onError={e => { e.target.src = "https://via.placeholder.com/400x300?text=No+Image"; }}
+                                                    />
+                                                    <div className="project-overlay" />
                                                 </Link>
-                                                <div className="Projects-Box-svg">
-                                                    {product.icons?.length > 0 ? (
-                                                        <div className="product-icons-display">
-                                                            {product.icons.map((icon, i) => (
-                                                                <img key={i} src={getImageUrl(icon)} alt={`Icon ${i + 1}`} className="products-icon-item"
-                                                                    style={{ width: '45px', height: '80px', objectFit: 'contain', marginLeft: '5px' }}
-                                                                    onError={e => { e.target.style.display = 'none'; }} />
-                                                            ))}
-                                                        </div>
-                                                    ) : (
-                                                        <img src="/iconPvc-6.svg" alt="Default icon" />
-                                                    )}
+
+                                                {/* ── Variant color badge on image ── */}
+                                                {activeVariant && variantColorInfo && (
+                                                    <div style={{
+                                                        position: 'absolute', bottom: '8px', left: '8px',
+                                                        display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                                        background: 'rgba(255,255,255,0.92)',
+                                                        backdropFilter: 'blur(4px)',
+                                                        borderRadius: '20px', padding: '3px 10px 3px 6px',
+                                                        fontSize: '0.75rem', fontWeight: 600, color: '#1e293b',
+                                                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                                        pointerEvents: 'none',
+                                                        zIndex: 2
+                                                    }}>
+                                                        <span style={{
+                                                            width: '10px', height: '10px', borderRadius: '50%',
+                                                            background: variantColorInfo.cssColor,
+                                                            border: '1px solid rgba(0,0,0,0.2)',
+                                                            display: 'inline-block', flexShrink: 0
+                                                        }} />
+                                                        {variantColorInfo.label}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            <div className="project-content">
+                                                <div className="Projects-Box-main-heading">
+                                                    <Link to={`/ProductDetail/${product._id}`} className="project-title-link">
+                                                        {product.title || 'Untitled Product'}
+                                                    </Link>
+                                                    <div className="Projects-Box-svg">
+                                                        {product.icons?.length > 0 ? (
+                                                            <div className="product-icons-display">
+                                                                {product.icons.map((icon, i) => (
+                                                                    <img key={i} src={getImageUrl(icon)} alt={`Icon ${i + 1}`} className="products-icon-item"
+                                                                        style={{ width: '45px', height: '80px', objectFit: 'contain', marginLeft: '5px' }}
+                                                                        onError={e => { e.target.style.display = 'none'; }} />
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <img src="/iconPvc-6.svg" alt="Default icon" />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="Projects-Box-main-des">
+                                                    <TruncatedText text={product.description || 'No description available'} maxLength={100} />
                                                 </div>
                                             </div>
-                                            <div className="Projects-Box-main-des">
-                                                <TruncatedText text={product.description || 'No description available'} maxLength={100} />
-                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

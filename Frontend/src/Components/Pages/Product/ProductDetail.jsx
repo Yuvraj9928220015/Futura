@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { PiPlus, PiMinus } from "react-icons/pi";
 import { useParams } from "react-router-dom";
 import { MdOutlineFileDownload, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 import "./ProductDetail.css"
 
-// ✅ FIXED: Correct API URL (same as Product.jsx)
 const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in/api/products';
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in';
 
-// ✅ FIXED: Image URL helper (same as Product.jsx)
 const getImageUrl = (imagePath) => {
     if (!imagePath) return "/no-image.png";
     const cleanedPath = imagePath.replace(/\\/g, '/');
@@ -19,6 +18,8 @@ const getImageUrl = (imagePath) => {
     return `${BASE_URL}/${cleanedPath}`;
 };
 
+const ITEMS_PER_VIEW = 5;
+
 const ProductDetail = () => {
     const { id } = useParams();
     const [selectedSwatchIndex, setSelectedSwatchIndex] = useState(null);
@@ -26,18 +27,22 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(null);
-    const [currentVariantSlide, setCurrentVariantSlide] = useState(0);
+
+    const [flammableOpen, setFlammableOpen] = useState(false);
+    const [turtleLifeOpen, setTurtleLifeOpen] = useState(false);
+    const [safeTouchOpen, setSafeTouchOpen] = useState(false);
+
+    const [selectedGrainFilter, setSelectedGrainFilter] = useState('all');
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 setLoading(true);
                 setError(null);
-                // ✅ FIXED: Using correct API_URL
                 const response = await fetch(`${API_URL}/${id}`, {
                     method: 'GET',
                     headers: {
@@ -68,7 +73,8 @@ const ProductDetail = () => {
     const productData = {
         name: product?.title || "Ophelia",
         code: "",
-        brand: "Suggested Applications:",
+        // ── CHANGE 1: Show product title as the "brand" label ──
+        brand: product?.title || "Ophelia",
         features: ["Marine", "Contract", "Healthcare"],
         selectUse: " 100% Polyester",
     };
@@ -87,46 +93,15 @@ const ProductDetail = () => {
             id: index + 3,
             type: "product",
             title: `${product.title} - View ${index + 3}`,
-            // ✅ FIXED: Using getImageUrl instead of localhost
             image: getImageUrl(img)
         }))
         : [
-            {
-                id: 3,
-                type: "pattern",
-                title: "Pattern Close-up",
-                image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop"
-            },
-            {
-                id: 4,
-                type: "application",
-                title: "Hospitality Setting",
-                image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop"
-            },
-            {
-                id: 5,
-                type: "samples",
-                title: "Color Variations",
-                image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&h=300&fit=crop"
-            },
-            {
-                id: 6,
-                type: "room",
-                title: "Modern Interior",
-                image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop"
-            },
-            {
-                id: 7,
-                type: "detail",
-                title: "Material Quality",
-                image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop"
-            },
-            {
-                id: 8,
-                type: "collection",
-                title: "Full Collection",
-                image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop"
-            }
+            { id: 3, type: "pattern", title: "Pattern Close-up", image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop" },
+            { id: 4, type: "application", title: "Hospitality Setting", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop" },
+            { id: 5, type: "samples", title: "Color Variations", image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&h=300&fit=crop" },
+            { id: 6, type: "room", title: "Modern Interior", image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop" },
+            { id: 7, type: "detail", title: "Material Quality", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" },
+            { id: 8, type: "collection", title: "Full Collection", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" }
         ];
 
     const productSwatches = product?.swatches || [];
@@ -135,53 +110,25 @@ const ProductDetail = () => {
     const itemsPerSlide = 4;
     const totalSlides = galleryImages.length;
 
-    const variantsPerSlide = 5;
-    const totalVariants = product?.variants ? product.variants.length + 1 : 1;
-    const totalVariantSlides = Math.ceil(totalVariants / variantsPerSlide);
+    const handleSwatchSelect = (index) => { setSelectedSwatchIndex(index); };
 
-    const handleSwatchSelect = (index) => {
-        setSelectedSwatchIndex(index);
-    };
-
-    const handleVariantSelect = (index) => {
+    const handleVariantSelect = useCallback((index) => {
         setSelectedVariantIndex(index);
         setSelectedImageIndex(0);
         setSelectedSwatchIndex(null);
-    };
+    }, []);
 
-    const handleDefaultSelect = () => {
+    const handleDefaultSelect = useCallback(() => {
         setSelectedVariantIndex(null);
         setSelectedImageIndex(0);
         setSelectedSwatchIndex(null);
-    };
+    }, []);
 
-    const nextSlide = () => {
-        if (currentSlide < totalSlides - itemsPerSlide) {
-            setCurrentSlide((prev) => prev + 1);
-        }
-    };
-
-    const prevSlide = () => {
-        if (currentSlide > 0) {
-            setCurrentSlide((prev) => prev - 1);
-        }
-    };
-
-    const nextVariantSlide = () => {
-        if (currentVariantSlide < totalVariantSlides - 1) {
-            setCurrentVariantSlide((prev) => prev + 1);
-        }
-    };
-
-    const prevVariantSlide = () => {
-        if (currentVariantSlide > 0) {
-            setCurrentVariantSlide((prev) => prev - 1);
-        }
-    };
+    const nextSlide = () => { if (currentSlide < totalSlides - itemsPerSlide) setCurrentSlide((prev) => prev + 1); };
+    const prevSlide = () => { if (currentSlide > 0) setCurrentSlide((prev) => prev - 1); };
 
     const getMainImage = () => {
         if (currentImages && currentImages.length > 0) {
-            // ✅ FIXED: Using getImageUrl instead of localhost
             return getImageUrl(currentImages[selectedImageIndex]);
         }
         return null;
@@ -189,11 +136,8 @@ const ProductDetail = () => {
 
     const getBottomSampleImages = () => {
         if (currentImages && currentImages.length > 0) {
-            const lastFour = currentImages.slice(-4);
-            // ✅ FIXED: Using getImageUrl instead of localhost
-            return lastFour.map(img => getImageUrl(img));
+            return currentImages.slice(-4).map(img => getImageUrl(img));
         }
-
         return [
             "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop",
             "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
@@ -202,20 +146,68 @@ const ProductDetail = () => {
         ];
     };
 
-    const handleThumbnailClick = (index) => {
-        setSelectedImageIndex(index + 2);
+    const handleThumbnailClick = (index) => { setSelectedImageIndex(index + 2); };
+
+    // ── Build grain-grouped data ──
+    const buildGrainGroups = () => {
+        if (!product) return {};
+
+        const defaultItem = {
+            type: 'default',
+            index: null,
+            // ── CHANGE 2: Show product title/code instead of "Default" ──
+            name: product?.title || product?.code || 'Default',
+            images: product.image,
+            grain: '__default__',
+        };
+
+        const groups = {};
+
+        if (product.variants) {
+            product.variants.forEach((variant, index) => {
+                const grain = (variant.grain && variant.grain.trim()) ? variant.grain.trim() : '__ungrouped__';
+                if (!groups[grain]) groups[grain] = [];
+                groups[grain].push({
+                    type: 'variant',
+                    index,
+                    name: variant.name,
+                    images: variant.images,
+                    grain,
+                    color: variant.color || '',
+                });
+            });
+        }
+
+        return { defaultItem, groups };
     };
+
+    const { defaultItem, groups: grainGroups } = buildGrainGroups();
+
+    const allGrainKeys = grainGroups ? Object.keys(grainGroups) : [];
+
+    const getGrainLabel = (grainKey) => {
+        if (grainKey === '__ungrouped__') return 'Other Variants';
+        return grainKey;
+    };
+
+    const getGrainNumberLabel = (grainKey, index) => {
+        if (grainKey === '__ungrouped__') return null;
+        return `Grain ${index + 1}`;
+    };
+
+    const getAllVariantsForGrain = (grainKey) => {
+        return grainGroups[grainKey] || [];
+    };
+
+    const filteredGrainKeys = selectedGrainFilter === 'all'
+        ? allGrainKeys
+        : allGrainKeys.filter(k => k === selectedGrainFilter);
 
     if (loading) {
         return (
             <div className="product-detail">
                 <div className="container-fluid">
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '3rem',
-                        fontSize: '1.2rem',
-                        color: '#666'
-                    }}>
+                    <div style={{ textAlign: 'center', padding: '3rem', fontSize: '1.2rem', color: '#666' }}>
                         Loading product details...
                     </div>
                 </div>
@@ -227,14 +219,7 @@ const ProductDetail = () => {
         return (
             <div className="product-detail">
                 <div className="container-fluid">
-                    <div style={{
-                        background: '#fee',
-                        color: '#c33',
-                        padding: '1rem',
-                        borderRadius: '8px',
-                        margin: '1rem 0',
-                        textAlign: 'center'
-                    }}>
+                    <div style={{ background: '#fee', color: '#c33', padding: '1rem', borderRadius: '8px', margin: '1rem 0', textAlign: 'center' }}>
                         Error: {error}
                     </div>
                 </div>
@@ -246,12 +231,7 @@ const ProductDetail = () => {
         return (
             <div className="product-detail">
                 <div className="container-fluid">
-                    <div style={{
-                        textAlign: 'center',
-                        padding: '3rem',
-                        fontSize: '1.2rem',
-                        color: '#666'
-                    }}>
+                    <div style={{ textAlign: 'center', padding: '3rem', fontSize: '1.2rem', color: '#666' }}>
                         Product not found
                     </div>
                 </div>
@@ -261,33 +241,290 @@ const ProductDetail = () => {
 
     const bottomSampleImages = getBottomSampleImages();
 
-    const getAllVariantItems = () => {
-        const items = [];
-
-        items.push({
-            type: 'default',
-            index: null,
-            name: 'Default',
-            images: product.image,
-            imageCount: product.image?.length || 0
-        });
-
-        if (product.variants) {
-            product.variants.forEach((variant, index) => {
-                items.push({
-                    type: 'variant',
-                    index: index,
-                    name: variant.name,
-                    images: variant.images,
-                    imageCount: variant.images?.length || 0
-                });
-            });
-        }
-
-        return items;
+    const toggleHeaderStyle = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        cursor: 'pointer',
+        padding: '10px 0',
+        userSelect: 'none',
     };
 
-    const allVariantItems = getAllVariantItems();
+    const sectionIconStyle = {
+        objectFit: 'contain',
+        flexShrink: 0,
+    };
+
+    const toggleIconStyle = (isOpen) => ({
+        width: '26px',
+        height: '26px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        flexShrink: 0,
+        transition: 'background-color 0.3s ease',
+    });
+
+    // ── Variant Card Renderer ──
+    const VariantCard = ({ item, isSelected, onClick }) => (
+        <div
+            onClick={onClick}
+            style={{ cursor: 'pointer', flexShrink: 0, textAlign: 'center', width: '100px' }}
+        >
+            <div style={{
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                border: isSelected ? '2.5px solid #333' : '2.5px solid transparent',
+                boxShadow: isSelected ? '0 0 0 3px #e0e0e0' : 'none',
+                transition: 'border 0.2s, box-shadow 0.2s',
+                backgroundColor: '#f0f0f0',
+            }}>
+                {item.images && item.images.length > 1 ? (
+                    <img
+                        src={getImageUrl(item.images[1])}
+                        alt={item.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => {
+                            if (item.images && item.images.length > 0) {
+                                e.target.src = getImageUrl(item.images[0]);
+                            } else {
+                                e.target.style.display = 'none';
+                            }
+                        }}
+                    />
+                ) : item.images && item.images.length > 0 ? (
+                    <img
+                        src={getImageUrl(item.images[0])}
+                        alt={item.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                ) : (
+                    <div style={{
+                        width: '100%', height: '100%', backgroundColor: '#e0e0e0',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '1.2rem', color: '#999'
+                    }}>
+                        📦
+                    </div>
+                )}
+            </div>
+
+            <div style={{
+                fontSize: '0.7rem',
+                color: '#333',
+                textAlign: 'center',
+                marginTop: '5px',
+                wordBreak: 'break-word',
+                fontWeight: isSelected ? '600' : '400',
+                lineHeight: '1.2',
+                width: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+            }}>
+                {item.name}
+            </div>
+
+            {/* ── CHANGE 3: Blue underline indicator for selected item ── */}
+            {isSelected && (
+                <div style={{
+                    height: '2px',
+                    backgroundColor: '#2196f3',
+                    borderRadius: '2px',
+                    marginTop: '4px',
+                    width: '60%',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }} />
+            )}
+        </div>
+    );
+
+    // ── GrainRow: slider (first 5) + dropdown expand (rest) ──
+    const GrainRow = ({ grainKey, grainIndex, variants, includeDefault }) => {
+        const [sliderOffset, setSliderOffset] = useState(0);
+        const [showExtra, setShowExtra] = useState(false);
+
+        // All items in this row
+        const allRowItems = includeDefault && defaultItem
+            ? [defaultItem, ...variants]
+            : variants;
+
+        const totalItems = allRowItems.length;
+        const hasMore = totalItems > ITEMS_PER_VIEW;
+
+        // Slider window — always shows ITEMS_PER_VIEW from the first set
+        const sliderItems = allRowItems.slice(0, ITEMS_PER_VIEW);
+        const extraItems = allRowItems.slice(ITEMS_PER_VIEW);
+
+        // Within the slider window, offset shifts which 5 are visible
+        const visibleItems = sliderItems.slice(sliderOffset, sliderOffset + ITEMS_PER_VIEW);
+
+        // For the slider, navigate within first ITEMS_PER_VIEW items
+        // Actually slide across ALL items (standard approach)
+        const visibleSlider = allRowItems.slice(sliderOffset, sliderOffset + ITEMS_PER_VIEW);
+        const canGoLeft = sliderOffset > 0;
+        const canGoRight = sliderOffset + ITEMS_PER_VIEW < totalItems;
+
+        const shiftLeft = () => { if (canGoLeft) setSliderOffset(prev => prev - 1); };
+        const shiftRight = () => { if (canGoRight) setSliderOffset(prev => prev + 1); };
+
+        // Dropdown pill label — shows currently selected variant name
+        const getDropdownLabel = () => {
+            if (selectedVariantIndex === null && includeDefault) return defaultItem.name;
+            const found = allRowItems.find(v => v.type === 'variant' && v.index === selectedVariantIndex);
+            if (found) return found.name;
+            return `${totalItems} variants`;
+        };
+
+        const renderCard = (item) => {
+            const isSelected = item.type === 'default'
+                ? selectedVariantIndex === null
+                : selectedVariantIndex === item.index;
+            return (
+                <VariantCard
+                    key={item.type === 'default' ? 'default' : `variant-${item.index}`}
+                    item={item}
+                    isSelected={isSelected}
+                    onClick={() => {
+                        if (item.type === 'default') handleDefaultSelect();
+                        else handleVariantSelect(item.index);
+                    }}
+                />
+            );
+        };
+
+        return (
+            <div style={{ marginBottom: '18px', padding: '14px 0px 10px' }}>
+
+                {/* ── Dropdown pill (top-right) — clickable to expand/collapse extra items ── */}
+                {hasMore && (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        marginBottom: '12px',
+                    }}>
+                        <button
+                            type="button"
+                            onClick={() => setShowExtra(prev => !prev)}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                                padding: '5px 14px',
+                                border: '1.5px solid #ddd',
+                                borderRadius: '20px',
+                                background: showExtra ? '#333' : '#fff',
+                                color: showExtra ? '#fff' : '#555',
+                                fontSize: '0.75rem',
+                                fontWeight: '500',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                                whiteSpace: 'nowrap',
+                                outline: 'none',
+                            }}
+                        >
+                            <span>See All - {getDropdownLabel()}</span>
+                            {showExtra
+                                ? <MdOutlineKeyboardArrowUp size={14} style={{ flexShrink: 0 }} />
+                                : <MdOutlineKeyboardArrowDown size={14} style={{ flexShrink: 0 }} />
+                            }
+                        </button>
+                    </div>
+                )}
+
+                {/* ── Slider row: ← [5 cards] → ── */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {/* Left arrow */}
+                    <button
+                        type="button"
+                        onClick={shiftLeft}
+                        disabled={!canGoLeft}
+                        style={{
+                            background: canGoLeft ? '#fff' : '#f5f5f5',
+                            border: '1px solid #ddd',
+                            borderRadius: '50%',
+                            width: '32px',
+                            height: '32px',
+                            cursor: canGoLeft ? 'pointer' : 'not-allowed',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.1rem',
+                            color: canGoLeft ? '#444' : '#ccc',
+                            flexShrink: 0,
+                            transition: 'all 0.2s ease',
+                            outline: 'none',
+                            padding: 0,
+                        }}
+                    >
+                        <MdChevronLeft />
+                    </button>
+
+                    {/* Visible cards */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '18px',
+                        flex: 1,
+                        overflow: 'hidden',
+                    }}>
+                        {visibleSlider.map(renderCard)}
+                    </div>
+
+                    {/* Right arrow */}
+                    <button
+                        type="button"
+                        onClick={shiftRight}
+                        disabled={!canGoRight}
+                        style={{
+                            background: canGoRight ? '#fff' : '#f5f5f5',
+                            border: '1px solid #ddd',
+                            borderRadius: '50%',
+                            width: '32px',
+                            height: '32px',
+                            cursor: canGoRight ? 'pointer' : 'not-allowed',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.1rem',
+                            color: canGoRight ? '#444' : '#ccc',
+                            flexShrink: 0,
+                            transition: 'all 0.2s ease',
+                            outline: 'none',
+                            padding: 0,
+                        }}
+                    >
+                        <MdChevronRight />
+                    </button>
+                </div>
+
+                {/* ── Expanded extra items (below slider, revealed by dropdown pill) ── */}
+                {showExtra && extraItems.length > 0 && (
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '16px',
+                        width: '100%',
+                        justifyContent: 'start',
+                        flexWrap: 'wrap',
+                        paddingTop: '10px',
+                        paddingLeft: '44px'
+                    }}>
+                        {extraItems.map(renderCard)}
+                    </div>
+                )
+                }
+            </div >
+        );
+    };
 
     return (
         <>
@@ -300,30 +537,16 @@ const ProductDetail = () => {
                                     {(selectedSwatchIndex !== null && selectedSwatch) ? (
                                         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                                             <img
-                                                // ✅ FIXED: Using getImageUrl
                                                 src={getImageUrl(selectedSwatch)}
                                                 alt={`Swatch ${selectedSwatchIndex + 1}`}
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover',
-                                                    borderRadius: '8px'
-                                                }}
-                                                onError={(e) => {
-                                                    console.error('Failed to load swatch image');
-                                                    e.target.src = getMainImage();
-                                                }}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                                                onError={(e) => { e.target.src = getMainImage(); }}
                                             />
                                             <div style={{
-                                                position: 'absolute',
-                                                top: '15px',
-                                                right: '15px',
-                                                backgroundColor: '#ff6b35',
-                                                color: 'white',
-                                                padding: '8px 15px',
-                                                borderRadius: '20px',
-                                                fontSize: '14px',
-                                                fontWeight: 'bold',
+                                                position: 'absolute', top: '15px', right: '15px',
+                                                backgroundColor: '#ff6b35', color: 'white',
+                                                padding: '8px 15px', borderRadius: '20px',
+                                                fontSize: '14px', fontWeight: 'bold',
                                                 boxShadow: '0 2px 8px #00000033'
                                             }}>
                                                 Swatch {selectedSwatchIndex + 1}
@@ -331,150 +554,44 @@ const ProductDetail = () => {
                                         </div>
                                     ) : getMainImage() ? (
                                         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                                            <img
-                                                src={getMainImage()}
-                                                alt={product.title}
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover',
-                                                    borderRadius: '4px'
-                                                }}
-                                            />
-                                            {selectedVariantIndex !== null && (
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    top: '15px',
-                                                    left: '15px',
-                                                    backgroundColor: '#4CAF50',
-                                                    color: 'white',
-                                                    padding: '8px 15px',
-                                                    borderRadius: '20px',
-                                                    fontSize: '14px',
-                                                    fontWeight: 'bold',
-                                                    boxShadow: '0 2px 8px #00000033'
-                                                }}>
-                                                    {product.variants[selectedVariantIndex].name}
-                                                </div>
-                                            )}
+                                            <img src={getMainImage()} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
                                         </div>
                                     ) : (
-                                        <div style={{
-                                            backgroundColor: '#f0f0f0',
-                                            width: '100%',
-                                            height: '100%',
-                                            borderRadius: '8px'
-                                        }}></div>
+                                        <div style={{ backgroundColor: '#f0f0f0', width: '100%', height: '100%', borderRadius: '8px' }}></div>
                                     )}
                                 </div>
 
-                                {/* Image Gallery Slider Section */}
                                 <div className="product-detail-gallery-slider">
                                     <div className="gallery-slider-header">
                                         <div className="slider-controls">
-                                            <button
-                                                className="slider-arrow prev-arrow"
-                                                onClick={prevSlide}
-                                                disabled={currentSlide === 0}
-                                            >
-                                                <MdChevronLeft />
-                                            </button>
+                                            <button className="slider-arrow prev-arrow" onClick={prevSlide} disabled={currentSlide === 0}><MdChevronLeft /></button>
                                             <div className="gallery-slider-container">
-                                                <div
-                                                    className="gallery-slides"
-                                                    style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}
-                                                >
+                                                <div className="gallery-slides" style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}>
                                                     {galleryImages.map((image, index) => (
                                                         <div key={image.id} className="gallery-slide">
-                                                            <div
-                                                                className="gallery-item"
-                                                                onClick={() => handleThumbnailClick(index)}
-                                                                style={{ cursor: 'pointer' }}
-                                                            >
-                                                                <img
-                                                                    src={image.image}
-                                                                    alt={image.title}
-                                                                    className="gallery-img"
-                                                                />
+                                                            <div className="gallery-item" onClick={() => handleThumbnailClick(index)} style={{ cursor: 'pointer' }}>
+                                                                <img src={image.image} alt={image.title} className="gallery-img" />
                                                             </div>
                                                         </div>
                                                     ))}
                                                 </div>
                                             </div>
-                                            <button
-                                                className="slider-arrow next-arrow"
-                                                onClick={nextSlide}
-                                                disabled={currentSlide >= totalSlides - itemsPerSlide}
-                                            >
-                                                <MdChevronRight />
-                                            </button>
+                                            <button className="slider-arrow next-arrow" onClick={nextSlide} disabled={currentSlide >= totalSlides - itemsPerSlide}><MdChevronRight /></button>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Thumbnail with Swatch Overlay */}
                                 <div className="product-detail-thumbnail-row">
-                                    <div
-                                        className="product-detail-thumbnail"
-                                        style={{
-                                            backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0',
-                                            position: 'relative'
-                                        }}
-                                    >
+                                    <div className="product-detail-thumbnail" style={{ backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0', position: 'relative' }}>
                                         {getMainImage() && currentImages && currentImages.length > 1 ? (
                                             <>
-                                                <img
-                                                    // ✅ FIXED: Using getImageUrl
-                                                    src={getImageUrl(currentImages[1])}
-                                                    alt="Second Image"
-                                                    style={{
-                                                        width: "100%",
-                                                        height: "100%",
-                                                        objectFit: "cover",
-                                                        borderRadius: "6px"
-                                                    }}
-                                                />
+                                                <img src={getImageUrl(currentImages[1])} alt="Second Image" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "6px" }} />
                                                 {selectedSwatch && productSwatches.length > 0 && (
-                                                    <div style={{
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        bottom: 0,
-                                                        borderRadius: '6px',
-                                                        pointerEvents: 'none',
-                                                        overflow: 'hidden'
-                                                    }}>
-                                                        <img
-                                                            // ✅ FIXED: Using getImageUrl
-                                                            src={getImageUrl(selectedSwatch)}
-                                                            alt="Swatch Overlay Thumbnail"
-                                                            style={{
-                                                                width: '100%',
-                                                                height: '100%',
-                                                                objectFit: 'cover',
-                                                                opacity: 0.7,
-                                                                mixBlendMode: 'multiply'
-                                                            }}
-                                                            onError={(e) => {
-                                                                console.error('Thumbnail overlay failed');
-                                                                e.target.style.display = 'none';
-                                                            }}
-                                                        />
+                                                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '6px', pointerEvents: 'none', overflow: 'hidden' }}>
+                                                        <img src={getImageUrl(selectedSwatch)} alt="Swatch Overlay Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, mixBlendMode: 'multiply' }} onError={(e) => { e.target.style.display = 'none'; }} />
                                                     </div>
                                                 )}
-                                                <div style={{
-                                                    position: 'absolute',
-                                                    bottom: '8px',
-                                                    right: '8px',
-                                                    backgroundColor: '#ffffffe6',
-                                                    color: '#333',
-                                                    padding: '4px 8px',
-                                                    borderRadius: '4px',
-                                                    fontSize: '14px',
-                                                    fontWeight: 'bold',
-                                                    zIndex: 1
-                                                }}>
+                                                <div style={{ position: 'absolute', bottom: '8px', right: '8px', backgroundColor: '#ffffffe6', color: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', zIndex: 1 }}>
                                                     {selectedImageIndex + 1}
                                                 </div>
                                             </>
@@ -483,18 +600,13 @@ const ProductDetail = () => {
                                 </div>
                             </div>
 
-                            {/* Bottom Sample Images */}
                             <div id="colClass-thumbnail-box" className="row">
                                 {bottomSampleImages.map((img, index) => {
                                     const colClass = (index === 0 || index === 3) ? "col-7" : "col-5";
                                     return (
                                         <div key={index} className={colClass}>
                                             <div className="product-detail-thumbnail-box" style={{ position: 'relative' }}>
-                                                <img
-                                                    src={img}
-                                                    alt={`Sample ${index + 2}`}
-                                                    className="sample-img"
-                                                />
+                                                <img src={img} alt={`Sample ${index + 2}`} className="sample-img" />
                                             </div>
                                         </div>
                                     );
@@ -505,237 +617,45 @@ const ProductDetail = () => {
                         {/* Right Side Info Section */}
                         <div className="col-lg-5 col-md-6 col-12">
                             <div className="product-detail-info-box">
-                                <div className="product-detail-header">
-                                    <h1 className="product-title">
-                                        {product.title || productData.name}
-                                        {selectedVariantIndex !== null && (
-                                            <span style={{
-                                                marginLeft: '10px',
-                                                fontSize: '0.8rem',
-                                                color: '#4CAF50',
-                                                backgroundColor: '#e8f5e9',
-                                                padding: '4px 12px',
-                                                borderRadius: '12px',
-                                                fontWeight: 'normal'
-                                            }}>
-                                                {product.variants[selectedVariantIndex].name}
-                                            </span>
-                                        )}
-                                    </h1>
-                                </div>
-
-                                <div className="product-detail-select-use">
-                                    <strong>Material/Fabric: </strong> {productData.selectUse}
-                                </div>
-
+                                {/* ── CHANGE 1: product title shown as brand label ── */}
                                 <div className="product-detail-brand">
                                     <span className="brand-name">{productData.brand}</span>
                                 </div>
 
                                 <div className="product-detail-features">
                                     {productData.features.map((feature, index) => (
-                                        <span key={index} className="feature-tag">
-                                            • {feature}
-                                        </span>
+                                        <span key={index} className="feature-tag">• {feature}</span>
                                     ))}
                                 </div>
 
-                                <div className="product-detail-downloads">
-                                    <div className="download-links">
-                                        <span className="download-link"><MdOutlineFileDownload />Download Catalogue </span>
-                                    </div>
+                                <div className="product-detail-select-use">
+                                    <strong>Material/Fabric : </strong> {productData.selectUse}
                                 </div>
 
-                                {/* SWATCH SECTION */}
+                                {/* ── GRAIN-GROUPED VARIANT SECTION with slider ── */}
                                 <div className="product-detail-color-section">
-                                    {/* VARIANT SELECTION SECTION WITH SLIDER */}
                                     {product?.variants && product.variants.length > 0 && (
                                         <div className="variant-slider-section">
-                                            <div className="variant-header">
-                                                {totalVariantSlides > 1 && (
-                                                    <div className="variant-slider-controls">
-                                                        <button
-                                                            className="variant-arrow prev-arrow"
-                                                            onClick={prevVariantSlide}
-                                                            disabled={currentVariantSlide === 0}
-                                                        >
-                                                            <MdChevronLeft />
-                                                        </button>
-                                                        <span className="variant-slide-indicator">
-                                                            {currentVariantSlide + 1} / {totalVariantSlides}
-                                                        </span>
-                                                        <button
-                                                            className="variant-arrow next-arrow"
-                                                            onClick={nextVariantSlide}
-                                                            disabled={currentVariantSlide >= totalVariantSlides - 1}
-                                                        >
-                                                            <MdChevronRight />
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="variant-slider-container">
-                                                <div
-                                                    className="variant-slides"
-                                                    style={{
-                                                        transform: `translateX(-${currentVariantSlide * 100}%)`,
-                                                        transition: 'transform 0.5s ease'
-                                                    }}
-                                                >
-                                                    {allVariantItems.map((item, globalIndex) => (
-                                                        <div key={globalIndex} className="variant-slide-item">
-                                                            <div
-                                                                onClick={() => item.type === 'default' ? handleDefaultSelect() : handleVariantSelect(item.index)}
-                                                                className="variant-card"
-                                                            >
-                                                                {item.images && item.images.length > 1 ? (
-                                                                    <img
-                                                                        // ✅ FIXED: Using getImageUrl
-                                                                        src={getImageUrl(item.images[1])}
-                                                                        alt={item.name}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            height: '100px',
-                                                                            objectFit: 'cover',
-                                                                            borderRadius: '8px',
-                                                                            marginBottom: '8px'
-                                                                        }}
-                                                                        onError={(e) => {
-                                                                            if (item.images && item.images.length > 0) {
-                                                                                e.target.src = getImageUrl(item.images[0]);
-                                                                            } else {
-                                                                                e.target.style.display = 'none';
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                ) : item.images && item.images.length > 0 ? (
-                                                                    <img
-                                                                        // ✅ FIXED: Using getImageUrl
-                                                                        src={getImageUrl(item.images[0])}
-                                                                        alt={item.name}
-                                                                        style={{
-                                                                            width: '100%',
-                                                                            height: '100px',
-                                                                            objectFit: 'cover',
-                                                                            borderRadius: '8px',
-                                                                            marginBottom: '8px'
-                                                                        }}
-                                                                        onError={(e) => {
-                                                                            e.target.style.display = 'none';
-                                                                        }}
-                                                                    />
-                                                                ) : (
-                                                                    <div style={{
-                                                                        width: '100%',
-                                                                        height: '100px',
-                                                                        borderRadius: '8px',
-                                                                        backgroundColor: '#e0e0e0',
-                                                                        marginBottom: '8px',
-                                                                        display: 'flex',
-                                                                        alignItems: 'center',
-                                                                        justifyContent: 'center',
-                                                                        fontSize: '2rem',
-                                                                        color: '#666'
-                                                                    }}>
-                                                                        {item.type === 'default' ? '🏠' : '📦'}
-                                                                    </div>
-                                                                )}
-                                                                <div style={{
-                                                                    fontWeight: ((item.type === 'default' && selectedVariantIndex === null) ||
-                                                                        (item.type === 'variant' && selectedVariantIndex === item.index))
-                                                                        ? 'bold' : 'normal',
-                                                                    fontSize: '0.9rem',
-                                                                    color: '#333',
-                                                                    textAlign: 'center',
-                                                                    wordBreak: 'break-word'
-                                                                }}>
-                                                                    {item.name}
-                                                                </div>
-                                                                <div style={{
-                                                                    fontSize: '0.75rem',
-                                                                    color: '#666',
-                                                                    textAlign: 'center',
-                                                                    marginTop: '4px'
-                                                                }}>
-                                                                    {item.imageCount} images
-                                                                </div>
-                                                                {((item.type === 'default' && selectedVariantIndex === null) ||
-                                                                    (item.type === 'variant' && selectedVariantIndex === item.index)) && (
-                                                                        <div style={{
-                                                                            position: 'absolute',
-                                                                            top: '8px',
-                                                                            right: '8px',
-                                                                            backgroundColor: '#4CAF50',
-                                                                            color: 'white',
-                                                                            borderRadius: '50%',
-                                                                            width: '24px',
-                                                                            height: '24px',
-                                                                            display: 'flex',
-                                                                            alignItems: 'center',
-                                                                            justifyContent: 'center',
-                                                                            fontWeight: 'bold',
-                                                                            fontSize: '14px'
-                                                                        }}>
-                                                                            ✓
-                                                                        </div>
-                                                                    )}
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {selectedVariantIndex !== null && (
-                                                <div style={{
-                                                    backgroundColor: '#fff',
-                                                    padding: '12px',
-                                                    borderRadius: '8px',
-                                                    border: '1px solid #e0e0e0',
-                                                    display: 'flex',
-                                                    justifyContent: 'space-between',
-                                                    alignItems: 'center',
-                                                    marginTop: '15px'
-                                                }}>
-                                                    <div>
-                                                        <strong style={{ color: '#4CAF50' }}>Currently Viewing:</strong>
-                                                        <span style={{ marginLeft: '8px', fontSize: '1rem' }}>
-                                                            {product.variants[selectedVariantIndex].name}
-                                                        </span>
-                                                    </div>
-                                                    <button
-                                                        onClick={handleDefaultSelect}
-                                                        style={{
-                                                            padding: '6px 12px',
-                                                            backgroundColor: '#ff6b35',
-                                                            color: 'white',
-                                                            border: 'none',
-                                                            borderRadius: '6px',
-                                                            cursor: 'pointer',
-                                                            fontSize: '0.85rem',
-                                                            fontWeight: 'bold'
-                                                        }}
-                                                    >
-                                                        Reset to Default
-                                                    </button>
-                                                </div>
-                                            )}
+                                            {filteredGrainKeys.map((grainKey) => {
+                                                const isFirstGrain = allGrainKeys.indexOf(grainKey) === 0;
+                                                return (
+                                                    <GrainRow
+                                                        key={grainKey}
+                                                        grainKey={grainKey}
+                                                        grainIndex={allGrainKeys.indexOf(grainKey)}
+                                                        variants={getAllVariantsForGrain(grainKey)}
+                                                        includeDefault={isFirstGrain && !!defaultItem}
+                                                    />
+                                                );
+                                            })}
                                         </div>
                                     )}
 
-                                    <div className="color-header">
-                                        <h3>Available Swatches: {productSwatches.length}</h3>
-                                        <div className="color-controls">
-                                            <label className="multiple-swatches">
-                                                <input type="checkbox" />
-                                                Select Multiple Swatches
-                                            </label>
-                                            <span className="selected-count">{selectedSwatchIndex !== null ? '1 Selected' : '0 Selected'}</span>
-                                            <button className="clear-btn" onClick={() => setSelectedSwatchIndex(null)}>Clear</button>
+                                    <div className="product-detail-downloads">
+                                        <div className="download-links">
+                                            <span className="download-link"><MdOutlineFileDownload />Download Catalogue </span>
                                         </div>
                                     </div>
-
-                                    <button className="order-sample-btn">ORDER SAMPLE</button>
                                 </div>
 
                                 <hr />
@@ -748,133 +668,124 @@ const ProductDetail = () => {
                                     <div className="ophelia-des">
                                         {product.description || "Ophelia offers a cost-effective option within our Carnegie Siltech Plus line. Crafted from 100% silicone, its unique resin system allows for a reduced price without compromising on quality. With a luxurious leather look and a soft, supple hand, Ophelia is also graffiti-resistant and meets the stringent standards of IMO Part 8. As part of our value-performance Carnegie Elements brand, it seamlessly combines performance and style."}
                                     </div>
-                                    <div>
+                                    <div className="readmore-container">
                                         <span
                                             className="readmore"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                setExpanded(!expanded);
-                                            }}
+                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setExpanded(!expanded); }}
                                             style={{ cursor: "pointer" }}
                                         >
                                             <div className="readmore-content">
                                                 <p>Key Characteristics</p>
                                                 <div className="readmore-icon">
-                                                    {expanded ? (
-                                                        <MdOutlineKeyboardArrowUp />
-                                                    ) : (
-                                                        <MdOutlineKeyboardArrowDown />
-                                                    )}
+                                                    {expanded ? <MdOutlineKeyboardArrowUp /> : <MdOutlineKeyboardArrowDown />}
                                                 </div>
                                             </div>
                                         </span>
 
                                         {expanded && (
-                                            <div className="extra-text">
+                                            <div className="Prodduct-extra-text">
+
+                                                {/* FLAMMABLE SECTION */}
                                                 {product.Flammable && (
-                                                    <>
-                                                        <div className="turtle-life-content">
-                                                            <img src="/flamesafe1.png" alt="" />
-                                                            <div className="ophelia-title">FLAMMABLE</div>
+                                                    <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                        <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
+                                                            <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                                <img src="/Futura-New-42.png" alt="" style={sectionIconStyle} />
+                                                                <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>FLAMMABLE</div>
+                                                            </div>
+                                                            <div style={toggleIconStyle(flammableOpen)}>
+                                                                {flammableOpen ? <PiMinus /> : <PiPlus />}
+                                                            </div>
                                                         </div>
-                                                        <div className="Anti-Flamesafe"><img src="/Untitled-2.png" alt="" /> <b>Anti flammable:</b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260</div>
-                                                        <div className="ophelia-description">
-                                                            {product.Flammable}
-                                                        </div>
-                                                    </>
+                                                        {flammableOpen && (
+                                                            <div className="Anti-Flamesafe-container" style={{ paddingBottom: '12px' }}>
+                                                                <div className="Anti-Flamesafe">
+                                                                    <img src="/Untitled-2.png" alt="" /> <b>Anti flammable : </b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260
+                                                                </div>
+                                                                <div className="ophelia-description">{product.Flammable}</div>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 )}
 
-                                                <div className="turtle-life-content">
-                                                    <img src="/turtle-life.png" alt="" />
-                                                    <div className="ophelia-title">TURTLE LIFE</div>
+                                                {/* TURTLE LIFE SECTION */}
+                                                <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                    <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
+                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                            <img src="/Futura-New-43.png" alt="" style={sectionIconStyle} />
+                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>TURTLE LIFE</div>
+                                                        </div>
+                                                        <div style={toggleIconStyle(turtleLifeOpen)}>
+                                                            {turtleLifeOpen ? <PiMinus /> : <PiPlus />}
+                                                        </div>
+                                                    </div>
+                                                    {turtleLifeOpen && (
+                                                        <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
+                                                            <div className="ophelia-description">
+                                                                Americana passes the requirements of the cold-crack laboratory and is an excellent outdoor upholstery option.
+                                                            </div>
+                                                            <div>
+                                                                {product.resistant && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div className="Pink-Stain"><img src="/5.png" alt="" /> <b>Cold crack resistant : </b> -60 degrees F</div>
+                                                                        <div className="ophelia-description">{product.resistant}</div>
+                                                                    </div>
+                                                                )}
+                                                                {product.QUV && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div id="Pink-Stain-container" className="Pink-Stain"><img src="/4.png" alt="" /> <div className="Pink-Stain-container-content"><b>QUV resistant : </b> {product.QUV}</div></div>
+                                                                        <div className="ophelia-description">{product.QUV}</div>
+                                                                    </div>
+                                                                )}
+                                                                {product.Weatherometer && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div className="Pink-Stain"><img src="/6.png" alt="" /> <b>Weatherometer : </b> 1000 Hrs</div>
+                                                                        <div className="ophelia-description">{product.Weatherometer}</div>
+                                                                    </div>
+                                                                )}
+                                                                {product.Abrasion && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div className="Pink-Stain"><img src="/3.png" alt="" /> <b>Abrasion : </b> Wyzenback 8 Cotton Duck 50,000 cycles</div>
+                                                                        <div className="ophelia-description">{product.Abrasion}</div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
 
-                                                {product.resistant && (
-                                                    <div className="Characteristics-content">
-                                                        <div className="Pink-Stain"><img src="/5.png" alt="" /> <b>Cold crack resistant:</b>-60 degrees F</div>
-                                                        <div className="ophelia-description">
-                                                            {product.resistant}
+                                                {/* SAFE TOUCH SECTION */}
+                                                <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                    <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
+                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                            <img src="/Futura-New-44.png" alt="" style={sectionIconStyle} />
+                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>SAFE TOUCH</div>
+                                                        </div>
+                                                        <div style={toggleIconStyle(safeTouchOpen)}>
+                                                            {safeTouchOpen ? <PiMinus /> : <PiPlus />}
                                                         </div>
                                                     </div>
-                                                )}
-
-                                                {product.QUV && (
-                                                    <div className="Characteristics-content">
-                                                        <div className="Pink-Stain"><img src="/4.png" alt="" /> <b>QUV resistant:</b> {product.QUV}</div>
-                                                        <div className="ophelia-description">
-                                                            {product.QUV}
+                                                    {safeTouchOpen && (
+                                                        <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
+                                                            <div className="ophelia-description">A microbial safe product</div>
+                                                            {product.AntiMicrobial && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain"><img src="/2.png" alt="" /> <b>Anti microbial : </b> AATCC-147</div>
+                                                                    <div className="ophelia-description">{product.AntiMicrobial}</div>
+                                                                </div>
+                                                            )}
+                                                            {product.PinkStain && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain"><img src="/7.png" alt="" /> <b>Pink Stain : </b> ASTM 1428</div>
+                                                                    <div className="ophelia-description">{product.PinkStain}</div>
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    </div>
-                                                )}
-
-                                                {product.Weatherometer && (
-                                                    <div className="Characteristics-content">
-                                                        <div className="Pink-Stain"><img src="/6.png" alt="" /> <b>Weatherometer:</b> 1000 Hrs</div>
-                                                        <div className="ophelia-description">
-                                                            {product.Weatherometer}
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {product.Abrasion && (
-                                                    <div className="Characteristics-content">
-                                                        <div className="Pink-Stain"><img src="/3.png" alt="" /> <b>Abrasion:</b> Wyzenback 8 Cotton Duck 50,000 cycles</div>
-                                                        <div className="ophelia-description">
-                                                            {product.Abrasion}
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                <div className="turtle-life-content">
-                                                    <img src="/safe-touch-black.png" alt="" />
-                                                    <div className="ophelia-title">SAFE TOUCH</div>
+                                                    )}
                                                 </div>
 
-                                                <h6 className="TURTLE-LIFE-Hending">A microbial safe product</h6>
-
-                                                {product.AntiMicrobial && (
-                                                    <div className="Characteristics-content">
-                                                        <div className="Pink-Stain"><img src="/2.png" alt="" /> <b>Anti microbial:</b> AATCC-147</div>
-                                                        <div className="ophelia-description">
-                                                            {product.AntiMicrobial}
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {product.PinkStain && (
-                                                    <div className="Characteristics-content">
-                                                        <div className="Pink-Stain"><img src="/7.png" alt="" /> <b>Pink Stain:</b> ASTM 1428</div>
-                                                        <div className="ophelia-description">
-                                                            {product.PinkStain}
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         )}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div className="row">
-                                        <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-                                            <div className="cleaned">
-                                                <div className="icon-placeholder"><img src="/flamesafe1.png" alt="" /></div>
-                                                <div>FLAMESAFE</div>
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-                                            <div className="cleaned">
-                                                <div className="icon-placeholder"><img src="/turtle-life.png" alt="" /></div>
-                                                <div>TURTLE LIFE</div>
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-                                            <div className="cleaned">
-                                                <div className="icon-placeholder"><img src="/safe-touch-black.png" alt="" /></div>
-                                                <div>SAFE TOUCH </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

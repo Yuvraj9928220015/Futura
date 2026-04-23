@@ -67,7 +67,7 @@
     z-index: 10;
     filter: brightness(1) saturate(1);
     cursor: default;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 20px 60px #00000059;
 }
 
 .lcs-center .lcs-img {
@@ -154,15 +154,15 @@
     color: #fff;
     text-decoration: none;
     letter-spacing: 0.08em;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 20px #00000080;
+    font-family: 'Gotu', sans-serif;
     line-height: 1.08;
     transition: opacity 0.22s, letter-spacing 0.35s ease;
-    font-family: 'Georgia', serif;
 }
 
 .lcs-title:hover {
     opacity: 0.8;
-    letter-spacing: 0.12em;
+    /* letter-spacing: 0.12em; */
 }
 
 .lcs-btn {
@@ -329,7 +329,7 @@
    PRODUCTS SECTION
 ═══════════════════════════════════════════════ */
 .Product-Container {
-    max-width: 1600px;
+    max-width: 1640px;
     margin: 0 auto;
 }
 
@@ -338,11 +338,16 @@
     font-size: 3.5rem;
     text-align: center;
     font-weight: 300;
+    font-family: 'Gotu', sans-serif;
     color: #2c2c2c;
     padding: 70px 0px;
     margin-bottom: 60px;
     letter-spacing: 0.02em;
     position: relative;
+}
+
+.Product-Container-title span {
+    font-family: 'Gotu', sans-serif;
 }
 
 .mobile-filter-toggle {
@@ -391,6 +396,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 25px 35px;
+    font-family: 'Gotu', sans-serif;
     border-bottom: 1px solid #e5e5e5;
     background: #f9f9f9;
     position: sticky;
@@ -404,7 +410,7 @@
     font-size: 1.4rem;
     font-weight: 700;
     color: #333;
-    font-family: 'Georgia', serif;
+    font-family: 'Gotu', sans-serif;
 }
 
 .close-mobile-filter {
@@ -446,9 +452,14 @@
 .filter-header {
     display: flex;
     justify-content: space-between;
+    font-family: 'Gotu', sans-serif;
     align-items: center;
     cursor: pointer;
     padding: 12px 0;
+}
+
+.filter-header h4 {
+    font-family: 'Gotu', sans-serif;
 }
 
 .filter-header:hover svg {
@@ -697,8 +708,9 @@
 
 .parent-category-label {
     cursor: pointer;
-    font-size: 15px;
+    font-size: 16px;
     color: #333;
+    font-family: 'Gotu', sans-serif;
     font-weight: 300;
 }
 
@@ -732,13 +744,6 @@
     min-width: 0;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   3-COLUMN FIXED GRID
-   repeat(3, 1fr) — always 3 equal columns.
-   1 product → occupies col-1, cols 2-3 stay empty.
-   2 products → cols 1-2 filled, col-3 empty.
-   3+ products → fills naturally row by row.
-═══════════════════════════════════════════════════════════ */
 .projects-grid-new {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

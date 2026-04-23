@@ -1,28 +1,14 @@
-/* =============================================
-   NAVBAR - FULLY RESPONSIVE CSS
-   Breakpoints:
-   - Desktop   : > 1200px
-   - Laptop     : 993px – 1200px
-   - Tablet     : 768px – 992px
-   - Mobile L   : 481px – 767px
-   - Mobile S   : ≤ 480px
-   - Mobile XS  : ≤ 360px
-============================================= */
-
 :root {
     --nav-link: #ffffff;
     --scrolled-link: #4d4d4d;
     --scrolled-bg: #ffffff;
     --nav-bg: #919191af;
-    --nav-height-desktop: 75px;
+    --nav-height-desktop: 62px;
     --nav-height-mobile: 60px;
     --transition-speed: 0.3s;
     --product-accent: #c4883a;
 }
 
-/* =============================================
-   BASE NAVBAR
-============================================= */
 .Navbar {
     padding: 0;
     position: fixed;
@@ -37,6 +23,14 @@
 }
 
 .Navbar.scrolled {
+    background-color: var(--scrolled-bg);
+    box-shadow: 0 4px 20px #0000001a;
+    backdrop-filter: none;
+    color: var(--scrolled-link);
+    top: 30px;
+}
+
+.Navbar.scrolled:hover {
     background-color: var(--scrolled-bg);
     box-shadow: 0 4px 20px #0000001a;
     backdrop-filter: none;
@@ -61,6 +55,10 @@
 
 .Navbar_container:hover {
     background-color: #919191af;
+}
+
+.Navbar.scrolled .Navbar_container:hover {
+    background-color: transparent;
 }
 
 /* =============================================
@@ -246,7 +244,7 @@
 
 .mega-dropdown-menu {
     position: fixed;
-    top: 48px;
+    top: 43px;
     /* matches nav height */
     left: -50px;
     width: 100vw;
@@ -277,7 +275,7 @@
 
 /* Scrolled state: adjust top */
 .Navbar.scrolled .mega-dropdown-menu {
-    top: 48px;
+    top: 43px;
 }
 
 .dropdown-content {
@@ -395,14 +393,13 @@
 
 .product-mega-menu {
     position: fixed;
-    top: 48px;
+    top: 43px;
     left: 0;
     background-color: #fff;
     box-shadow: 0 8px 32px #0000001f;
     z-index: 10000;
     box-sizing: border-box;
     border-top: 2px solid #f0f0f0;
-
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -505,6 +502,7 @@
 }
 
 .product-item-link {
+    font-family: 'Gotu', sans-serif;
     display: block;
     padding: 10px 0;
     font-size: 14px;
@@ -521,7 +519,7 @@
 
 /* Scrolled state: adjust top for product menu */
 .Navbar.scrolled .product-mega-menu {
-    top: 49px;
+    top: 43px;
 }
 
 /* =============================================
