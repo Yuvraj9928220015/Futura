@@ -247,7 +247,6 @@ const Navbar = () => {
                                                         <ul key={ci} className="product-col-list">
                                                             {col.map((item) => (
                                                                 <li key={item}>
-                                                                    {/* ✅ onClick navigates to /product?category=slug */}
                                                                     <a
                                                                         href={`/product?category=${item.toLowerCase().replace(/\s+/g, '-')}`}
                                                                         className="product-item-link"

@@ -12,6 +12,7 @@ const deleteFilesOnError = (files) => {
     if (files.video) allFiles.push(...files.video);
     if (files.icons) allFiles.push(...files.icons);
     if (files.swatches) allFiles.push(...files.swatches);
+    if (files.pdf) allFiles.push(...files.pdf); // ✅ include pdf
 
     Object.keys(files).forEach(key => {
         if (key.startsWith('variant_')) {
@@ -40,19 +41,16 @@ const deleteFile = (filePath) => {
 
 // ─────────────────────────────────────────────
 // GET /api/products
-// Supports: ?color=Red  ?category=Fabric  ?sortBy=price&sortOrder=asc
 // ─────────────────────────────────────────────
 exports.getProducts = async (req, res) => {
     try {
         const { category, color, sortBy, sortOrder } = req.query;
         const filter = {};
 
-        // Category filter — exact match, case-insensitive
         if (category && category.trim() !== '') {
             filter.category = { $regex: new RegExp(`^${category.trim()}$`, 'i') };
         }
 
-        // Color filter — matches product-level color OR any variant color, partial & case-insensitive
         if (color && color.trim() !== '') {
             const colorRegex = new RegExp(color.trim(), 'i');
             filter.$or = [
@@ -61,7 +59,6 @@ exports.getProducts = async (req, res) => {
             ];
         }
 
-        // Sort
         let sort = {};
         if (sortBy && sortBy.trim() !== '') {
             sort[sortBy.trim()] = sortOrder === 'desc' ? -1 : 1;
@@ -100,7 +97,6 @@ exports.getProductById = async (req, res) => {
 
 // ─────────────────────────────────────────────
 // POST /api/products
-// ✅ Creates product — product color + per-variant color + per-variant grain included
 // ─────────────────────────────────────────────
 exports.addProduct = async (req, res) => {
     try {
@@ -113,7 +109,7 @@ exports.addProduct = async (req, res) => {
             price,
             category,
             description,
-            color,           // ✅ product-level color
+            color,
             Flammable,
             resistant,
             QUV,
@@ -122,8 +118,8 @@ exports.addProduct = async (req, res) => {
             AntiMicrobial,
             PinkStain,
             variantNames,
-            variantColors,   // ✅ JSON array of colors per variant e.g. '["Red","Blue"]'
-            variantGrain     // ✅ JSON array of grains per variant e.g. '["Smooth","Textured"]'
+            variantColors,
+            variantGrain
         } = req.body;
 
         const images = req.files?.images || [];
@@ -131,6 +127,10 @@ exports.addProduct = async (req, res) => {
         const icons = req.files?.icons || [];
         const swatches = req.files?.swatches || [];
         const video = videoArr.length > 0 ? videoArr[0] : null;
+
+        // ✅ Extract uploaded PDF (single file)
+        const pdfArr = req.files?.pdf || [];
+        const pdfFile = pdfArr.length > 0 ? pdfArr[0] : null;
 
         // ── Validation ──
         if (!title || !price || !category || !description) {
@@ -156,6 +156,7 @@ exports.addProduct = async (req, res) => {
         const videoPath = video ? video.path : null;
         const iconPaths = icons.map(f => f.path);
         const swatchPaths = swatches.map(f => f.path);
+        const pdfPath = pdfFile ? pdfFile.path : null; // ✅
 
         // ── Variants ──
         let variants = [];
@@ -171,25 +172,15 @@ exports.addProduct = async (req, res) => {
                 return res.status(400).json({ message: 'Invalid variantNames format.' });
             }
 
-            // ✅ Parse variantColors safely (optional field)
             if (variantColors) {
-                try {
-                    parsedVariantColors = JSON.parse(variantColors);
-                } catch {
-                    parsedVariantColors = [];
-                }
+                try { parsedVariantColors = JSON.parse(variantColors); }
+                catch { parsedVariantColors = []; }
             }
 
-            // ✅ Parse variantGrain safely (optional field)
             if (variantGrain) {
-                try {
-                    parsedVariantGrains = JSON.parse(variantGrain);
-                } catch {
-                    parsedVariantGrains = [];
-                }
+                try { parsedVariantGrains = JSON.parse(variantGrain); }
+                catch { parsedVariantGrains = []; }
             }
-
-            console.log('Parsed variantGrains (add):', parsedVariantGrains);
 
             for (let i = 0; i < parsedVariantNames.length; i++) {
                 const variantKey = `variant_${i}`;
@@ -211,8 +202,8 @@ exports.addProduct = async (req, res) => {
 
                 variants.push({
                     name: parsedVariantNames[i].trim(),
-                    color: parsedVariantColors[i] ? parsedVariantColors[i].trim() : '',   // ✅ variant color
-                    grain: parsedVariantGrains[i] ? parsedVariantGrains[i].trim() : '',   // ✅ variant grain
+                    color: parsedVariantColors[i] ? parsedVariantColors[i].trim() : '',
+                    grain: parsedVariantGrains[i] ? parsedVariantGrains[i].trim() : '',
                     images: variantImages.map(f => f.path)
                 });
             }
@@ -225,9 +216,10 @@ exports.addProduct = async (req, res) => {
             category: category.trim(),
             description: description.trim(),
             price: priceValue,
-            color: color ? color.trim() : '',   // ✅ product-level color saved
+            color: color ? color.trim() : '',
             image: imagePaths,
             video: videoPath,
+            pdf: pdfPath,   // ✅ save pdf path
             icons: iconPaths,
             swatches: swatchPaths,
             variants: variants,
@@ -263,7 +255,6 @@ exports.addProduct = async (req, res) => {
 
 // ─────────────────────────────────────────────
 // PUT /api/products/:id
-// ✅ Updates product — product color + per-variant color + per-variant grain included
 // ─────────────────────────────────────────────
 exports.updateProduct = async (req, res) => {
     try {
@@ -276,13 +267,13 @@ exports.updateProduct = async (req, res) => {
             price,
             category,
             description,
-            color,           // ✅ product-level color
+            color,
             imageOrder,
             iconOrder,
             swatchOrder,
             variantNames,
-            variantColors,   // ✅ JSON array of colors per variant
-            variantGrains,   // ✅ JSON array of grains per variant
+            variantColors,
+            variantGrains,
             variantOrders,
             Flammable,
             resistant,
@@ -299,6 +290,10 @@ exports.updateProduct = async (req, res) => {
         const newSwatchFiles = req.files?.swatches || [];
         const newVideoFile = newVideoArr.length > 0 ? newVideoArr[0] : null;
 
+        // ✅ Extract new PDF if uploaded
+        const newPdfArr = req.files?.pdf || [];
+        const newPdfFile = newPdfArr.length > 0 ? newPdfArr[0] : null;
+
         // ── Find product ──
         const product = await Product.findById(req.params.id);
         if (!product) {
@@ -307,7 +302,7 @@ exports.updateProduct = async (req, res) => {
         }
 
         // ──────────────────────────────────────
-        // Handle VARIANTS (with color + grain)
+        // Handle VARIANTS
         // ──────────────────────────────────────
         let finalVariants = [];
         if (variantNames) {
@@ -323,26 +318,15 @@ exports.updateProduct = async (req, res) => {
                 return res.status(400).json({ message: 'Invalid variantNames or variantOrders format.' });
             }
 
-            // ✅ Parse variantColors safely
             if (variantColors) {
-                try {
-                    parsedVariantColors = JSON.parse(variantColors);
-                } catch {
-                    parsedVariantColors = [];
-                }
+                try { parsedVariantColors = JSON.parse(variantColors); }
+                catch { parsedVariantColors = []; }
             }
 
-            // ✅ Parse variantGrains safely
             if (variantGrains) {
-                try {
-                    parsedVariantGrains = JSON.parse(variantGrains);
-                } catch {
-                    parsedVariantGrains = [];
-                }
+                try { parsedVariantGrains = JSON.parse(variantGrains); }
+                catch { parsedVariantGrains = []; }
             }
-
-            console.log('Parsed variantColors (update):', parsedVariantColors);
-            console.log('Parsed variantGrains (update):', parsedVariantGrains);
 
             for (let i = 0; i < parsedVariantNames.length; i++) {
                 const variantKey = `variant_${i}`;
@@ -374,7 +358,6 @@ exports.updateProduct = async (req, res) => {
                     });
                 }
 
-                // ✅ Resolve variant color: use new value if provided, else keep existing
                 let resolvedVariantColor = '';
                 if (parsedVariantColors[i] !== undefined && parsedVariantColors[i] !== null) {
                     resolvedVariantColor = parsedVariantColors[i].trim();
@@ -382,7 +365,6 @@ exports.updateProduct = async (req, res) => {
                     resolvedVariantColor = product.variants[i].color || '';
                 }
 
-                // ✅ Resolve variant grain: use new value if provided, else keep existing
                 let resolvedVariantGrain = '';
                 if (parsedVariantGrains[i] !== undefined && parsedVariantGrains[i] !== null) {
                     resolvedVariantGrain = parsedVariantGrains[i].trim();
@@ -392,12 +374,11 @@ exports.updateProduct = async (req, res) => {
 
                 finalVariants.push({
                     name: parsedVariantNames[i].trim(),
-                    color: resolvedVariantColor, // ✅ variant color saved
-                    grain: resolvedVariantGrain, // ✅ variant grain saved
+                    color: resolvedVariantColor,
+                    grain: resolvedVariantGrain,
                     images: finalVariantImages
                 });
 
-                // Delete old variant images that are no longer used
                 if (product.variants && product.variants[i]) {
                     const originalImages = product.variants[i].images || [];
                     originalImages
@@ -406,7 +387,6 @@ exports.updateProduct = async (req, res) => {
                 }
             }
 
-            // Delete images of variants that were removed entirely
             if (product.variants && product.variants.length > parsedVariantNames.length) {
                 for (let i = parsedVariantNames.length; i < product.variants.length; i++) {
                     (product.variants[i].images || []).forEach(img => deleteFile(img));
@@ -441,7 +421,6 @@ exports.updateProduct = async (req, res) => {
             finalImagePaths = product.image || [];
         }
 
-        // Delete old images no longer used
         (product.image || [])
             .filter(p => !finalImagePaths.includes(p))
             .forEach(p => deleteFile(p));
@@ -473,7 +452,6 @@ exports.updateProduct = async (req, res) => {
             finalIconPaths = product.icons || [];
         }
 
-        // Delete old icons no longer used
         (product.icons || [])
             .filter(p => !finalIconPaths.includes(p))
             .forEach(p => deleteFile(p));
@@ -505,7 +483,6 @@ exports.updateProduct = async (req, res) => {
             finalSwatchPaths = product.swatches || [];
         }
 
-        // Delete old swatches no longer used
         (product.swatches || [])
             .filter(p => !finalSwatchPaths.includes(p))
             .forEach(p => deleteFile(p));
@@ -521,6 +498,21 @@ exports.updateProduct = async (req, res) => {
         } else if (req.body.removeVideo === 'true') {
             if (product.video) deleteFile(product.video);
             finalVideoPath = null;
+        }
+
+        // ──────────────────────────────────────
+        // ✅ Handle PDF
+        // ──────────────────────────────────────
+        let finalPdfPath = product.pdf;
+
+        if (newPdfFile) {
+            // Replace existing PDF — delete old one first
+            if (product.pdf) deleteFile(product.pdf);
+            finalPdfPath = newPdfFile.path;
+        } else if (req.body.removePdf === 'true') {
+            // Explicit remove requested
+            if (product.pdf) deleteFile(product.pdf);
+            finalPdfPath = null;
         }
 
         // ──────────────────────────────────────
@@ -542,25 +534,21 @@ exports.updateProduct = async (req, res) => {
         product.category = category && category.trim() ? category.trim() : product.category;
         product.description = description && description.trim() ? description.trim() : product.description;
         product.price = priceValue;
-
-        // ✅ product-level color — always update (can be cleared)
         product.color = color !== undefined && color !== null ? color.trim() : product.color;
 
         product.image = finalImagePaths;
         product.video = finalVideoPath;
+        product.pdf = finalPdfPath;   // ✅ update pdf path
         product.icons = finalIconPaths;
         product.swatches = finalSwatchPaths;
 
-        // Variants: use new if provided, else keep existing
         product.variants = finalVariants.length > 0 ? finalVariants : product.variants;
 
-        // ✅ CRITICAL: markModified for all array/nested fields so Mongoose detects changes
         product.markModified('variants');
         product.markModified('image');
         product.markModified('icons');
         product.markModified('swatches');
 
-        // ✅ Use ?? so empty string ("") is kept, only undefined/null falls back
         product.Flammable = Flammable ?? product.Flammable;
         product.resistant = resistant ?? product.resistant;
         product.QUV = QUV ?? product.QUV;
@@ -604,11 +592,11 @@ exports.deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Delete all associated files
         (product.image || []).forEach(p => deleteFile(p));
         (product.icons || []).forEach(p => deleteFile(p));
         (product.swatches || []).forEach(p => deleteFile(p));
         if (product.video) deleteFile(product.video);
+        if (product.pdf) deleteFile(product.pdf); // ✅ delete pdf on product delete
 
         (product.variants || []).forEach(variant => {
             (variant.images || []).forEach(p => deleteFile(p));

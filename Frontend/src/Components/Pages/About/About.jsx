@@ -31,12 +31,8 @@ const companyContent = {
     },
 };
 
-/* ─────────────────────────────────────────
-   JOURNEY SCROLLER
-───────────────────────────────────────── */
 function JourneyScroller({ speed = 0.6 }) {
     const scrollAreaRef = useRef(null);
-    const imgInnerRef = useRef(null);
     const posRef = useRef(0);
     const animRef = useRef(null);
     const hoveredRef = useRef(false);
@@ -46,12 +42,14 @@ function JourneyScroller({ speed = 0.6 }) {
 
     const applyPos = useCallback((p) => {
         posRef.current = p;
-        if (imgInnerRef.current) imgInnerRef.current.style.transform = `translateX(-${p}px)`;
+        if (scrollAreaRef.current) {
+            scrollAreaRef.current.scrollLeft = p;
+        }
     }, []);
 
     const getMax = useCallback(() => {
-        if (!scrollAreaRef.current || !imgInnerRef.current) return 0;
-        return Math.max(0, imgInnerRef.current.scrollWidth - scrollAreaRef.current.clientWidth);
+        if (!scrollAreaRef.current) return 0;
+        return Math.max(0, scrollAreaRef.current.scrollWidth - scrollAreaRef.current.clientWidth);
     }, []);
 
     useEffect(() => {
@@ -66,11 +64,33 @@ function JourneyScroller({ speed = 0.6 }) {
         return () => cancelAnimationFrame(animRef.current);
     }, [speed, getMax, applyPos]);
 
-    const onPointerDown = (e) => { draggingRef.current = true; dragStartX.current = e.clientX; dragStartPos.current = posRef.current; scrollAreaRef.current.setPointerCapture(e.pointerId); e.preventDefault(); };
-    const onPointerMove = (e) => { if (!draggingRef.current) return; applyPos(Math.max(0, Math.min(dragStartPos.current + (dragStartX.current - e.clientX), getMax()))); };
+    const onPointerDown = (e) => {
+        draggingRef.current = true;
+        dragStartX.current = e.clientX;
+        dragStartPos.current = posRef.current;
+        scrollAreaRef.current.setPointerCapture(e.pointerId);
+        e.preventDefault();
+    };
+    const onPointerMove = (e) => {
+        if (!draggingRef.current) return;
+        applyPos(Math.max(0, Math.min(
+            dragStartPos.current + (dragStartX.current - e.clientX),
+            getMax()
+        )));
+    };
     const onPointerUp = () => { draggingRef.current = false; };
-    const onTouchStart = (e) => { draggingRef.current = true; dragStartX.current = e.touches[0].clientX; dragStartPos.current = posRef.current; };
-    const onTouchMove = (e) => { if (!draggingRef.current) return; applyPos(Math.max(0, Math.min(dragStartPos.current + (dragStartX.current - e.touches[0].clientX), getMax()))); };
+    const onTouchStart = (e) => {
+        draggingRef.current = true;
+        dragStartX.current = e.touches[0].clientX;
+        dragStartPos.current = posRef.current;
+    };
+    const onTouchMove = (e) => {
+        if (!draggingRef.current) return;
+        applyPos(Math.max(0, Math.min(
+            dragStartPos.current + (dragStartX.current - e.touches[0].clientX),
+            getMax()
+        )));
+    };
     const onTouchEnd = () => { draggingRef.current = false; };
 
     return (
@@ -91,14 +111,19 @@ function JourneyScroller({ speed = 0.6 }) {
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
             >
-                <div ref={imgInnerRef} className="journey-img-inner">
-                    <img src="/Futura-New-27.png" alt="Futura Timeline" className="journey-timeline-img" draggable="false" />
-                </div>
+                <img
+                    src="/Futura-New-27.webp"
+                    alt="Futura Timeline"
+                    className="journey-timeline-img"
+                />
             </div>
         </div>
     );
 }
 
+/* ─────────────────────────────────────────
+   CARD CONFIGS
+───────────────────────────────────────── */
 const CARD_CONFIGS = [
     { w: 500, h: 410, st: 12, sl: 10 },
     { w: 460, h: 510, st: 12, sl: -10 },
@@ -108,7 +133,6 @@ const CARD_CONFIGS = [
     { w: 520, h: 445, st: 12, sl: -10 },
 ];
 
-/* Tablet sizes */
 const CARD_CONFIGS_MD = [
     { w: 500, h: 290, st: 10, sl: 8 },
     { w: 460, h: 360, st: 10, sl: -8 },
@@ -118,7 +142,6 @@ const CARD_CONFIGS_MD = [
     { w: 520, h: 315, st: 10, sl: -8 },
 ];
 
-/* Mobile sizes */
 const CARD_CONFIGS_SM = [
     { w: 500, h: 210, st: 8, sl: 7 },
     { w: 460, h: 265, st: 8, sl: -7 },
@@ -136,32 +159,32 @@ function getCardConfigs() {
 }
 
 function FrameImageMarquee({ slides, speed = 0.9, pauseOnHover = true }) {
-    const trackRef = useRef(null);
+    const outerRef = useRef(null);
     const pausedRef = useRef(false);
     const posRef = useRef(0);
     const rafRef = useRef(null);
     const [configs, setConfigs] = useState(getCardConfigs);
 
-    /* Update configs on resize */
     useEffect(() => {
         const onResize = () => setConfigs(getCardConfigs());
         window.addEventListener('resize', onResize);
         return () => window.removeEventListener('resize', onResize);
     }, []);
 
-    /* 4× duplicate for a very long seamless strip */
-
-    const allSlides = useMemo(() => [...slides, ...slides, ...slides, ...slides], [slides]);
+    const allSlides = useMemo(() => [...slides, ...slides], [slides]);
 
     useEffect(() => {
-        const track = trackRef.current;
-        if (!track) return;
+        const outer = outerRef.current;
+        if (!outer) return;
+
         const tick = () => {
             if (!pausedRef.current) {
                 posRef.current += speed;
-                const halfW = track.scrollWidth / 2;
-                if (posRef.current >= halfW) posRef.current -= halfW;
-                track.style.transform = `translateX(-${posRef.current}px)`;
+                const half = outer.scrollWidth / 2;
+                if (posRef.current >= half) {
+                    posRef.current -= half;
+                }
+                outer.scrollLeft = posRef.current;
             }
             rafRef.current = requestAnimationFrame(tick);
         };
@@ -171,11 +194,13 @@ function FrameImageMarquee({ slides, speed = 0.9, pauseOnHover = true }) {
 
     return (
         <div
+            ref={outerRef}
             className="fmq-outer"
             onMouseEnter={() => { if (pauseOnHover) pausedRef.current = true; }}
             onMouseLeave={() => { pausedRef.current = false; }}
         >
-            <div ref={trackRef} className="fmq-track">
+            {/* No transform on track — scrollLeft on outer handles movement */}
+            <div className="fmq-track">
                 {allSlides.map((slide, i) => {
                     const c = configs[i % configs.length];
                     const shadowStyle = {
@@ -191,7 +216,14 @@ function FrameImageMarquee({ slides, speed = 0.9, pauseOnHover = true }) {
                         <div key={i} className="fmq-card" style={{ width: c.w, height: c.h }}>
                             <div className="fmq-shadow" style={shadowStyle} />
                             <div className="fmq-frame">
-                                <img src={slide.src} alt={slide.alt} className="fmq-img" draggable="false" />
+                                <img
+                                    src={slide.src}
+                                    alt={slide.alt}
+                                    className="fmq-img"
+                                    draggable="false"
+                                    loading="eager"
+                                    decoding="async"
+                                />
                                 <div className="fmq-overlay">
                                     <span className="fmq-text">{slide.text}</span>
                                     <span className="fmq-subtext">{slide.subtext}</span>
@@ -247,9 +279,19 @@ export default function About() {
                                     <div className="Futura-Textiles-content">
                                         <div className="Futura-Textiles-content-About">About us</div>
                                         <div className="company-tabs">
-                                            <button onClick={() => setActiveTab('futura')} className={`tab-button ${activeTab === 'futura' ? 'active' : ''}`}>Futura Textiles</button>
+                                            <button
+                                                onClick={() => setActiveTab('futura')}
+                                                className={`tab-button ${activeTab === 'futura' ? 'active' : ''}`}
+                                            >
+                                                Futura Textiles
+                                            </button>
                                             <div className='company-tabs-line'></div>
-                                            <button onClick={() => setActiveTab('mayur')} className={`tab-button ${activeTab === 'mayur' ? 'active' : ''}`}>Mayur Uniquoters</button>
+                                            <button
+                                                onClick={() => setActiveTab('mayur')}
+                                                className={`tab-button ${activeTab === 'mayur' ? 'active' : ''}`}
+                                            >
+                                                Mayur Uniquoters
+                                            </button>
                                         </div>
                                     </div>
                                     <div className="Futura-Textiles-container-des tab-content">
@@ -283,7 +325,7 @@ export default function About() {
                         <div className="Manfacturer-Box-1-title">OUR PLANT <span>IN INDIA</span></div>
                     </div>
                     <div className="Manfacturer-Box-2">
-                        <div className="Manfacturer-Box-1-line-2"></div>
+                        <div className="Manfacturer-Box-1-line-2"></div> 
                         <div className="Manfacturer-Box-1-des">
                             <p>
                                 We are the largest manufacturer of artificial leather, using the 'Release Paper Transfer
@@ -331,7 +373,11 @@ export default function About() {
                         <div className="Certification-logos-grid">
                             {certificates.map((cert, i) => (
                                 <div className="Certification-logo-item" key={i}>
-                                    <img src={cert.src} alt={cert.label} loading="lazy" />
+                                    <img
+                                        src={cert.src}
+                                        alt={cert.label}
+                                        loading="lazy"
+                                    />
                                     <span className="Certification-logo-label">{cert.label}</span>
                                 </div>
                             ))}

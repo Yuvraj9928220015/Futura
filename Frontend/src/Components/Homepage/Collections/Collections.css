@@ -290,3 +290,31 @@
     background-color: #000;
     color: #fff;
 }
+
+.read-more {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.about-link {
+    transition: 0.3s;
+    color: #4d4d4d;
+}
+
+.about-link a {
+    padding: 10px 20px;
+    transition: 0.4s;
+    color: #4d4d4d;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.about-link a:hover {
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-color: #000000e1;
+    color: #ddddddf8;
+}

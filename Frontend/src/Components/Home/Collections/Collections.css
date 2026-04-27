@@ -6,7 +6,7 @@
 }
 
 .collections-container {
-    background-color: #fffdf8;
+    /* background-color: #fffdf8; */
     color: #333;
     font-family: 'Roboto', sans-serif;
     width: 100%;
@@ -293,7 +293,7 @@
     }
 
     .overlay-text-wrapper {
-        padding: 15px 20px;
+        padding: 15px 20px;         
     }
 
     .collection-image-title {

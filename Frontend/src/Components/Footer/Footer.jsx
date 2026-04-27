@@ -1,16 +1,24 @@
 import "./Footer.css";
 import { useState } from "react";
-import { FaInstagram } from "react-icons/fa";
-import { FaLinkedinIn } from "react-icons/fa";
 import { MdOutlinePhone } from "react-icons/md";
 import { MdFax } from "react-icons/md";
-import { FaFacebook } from "react-icons/fa";
 import { IoLocationOutline } from "react-icons/io5";
 
 // ✅ Automatically detect: localhost ya production
 const BASE_URL = window.location.hostname === "localhost"
-    ? "http://localhost:8000"               // local development
-    : "https://api.futuratextiles.in";      // production
+    ? "http://localhost:8000"
+    : "https://api.futuratextiles.in";
+
+// ✅ FIX: Critical styles inline rakho taaki production me CSS override na ho
+const footerStyle = {
+    backgroundColor: "#7a6b64",
+    color: "white",
+    width: "100%",
+    padding: "30px 60px",
+    position: "relative",
+    overflow: "hidden",
+    fontFamily: "'Roboto', sans-serif",
+};
 
 export default function Footer() {
     const [formData, setFormData] = useState({
@@ -36,7 +44,6 @@ export default function Footer() {
 
         setLoading(true);
         try {
-            // ✅ BASE_URL automatically sahi URL use karega
             const res = await fetch(`${BASE_URL}/api/receive/subscribe`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -61,7 +68,9 @@ export default function Footer() {
     return (
         <>
             <div className="Footer-Top"></div>
-            <div className="Footer">
+
+            {/* ✅ FIX: style prop se inline backgroundColor diya — production me kabhi override nahi hoga */}
+            <div className="Footer" style={footerStyle}>
                 <div className="container-fluid">
                     <div className="row">
                         {/* Left Column */}

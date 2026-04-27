@@ -15,7 +15,7 @@ const collections = [
         path: '/marine'
     },
     {
-        img: '/Product-Banner-1.png',
+        img: '/Futura-New-52.png',
         title: 'Contract',
         desc: 'For All your Contract Furnishing Needs',
         path: '/contract'
@@ -37,6 +37,11 @@ export default function Collections() {
                             At Futura, We specialize in PVC-coated fabrics designed to meet the diverse
                             needs of marine, contract furnishing, and automotive industries.
                         </p>
+                        <div className="read-more">
+                            <div className="about-link"><a href="/about">About Futura</a></div>
+                            <span className="separator">|</span>
+                            <div className="about-link"><a href="/about">About Mayur</a></div>
+                        </div>
                     </div>
                 </div>
 
@@ -44,9 +49,9 @@ export default function Collections() {
                 <div className="Perform-section">
                     <div className="collections-grid">
                         {collections.map((item) => (
-                            <Link 
-                                to={item.path} 
-                                key={item.title} 
+                            <Link
+                                to={item.path}
+                                key={item.title}
                                 className="collections-wrapper-Box"
                             >
                                 <img src={item.img} alt={item.title} />

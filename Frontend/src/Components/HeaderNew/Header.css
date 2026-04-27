@@ -1,23 +1,16 @@
-/* =============================================
-   HEADER - FIXED & RESPONSIVE CSS
-   FIX: z-index raised to 10001 (above Navbar's 9999)
-         Dropdown rendered as portal outside Header DOM
-============================================= */
-
+/* ===== BASE ===== */
 .Header {
     width: 100%;
-    height: 30px;
-    background-color: aliceblue;
+    background-color: #EFF6FF;
     display: flex;
+    flex-direction: column;
     position: fixed;
-    padding: 10px 0px;
     top: 0;
     left: 0;
-    /* ✅ FIX: Must be HIGHER than Navbar z-index (9999) so Header sits above it.
-       Previously 1000 was creating a stacking context that trapped the dropdown. */
     z-index: 10001;
-    align-items: center;
-    justify-content: center;
+    height: 30px;
+    /* fixed height used by Navbar top offset */
+    box-sizing: border-box;
 }
 
 .Header-container {
@@ -25,114 +18,122 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0px 40px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    height: 100%;
 }
 
+/* LEFT SECTION */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* LANGUAGE TRIGGER */
+.header-lang-wrap {
+    position: relative;
+}
+
+.country-select {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #1a1a1a;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.country-select:hover {
+    background: rgba(0, 0, 0, 0.07);
+}
+
+.country-flag-img {
+    width: 18px;
+    height: 13px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+/* TITLE */
 .Header-container-title {
-    font-size: 14px;
+    font-size: 12px;
 }
 
+.Header-container-title a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #111;
+}
+
+.Header-container-title img {
+    width: 18px;
+    height: auto;
+}
+
+/* RIGHT: CONTACT */
 .Header-container-Box {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 14px;
-    margin: 0;
-    padding: 0;
 }
 
 .Header-container-Box span {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 14px;
+    font-size: 13px;
+}
+
+.Header-container-Box span a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    color: #111;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.Header-container-Box span a:hover {
+    color: #1e40af;
 }
 
 .Header-container-Box span svg {
-    font-size: 16px;
+    font-size: 13px;
+    flex-shrink: 0;
 }
 
-.header-main-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 16px;
-}
-
-.header-main-section-1 {
-    display: flex;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-wrap: wrap;
-}
-
-.header-main-section-1 li {
-    padding: 5px 12px;
-    cursor: pointer;
-    opacity: 0.9;
-    transition: all 0.3s ease;
-    font-size: 11px;
-    font-weight: 300;
-    text-transform: uppercase;
-    color: #000000;
-    letter-spacing: 0.8px;
-    position: relative;
-    border-radius: 4px;
-}
-
-.header-main-container li a {
-    color: white;
-    text-decoration: none;
-}
-
-.header-main-section-1 li:hover {
-    opacity: 1;
-    background-color: #00000012;
-}
-
-/* =============================================
-   COUNTRY SELECT TRIGGER
-============================================= */
-.country-select {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: #333;
-    position: relative;
-    user-select: none;
-}
-
-.Header-container-title img {
-    width: 6%;
-}
-
-.country-flag img {
-    border-radius: 50%;
-    width: 21px;
-    height: 18px;
-    object-fit: contain;
-}
-
-.country-dropdown-portal {
-    position: fixed;
-    z-index: 99999;
-    background-color: #f0f8ff;
-    color: black;
+/* COUNTRY DROPDOWN */
+.country-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #EFF6FF;
+    border: 0.5px solid rgba(0, 0, 0, 0.12);
     border-radius: 8px;
-    box-shadow: 0 8px 25px #00000066;
-    border: 1px solid #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
     overflow: hidden;
-    animation: dropdownFadeIn 0.22s ease-out forwards;
+    min-width: 130px;
+    z-index: 99999;
+    animation: dropFadeIn 0.18s ease;
+    max-height: 260px;
+    overflow-y: auto;
 }
 
-@keyframes dropdownFadeIn {
+@keyframes dropFadeIn {
     from {
         opacity: 0;
-        transform: translateY(-6px) scale(0.97);
+        transform: translateY(-5px) scale(0.97);
     }
 
     to {
@@ -141,37 +142,16 @@
     }
 }
 
-.country-dropdown {
-    padding: 6px 0;
-    max-height: 260px;
-    overflow-y: auto;
-}
-
-/* Thin scrollbar for dropdown */
-.country-dropdown::-webkit-scrollbar {
-    width: 4px;
-}
-
-.country-dropdown::-webkit-scrollbar-track {
-    background: #1a1a1a;
-}
-
-.country-dropdown::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 2px;
-}
-
 .country-item {
-    padding: 10px 16px;
-    color: #000000;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    border-bottom: 1px solid #ffffff;
+    gap: 9px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: #111;
+    cursor: pointer;
+    border-bottom: 0.5px solid #0000000d;
+    transition: background 0.15s, color 0.15s;
     white-space: nowrap;
 }
 
@@ -180,131 +160,87 @@
 }
 
 .country-item:hover {
-    background-color: #007acc;
-    color: #ffffff;
+    background: #1e40af;
+    color: #fff;
 }
 
 .country-item img {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
+    width: 18px;
+    height: 13px;
     object-fit: cover;
+    border-radius: 2px;
     flex-shrink: 0;
 }
 
-/* =============================================
-   RESPONSIVE HEADER
-============================================= */
+.country-dropdown::-webkit-scrollbar {
+    width: 4px;
+}
 
-/* Tablet (768px – 992px) */
-@media (max-width: 992px) {
-    .Header {
-        height: auto;
-        padding: 7px 0;
-    }
+.country-dropdown::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 2px;
+}
 
+/* ===== TABLET (≤900px) ===== */
+@media (max-width: 900px) {
     .Header-container {
         padding: 0 20px;
-        flex-wrap: wrap;
-        gap: 6px;
     }
 
-    .Header-container-Box {
-        gap: 10px;
-    }
-
-    .Header-container-Box span {
-        font-size: 12px;
+    .hide-on-tablet {
+        display: none !important;
     }
 
     .Header-container-title {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 
-/* Mobile Large (481px – 767px) */
-@media (max-width: 767px) {
+/* ===== MOBILE (≤640px) ===== */
+@media (max-width: 640px) {
     .Header {
-        padding: 6px 0;
+        height: 30px;
+        /* keep same height so navbar offset stays consistent */
     }
 
     .Header-container {
-        padding: 0 16px;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 4px;
-        row-gap: 4px;
+        padding: 0 14px;
     }
 
+    /* Hide right contact section on mobile - no hamburger needed */
     .Header-container-Box {
+        display: none;
+    }
+
+    .Header-container-title {
+        font-size: 10.5px;
+    }
+
+    .country-select {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+
+    .Header-container-title img {
+        width: 15px;
+    }
+}
+
+/* ===== MOBILE XS (≤380px) ===== */
+@media (max-width: 380px) {
+    .header-left {
         gap: 8px;
-        flex-wrap: wrap;
-        justify-content: center;
     }
 
-    .Header-container-Box span {
-        font-size: 11px;
-    }
-
-    .Header-container-title {
-        font-size: 11px;
-        text-align: center;
-        width: 100%;
-    }
-
-    .header-main-section-1 li {
-        font-size: 10px;
-        padding: 4px 8px;
-    }
-}
-
-/* Mobile Small (≤ 480px) */
-@media (max-width: 480px) {
     .Header-container {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 4px 12px;
-        gap: 2px;
+        padding: 0 10px;
     }
 
-    .header-main-container {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .Header-container-Box {
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-    }
-
-    .Header-container-Box span {
-        font-size: 10px;
+    .Header-container-title span {
+        display: none;
     }
 
     .Header-container-title {
         font-size: 10px;
-    }
-
-    /* Portal dropdown on mobile — full width aligned to left edge */
-    .country-dropdown-portal {
-        min-width: 140px;
-    }
-}
-
-/* Mobile XS (≤ 360px) */
-@media (max-width: 360px) {
-    .Header-container {
-        padding: 4px 8px;
-    }
-
-    .Header-container-Box span {
-        font-size: 9px;
-    }
-
-    .header-main-section-1 li {
-        font-size: 9px;
-        padding: 3px 6px;
     }
 }

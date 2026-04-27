@@ -4,17 +4,6 @@ body {
     overflow-x: hidden;
 }
 
-/* CSS Variables for consistency */
-:root {
-    --primary-text-color: #374151de;
-    --secondary-text-color: #6b7280;
-    --light-border: #d1d5db;
-    --dark-gray: #374151;
-    --light-gray: #6b7280;
-    --white: #ffffff;
-    --transition-speed: 0.3s;
-}
-
 * {
     box-sizing: border-box;
 }
@@ -37,7 +26,7 @@ body {
    iOS & mobile: scroll fallback via @supports
    ============================================= */
 .New-Main-slider-container {
-    background-image: url(/Futura-New-23.jpeg);
+    background-image: url('/Futura-New-22.jpeg');
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
@@ -513,7 +502,7 @@ p.subtitle {
     }
 
     .Certificate-container-Box {
-        max-width: 240px;
+        max-width: 400px;
     }
 
     .certificate-badge-image {
@@ -521,13 +510,13 @@ p.subtitle {
     }
 
     .Certificate-container-content {
-        width: 68%;
+        width: 63%;
         margin-top: -1%;
     }
 
     .Certificate-container-title,
     .Certificate-container-standard {
-        font-size: 1.15rem;
+        font-size: 2;
         margin-bottom: 0.3rem;
     }
 
@@ -766,7 +755,7 @@ p.subtitle {
     }
 
     .static-left-wrapper {
-        padding-left: 10rem;
+        padding-left: 7rem;
     }
 
     .certification-Product-Box-title {
@@ -829,7 +818,7 @@ p.subtitle {
     }
 
     .Certificate-container-Box {
-        max-width: 240px;
+        max-width: 350px;
     }
 
     .certificate-badge-image {
@@ -837,7 +826,7 @@ p.subtitle {
     }
 
     .Certificate-container-content {
-        width: 68%;
+        width: 63%;
         margin-top: -1%;
     }
 

@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const sharp = require('sharp'); // 🔥 added
+const sharp = require('sharp');
 
 const {
     getProducts,
@@ -30,13 +30,20 @@ const storage = multer.diskStorage({
     }
 });
 
-// file filter
+// ✅ Updated file filter — now also allows PDF for the 'pdf' field
 const fileFilter = (req, file, cb) => {
     const imageTypes = /jpeg|jpg|png|gif|webp|svg/;
     const videoTypes = /mp4|mov|avi|wmv|mkv|flv|webm/;
 
     const extname = path.extname(file.originalname).toLowerCase().slice(1);
     const mimetype = file.mimetype;
+
+    // ✅ PDF field — only application/pdf allowed
+    if (file.fieldname === 'pdf') {
+        const isValidPdf = extname === 'pdf' && mimetype === 'application/pdf';
+        if (isValidPdf) return cb(null, true);
+        return cb(new Error('Only PDF files are allowed for the pdf field'));
+    }
 
     if (
         file.fieldname === 'images' ||
@@ -63,18 +70,19 @@ const upload = multer({
     storage,
     fileFilter,
     limits: {
-        fileSize: 100 * 1024 * 1024,
-        files: 120
+        fileSize: 100 * 1024 * 1024, // 100MB (covers large PDFs too)
+        files: 121 // +1 for pdf
     }
 });
 
-// upload middleware
+// ✅ Updated upload middleware — pdf field added
 const handleUpload = (req, res, next) => {
     const uploadFields = [
         { name: 'images', maxCount: 20 },
         { name: 'video', maxCount: 1 },
         { name: 'icons', maxCount: 5 },
-        { name: 'swatches', maxCount: 30 }
+        { name: 'swatches', maxCount: 30 },
+        { name: 'pdf', maxCount: 1 },   // ✅ ONE pdf per product
     ];
 
     for (let i = 0; i < 30; i++) {
@@ -93,9 +101,7 @@ const handleUpload = (req, res, next) => {
     });
 };
 
-
-
-// 🔥🔥🔥 IMAGE COMPRESSION MIDDLEWARE
+// ✅ Image compression middleware — skips PDFs and videos
 const compressImagesMiddleware = async (req, res, next) => {
     try {
         if (!req.files) return next();
@@ -104,11 +110,12 @@ const compressImagesMiddleware = async (req, res, next) => {
             for (let file of filesArray) {
                 const inputPath = file.path;
 
-                // skip videos
-                if (file.mimetype.startsWith("video/")) continue;
+                // ✅ Skip videos and PDFs — only compress images
+                if (file.mimetype.startsWith('video/')) continue;
+                if (file.mimetype === 'application/pdf') continue;
 
                 const outputFileName = `compressed-${Date.now()}-${file.filename}.webp`;
-                const outputPath = path.join("uploads", outputFileName);
+                const outputPath = path.join('uploads', outputFileName);
 
                 await sharp(inputPath)
                     .resize(800)
@@ -130,11 +137,10 @@ const compressImagesMiddleware = async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.error("Compression error:", err);
+        console.error('Compression error:', err);
         next(err);
     }
 };
-
 
 // debug middleware
 const debugMiddleware = (req, res, next) => {
@@ -145,17 +151,14 @@ const debugMiddleware = (req, res, next) => {
     next();
 };
 
-
 // ROUTES
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 
-// 🔥 compression added here
 router.post('/', debugMiddleware, handleUpload, compressImagesMiddleware, addProduct);
 router.put('/:id', debugMiddleware, handleUpload, compressImagesMiddleware, updateProduct);
 
 router.delete('/:id', deleteProduct);
-
 
 // error handler
 router.use((error, req, res, next) => {

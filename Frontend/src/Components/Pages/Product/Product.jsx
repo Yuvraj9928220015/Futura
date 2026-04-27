@@ -23,16 +23,12 @@ const CATEGORY_HIERARCHY = {
     'Offroading': []
 };
 
-// ─── Helper: normalize a color string to a slug ───
 const colorToSlug = (c) => c.trim().toLowerCase().replace(/\s+/g, '-');
 
-// ─── Helper: best-effort CSS color from a color label / hex ───
 const colorToCss = (label) => {
     if (!label) return '#CCCCCC';
     const t = label.trim();
-    // If it's already a hex / rgb / hsl, use directly
     if (/^#[0-9a-fA-F]{3,8}$/.test(t) || /^rgb/i.test(t) || /^hsl/i.test(t)) return t;
-    // Named-color map (extend as needed)
     const map = {
         beige: '#F5F5DC', black: '#1a1a1a', blue: '#0066CC', brown: '#8B4513',
         'cool neutrals': 'linear-gradient(135deg,#B8B8B8,#D3D3D3)',

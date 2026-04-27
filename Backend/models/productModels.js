@@ -74,6 +74,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    // ✅ NEW: PDF file path (one per product)
+    pdf: {
+        type: String,
+        default: null
+    },
     icons: {
         type: [String],
         default: []

@@ -1,383 +1,284 @@
 import { useState, useEffect, useRef } from 'react';
-import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-const PRODUCT_TABS = [
-    {
-        label: 'Product Collections',
-        collections: [
-            'Americana', 'Apollo', 'Sauve', 'Offroad',
-            'Poseidon', 'Runabout', 'Matrix', 'Xtreme',
-            'Auto Revolution', 'Marine Revolution', 'Fuerte', 'All'
-        ],
-    },
+const PRODUCT_COLLECTIONS = [
+    'Americana', 'Apollo', 'Suave', 'Offroad',
+    'Poseiden', 'Runabout', 'Matrix', 'Xtreme',
+    'Auto Revolution', 'Marine Revolution', 'Fuerte', 'All'
 ];
 
-const NavbarNew = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isNavHovered, setIsNavHovered] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isMobileCollectionsOpen, setIsMobileCollectionsOpen] = useState(false);
-    const [isMobileProductOpen, setIsMobileProductOpen] = useState(false);
-    const [isCollectionsDropdownOpen, setIsCollectionsDropdownOpen] = useState(false);
-    const [isProductDropdownOpen, setIsProductDropdownOpen] = useState(false);
-    const [activeProductTab, setActiveProductTab] = useState(0);
+const INDUSTRIAL_SEGMENTS = [
+    { label: 'Automotive', href: '/automotive' },
+    { label: 'Marine', href: '/marine' },
+    { label: 'Contract Furnishing', href: '/contract' },
+];
 
+const Navbar = () => {
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [segmentsOpen, setSegmentsOpen] = useState(false);
+    const [productOpen, setProductOpen] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [mobileSegmentsOpen, setMobileSegmentsOpen] = useState(false);
+    const [mobileProductOpen, setMobileProductOpen] = useState(false);
+
+    const segmentsTimer = useRef(null);
+    const productTimer = useRef(null);
     const navigate = useNavigate();
 
-    const collectionsRef = useRef(null);
-    const productRef = useRef(null);
-    const collectionsTimeoutRef = useRef(null);
-    const productTimeoutRef = useRef(null);
-
     useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        const onScroll = () => setIsScrolled(window.scrollY > 40);
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth > 992) {
-                setIsMobileMenuOpen(false);
-                setIsMobileCollectionsOpen(false);
-                setIsMobileProductOpen(false);
-            }
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        const onResize = () => { if (window.innerWidth > 992) closeMobile(); };
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
     }, []);
 
     useEffect(() => {
-        document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
+        document.body.style.overflow = mobileOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
-    }, [isMobileMenuOpen]);
+    }, [mobileOpen]);
 
-    // ── Collections hover handlers ──
-    const handleCollectionsMouseEnter = () => {
-        clearTimeout(collectionsTimeoutRef.current);
-        setIsCollectionsDropdownOpen(true);
+    const openSegments = () => { clearTimeout(segmentsTimer.current); setSegmentsOpen(true); };
+    const closeSegments = () => { segmentsTimer.current = setTimeout(() => setSegmentsOpen(false), 120); };
+    const openProduct = () => { clearTimeout(productTimer.current); setProductOpen(true); };
+    const closeProduct = () => { productTimer.current = setTimeout(() => setProductOpen(false), 120); };
+    const closeMobile = () => {
+        setMobileOpen(false);
+        setMobileSegmentsOpen(false);
+        setMobileProductOpen(false);
     };
 
-    const handleCollectionsMouseLeave = () => {
-        collectionsTimeoutRef.current = setTimeout(() => {
-            setIsCollectionsDropdownOpen(false);
-        }, 150);
-    };
+    const handleCategoryNav = (e, item) => {
+        e.preventDefault();
+        setProductOpen(false);
+        closeMobile();
 
-    // ── Product hover handlers ──
-    const handleProductMouseEnter = () => {
-        clearTimeout(productTimeoutRef.current);
-        setIsProductDropdownOpen(true);
-    };
-
-    const handleProductMouseLeave = () => {
-        productTimeoutRef.current = setTimeout(() => {
-            setIsProductDropdownOpen(false);
-        }, 150);
-    };
-
-    // ── Mobile handlers ──
-    const handleMobileMenuToggle = () => {
-        setIsMobileMenuOpen(prev => !prev);
-        if (!isMobileMenuOpen) {
-            setIsMobileCollectionsOpen(false);
-            setIsMobileProductOpen(false);
+        if (item === 'All') {
+            navigate('/product');
+        } else {
+            const slug = item.toLowerCase().replace(/\s+/g, '-');
+            navigate(`/product?category=${slug}`);
         }
     };
 
-    const handleMobileCollectionsToggle = (e) => {
-        e.preventDefault();
-        setIsMobileCollectionsOpen(prev => !prev);
-    };
-
-    const handleMobileProductToggle = (e) => {
-        e.preventDefault();
-        setIsMobileProductOpen(prev => !prev);
-    };
-
-    const closeMobileMenu = () => {
-        setIsMobileMenuOpen(false);
-        setIsMobileCollectionsOpen(false);
-        setIsMobileProductOpen(false);
-    };
-
-    const handleCategoryClick = (e, item) => {
-        e.preventDefault();
-        const slug = item.toLowerCase().replace(/\s+/g, '-');
-        setIsProductDropdownOpen(false);
-        closeMobileMenu();
-        navigate(`/product?category=${slug}`);
-    };
-
-    const splitIntoColumns = (arr, cols = 3) => {
-        const perCol = Math.ceil(arr.length / cols);
-        return Array.from({ length: cols }, (_, i) => arr.slice(i * perCol, i * perCol + perCol));
-    };
-
-    const showHoverLogo = isNavHovered || isCollectionsDropdownOpen || isProductDropdownOpen;
+    const cols = (() => {
+        const size = Math.ceil(PRODUCT_COLLECTIONS.length / 3);
+        return [0, 1, 2].map(i => PRODUCT_COLLECTIONS.slice(i * size, i * size + size));
+    })();
 
     return (
         <>
-            <div
-                className={`dropdown-overlay ${isCollectionsDropdownOpen ? 'show' : ''}`}
-                onClick={() => setIsCollectionsDropdownOpen(false)}
-            />
-            <div
-                className={`mobile-overlay ${isMobileMenuOpen ? 'show' : ''}`}
-                onClick={closeMobileMenu}
-            />
+            {mobileOpen && <div className="nb-backdrop" onClick={closeMobile} />}
 
-            <nav
-                className={`Navbar ${isScrolled ? 'scrolled' : ''}`}
-                onMouseEnter={() => setIsNavHovered(true)}
-                onMouseLeave={() => setIsNavHovered(false)}
-            >
-                <div className="Navbar_container">
-                    <div className="Navbar_Section">
+            <nav className={`nb ${isScrolled ? 'nb--scrolled' : ''}`}>
+                <div className="nb__inner">
 
-                        {/* ── Central Logo ── */}
-                        <div className="Navbar_logo">
-                            <a href="/" aria-label="Futura Home">
-                                <img
-                                    src="/Futura-logo.png"
-                                    alt="Futura Logo"
-                                    className={`logo-default ${(!isScrolled && !showHoverLogo) ? 'show' : 'hide'}`}
-                                />
-                                <img
-                                    src="/Futura-logo.png"
-                                    alt="Futura Logo"
-                                    className={`logo-hover ${(isScrolled || showHoverLogo) ? 'show' : 'hide'}`}
-                                />
-                            </a>
-                        </div>
-                        {/* ── Right Nav Links ── */}
-                        <ul className="Navbar_list-right">
-                            {/* INDUSTRIAL SEGMENTS — hover dropdown */}
-                            <li><a href="/about" className="nav-link">About Us</a></li>
-                            <li
-                                className="dropdown collections-dropdown-wrapper"
-                                ref={collectionsRef}
-                                onMouseEnter={handleCollectionsMouseEnter}
-                                onMouseLeave={handleCollectionsMouseLeave}
+                    {/* ── LOGO ── */}
+                    <a href="/" className="nb__logo" aria-label="Futura Home">
+                        <img src="/Futura-logo.png" alt="Futura" />
+                    </a>
+
+                    {/* ── DESKTOP NAV ── */}
+                    <ul className="nb__links">
+
+                        <li>
+                            <a href="/about" className="nb__link">About Us</a>
+                        </li>
+
+                        {/* ── INDUSTRIAL SEGMENTS dropdown ── */}
+                        <li
+                            className="nb__dropdown-wrap"
+                            onMouseEnter={openSegments}
+                            onMouseLeave={closeSegments}
+                        >
+                            <button
+                                className={`nb__link nb__link--btn ${segmentsOpen ? 'nb__link--active' : ''}`}
+                                aria-haspopup="true"
+                                aria-expanded={segmentsOpen}
                             >
-                                <a
-                                    href="#"
-                                    className={`nav-link dropdown-toggle ${isCollectionsDropdownOpen ? 'active' : ''}`}
-                                    aria-haspopup="true"
-                                    aria-expanded={isCollectionsDropdownOpen}
-                                    onClick={(e) => e.preventDefault()}
-                                >
-                                    {/* INDUSTRIAL SEGMENTS */}
-                                    Industrial Segments
-                                    {isCollectionsDropdownOpen
-                                        ? <MdKeyboardArrowUp className="arrow-icon" />
-                                        : <MdKeyboardArrowDown className="arrow-icon" />
-                                    }
-                                </a>
+                                Industrial Segments
+                                {segmentsOpen
+                                    ? <MdKeyboardArrowUp className="nb__arrow" />
+                                    : <MdKeyboardArrowDown className="nb__arrow" />}
+                            </button>
 
-                                {/* Collections Mega Dropdown */}
-                                <div
-                                    className={`mega-dropdown-menu ${isCollectionsDropdownOpen ? 'open' : ''}`}
-                                    onMouseEnter={handleCollectionsMouseEnter}
-                                    onMouseLeave={handleCollectionsMouseLeave}
-                                >
-                                    <div className="dropdown-content">
-                                        <div className="dropdown-links">
-                                            <ul>
-                                                <li><a href="/automotive" className="nav-link">Automotive</a></li>
-                                                <li><a href="/marine" className="nav-link">Marine</a></li>
-                                                <li><a href="/contract" className="nav-link">Contract Furnishing</a></li>
-                                            </ul>
-                                        </div>
-                                        <div className="dropdown-images">
-                                            <a href="/automotive" className="image-card">
-                                                <img src="Automotive-15.jpg" alt="Automotive Collection" loading="lazy" />
-                                            </a>
-                                            <a href="/marine" className="image-card">
-                                                <img src="marine-1.png" alt="Marine Collection" loading="lazy" />
-                                            </a>
-                                            <a href="/contract" className="image-card">
-                                                <img src="About_Banner.jpg" alt="Contract Collection" loading="lazy" />
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-
-                            {/* PRODUCT — hover dropdown */}
-                            <li
-                                className="dropdown product-dropdown-wrapper"
-                                ref={productRef}
-                                onMouseEnter={handleProductMouseEnter}
-                                onMouseLeave={handleProductMouseLeave}
+                            <div
+                                className={`nb__mega nb__mega--segments ${segmentsOpen ? 'nb__mega--open' : ''}`}
+                                onMouseEnter={openSegments}
+                                onMouseLeave={closeSegments}
                             >
-                                <a
-                                    href="/product"
-                                    className={`nav-link dropdown-toggle ${isProductDropdownOpen ? 'active' : ''}`}
-                                    aria-haspopup="true"
-                                    aria-expanded={isProductDropdownOpen}
-                                >
-                                    {/* PRODUCT */}
-                                    Product
-                                    {isProductDropdownOpen
-                                        ? <MdKeyboardArrowUp className="arrow-icon" />
-                                        : <MdKeyboardArrowDown className="arrow-icon" />
-                                    }
-                                </a>
-
-                                {/* Product Mega Dropdown */}
-                                <div
-                                    className={`product-mega-menu ${isProductDropdownOpen ? 'open' : ''}`}
-                                    onMouseEnter={handleProductMouseEnter}
-                                    onMouseLeave={handleProductMouseLeave}
-                                >
-                                    {/* Tabs */}
-                                    <div className="product-tabs">
-                                        {PRODUCT_TABS.map((tab, i) => (
-                                            <button
-                                                key={tab.label}
-                                                className={`product-tab-btn ${activeProductTab === i ? 'active' : ''}`}
-                                                onMouseEnter={() => setActiveProductTab(i)}
-                                                onClick={() => setActiveProductTab(i)}
-                                            >
-                                                {tab.label}
-                                            </button>
+                                <div className="nb__seg-inner">
+                                    <div className="nb__seg-links">
+                                        {INDUSTRIAL_SEGMENTS.map(s => (
+                                            <a key={s.href} href={s.href} className="nb__seg-link">
+                                                {s.label}
+                                            </a>
                                         ))}
                                     </div>
-
-                                    {/* Tab Content */}
-                                    <div className="product-tab-content">
-                                        {PRODUCT_TABS.map((tab, i) => {
-                                            const columns = splitIntoColumns(tab.collections);
-                                            return (
-                                                <div
-                                                    key={tab.label}
-                                                    className={`product-tab-panel ${activeProductTab === i ? 'active' : ''}`}
-                                                >
-                                                    {columns.map((col, ci) => (
-                                                        <ul key={ci} className="product-col-list">
-                                                            {col.map((item) => (
-                                                                <li key={item}>
-                                                                    {/* ✅ onClick navigates to /product?category=slug */}
-                                                                    <a
-                                                                        href={`/product?category=${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                                                        className="product-item-link"
-                                                                        onClick={(e) => handleCategoryClick(e, item)}
-                                                                    >
-                                                                        {item}
-                                                                    </a>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
-                                                    ))}
-                                                </div>
-                                            );
-                                        })}
+                                    <div className="nb__seg-images">
+                                        <a href="/automotive" className="nb__seg-card">
+                                            <img src="Automotive-15.jpg" alt="Automotive" loading="lazy" />
+                                            <span>Automotive</span>
+                                        </a>
+                                        <a href="/marine" className="nb__seg-card">
+                                            <img src="marine-1.png" alt="Marine" loading="lazy" />
+                                            <span>Marine</span>
+                                        </a>
+                                        <a href="/contract" className="nb__seg-card">
+                                            <img src="About_Banner.jpg" alt="Contract" loading="lazy" />
+                                            <span>Contract</span>
+                                        </a>
                                     </div>
                                 </div>
-                            </li>
-                            <li><a href="/Preformance" className="nav-link">Performance & Features</a></li>
-                            <li><a href="/sustainability" className="nav-link">Sustainability</a></li>
-                        </ul>
-
-                        <div className="Get-in-touch">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                            <div className="Get-btn">
-                                <button><a href="/contact">Get in Touch</a></button>
                             </div>
-                        </div>
+                        </li>
 
-                        {/* ── Hamburger ── */}
-                        <button
-                            className="mobile-menu-toggle"
-                            onClick={handleMobileMenuToggle}
-                            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-                            aria-expanded={isMobileMenuOpen}
+                        {/* ── PRODUCT dropdown ── */}
+                        <li
+                            className="nb__dropdown-wrap"
+                            onMouseEnter={openProduct}
+                            onMouseLeave={closeProduct}
                         >
-                            <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </span>
+                            <button
+                                className={`nb__link nb__link--btn ${productOpen ? 'nb__link--active' : ''}`}
+                                aria-haspopup="true"
+                                aria-expanded={productOpen}
+                            >
+                                <a href="/product" className="nb__link">Product</a>
+                                {productOpen
+                                    ? <MdKeyboardArrowUp className="nb__arrow" />
+                                    : <MdKeyboardArrowDown className="nb__arrow" />}
+                            </button>
+
+                            <div
+                                className={`nb__mega nb__mega--product ${productOpen ? 'nb__mega--open' : ''}`}
+                                onMouseEnter={openProduct}
+                                onMouseLeave={closeProduct}
+                            >
+                                <div className="nb__prod-inner">
+                                    <p className="nb__prod-heading"><a href="/product">Product Collections</a></p>
+                                    <div className="nb__prod-grid">
+                                        {cols.map((col, ci) => (
+                                            <ul key={ci} className="nb__prod-col">
+                                                {col.map(item => (
+                                                    <li key={item}>
+
+                                                        <a href={item === 'All' ? '/product' : `/product?category=${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                                            className="nb__prod-link"
+                                                            onClick={e => handleCategoryNav(e, item)}
+                                                        >
+                                                            {item}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="/Preformance" className="nb__link">Performance &amp; Features</a>
+                        </li>
+
+                        <li>
+                            <a href="/sustainability" className="nb__link">Sustainability</a>
+                        </li>
+
+                    </ul>
+
+                    {/* ── RIGHT: CTA + hamburger ── */}
+                    <div className="nb__right">
+                        <a href="/contact" className="nb__cta">Get in Touch</a>
+                        <button
+                            className={`nb__ham ${mobileOpen ? 'nb__ham--open' : ''}`}
+                            onClick={() => setMobileOpen(p => !p)}
+                            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                            aria-expanded={mobileOpen}
+                        >
+                            <span /><span /><span />
                         </button>
                     </div>
                 </div>
 
-                {/* ── Mobile Menu ── */}
-                <ul className={`mobile-menu ${isMobileMenuOpen ? 'show' : ''}`} role="menu">
+                {/* ── MOBILE DRAWER ── */}
+                <div className={`nb__drawer ${mobileOpen ? 'nb__drawer--open' : ''}`} aria-hidden={!mobileOpen}>
 
-                    {/* Mobile: INDUSTRIAL SEGMENTS */}
-                    <li className="dropdown-mobile" role="none">
-                        <a
-                            href="#"
-                            className={`nav-link dropdown-toggle-mobile ${isMobileCollectionsOpen ? 'active' : ''}`}
-                            onClick={handleMobileCollectionsToggle}
-                            aria-haspopup="true"
-                            aria-expanded={isMobileCollectionsOpen}
-                            role="menuitem"
-                        >
-                            INDUSTRIAL SEGMENTS
-                            {isMobileCollectionsOpen
-                                ? <MdKeyboardArrowUp className="arrow-mobile-icon" />
-                                : <MdKeyboardArrowDown className="arrow-mobile-icon" />
-                            }
-                        </a>
-                        <ul className={`mobile-menu-dropdown ${isMobileCollectionsOpen ? 'show' : ''}`}>
-                            <li><a href="/automotive" className="nav-link" onClick={closeMobileMenu}>Automotive Collection</a></li>
-                            <li><a href="/marine" className="nav-link" onClick={closeMobileMenu}>Marine Collection</a></li>
-                            <li><a href="/contract" className="nav-link" onClick={closeMobileMenu}>Contract Collection</a></li>
-                        </ul>
-                    </li>
+                    <div className="nb__drawer-head">
+                        <a href="/" onClick={closeMobile} className="nb__drawer-logo" />
+                        <button className="nb__drawer-close" onClick={closeMobile} aria-label="Close menu">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </button>
+                    </div>
 
-                    {/* Mobile: PRODUCT */}
-                    <li className="dropdown-mobile" role="none">
-                        <a
-                            href="#"
-                            className={`nav-link dropdown-toggle-mobile ${isMobileProductOpen ? 'active' : ''}`}
-                            onClick={handleMobileProductToggle}
-                            aria-haspopup="true"
-                            aria-expanded={isMobileProductOpen}
-                            role="menuitem"
-                        >
-                            PRODUCT
-                            {isMobileProductOpen
-                                ? <MdKeyboardArrowUp className="arrow-mobile-icon" />
-                                : <MdKeyboardArrowDown className="arrow-mobile-icon" />
-                            }
-                        </a>
-                        <ul className={`mobile-menu-dropdown mobile-product-dropdown ${isMobileProductOpen ? 'show' : ''}`}>
-                            {PRODUCT_TABS.map((tab) => (
-                                <li key={tab.label} className="mobile-product-group">
-                                    <span className="mobile-product-group-label">{tab.label}</span>
-                                    <ul className="mobile-product-sublist">
-                                        {tab.collections.map((item) => (
-                                            <li key={item}>
-                                                {/* ✅ Mobile: same category-filter navigation */}
-                                                <a
-                                                    href={`/product?category=${item.toLowerCase().replace(/\s+/g, '-')}`}
-                                                    className="nav-link"
-                                                    onClick={(e) => handleCategoryClick(e, item)}
-                                                >
-                                                    {item}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </li>
-                            ))}
-                        </ul>
-                    </li>
+                    <nav className="nb__drawer-nav">
 
-                    <li role="none"><a href="/sustainability" className="nav-link" onClick={closeMobileMenu} role="menuitem">SUSTAINABILITY</a></li>
-                    <li role="none"><a href="/about" className="nav-link" onClick={closeMobileMenu} role="menuitem">ABOUT US</a></li>
-                    <li role="none"><a href="/Preformance" className="nav-link" onClick={closeMobileMenu} role="menuitem">PERFORMANCE & FEATURES</a></li>
-                    <li role="none"><a href="/news" className="nav-link" onClick={closeMobileMenu} role="menuitem">NEWS & EVENTS</a></li>
-                </ul>
+                        <a href="/about" className="nb__drawer-link" onClick={closeMobile}>About Us</a>
+
+                        {/* Industrial Segments accordion */}
+                        <div className="nb__drawer-acc">
+                            <button
+                                className={`nb__drawer-link nb__drawer-link--acc ${mobileSegmentsOpen ? 'nb__drawer-link--active' : ''}`}
+                                onClick={() => setMobileSegmentsOpen(p => !p)}
+                                aria-expanded={mobileSegmentsOpen}
+                            >
+                                <span>Industrial Segments</span>
+                                {mobileSegmentsOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                            </button>
+                            <ul className={`nb__drawer-sub ${mobileSegmentsOpen ? 'nb__drawer-sub--open' : ''}`}>
+                                {INDUSTRIAL_SEGMENTS.map(s => (
+                                    <li key={s.href}>
+                                        <a href={s.href} onClick={closeMobile}>{s.label}</a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Product accordion */}
+                        <div className="nb__drawer-acc">
+                            <button
+                                className={`nb__drawer-link nb__drawer-link--acc ${mobileProductOpen ? 'nb__drawer-link--active' : ''}`}
+                                onClick={() => setMobileProductOpen(p => !p)}
+                                aria-expanded={mobileProductOpen}
+                            >
+                                <span>Product</span>
+                                {mobileProductOpen ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
+                            </button>
+                            <ul className={`nb__drawer-sub ${mobileProductOpen ? 'nb__drawer-sub--open' : ''}`}>
+                                {PRODUCT_COLLECTIONS.map(item => (
+                                    <li key={item}>
+
+                                        <a href={item === 'All' ? '/product' : `/product?category=${item.toLowerCase().replace(/\s+/g, '-')}`}
+                                            onClick={e => handleCategoryNav(e, item)}
+                                        >
+                                            {item}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <a href="/Preformance" className="nb__drawer-link" onClick={closeMobile}>Performance &amp; Features</a>
+                        <a href="/sustainability" className="nb__drawer-link" onClick={closeMobile}>Sustainability</a>
+
+                    </nav>
+
+                    <div className="nb__drawer-foot">
+                        <a href="/contact" className="nb__drawer-cta" onClick={closeMobile}>Get in Touch</a>
+                    </div>
+                </div>
             </nav>
         </>
     );
 };
 
-export default NavbarNew;
+export default Navbar;

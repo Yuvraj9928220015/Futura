@@ -22,7 +22,7 @@ body {
 .Main-slider-container {
     padding-left: 4vw;
     margin-left: 26px;
-    background-color: #afaaa9;
+    /* background-color: #afaaa9; */
     width: 100%;
 }
 
@@ -37,7 +37,7 @@ body {
     position: relative;
     width: 100%;
     margin: 0 auto;
-    background-color: #fffdf9;
+    /* background-color: #fffdf9; */
     /* NO overflow: hidden — JS animation handles positioning from viewport edge */
 }
 

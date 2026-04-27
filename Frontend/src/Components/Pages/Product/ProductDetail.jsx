@@ -38,6 +38,9 @@ const ProductDetail = () => {
 
     const [selectedGrainFilter, setSelectedGrainFilter] = useState('all');
 
+    // Global "See All" state — expands all grain rows at once
+    const [showAllGrains, setShowAllGrains] = useState(false);
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -73,7 +76,6 @@ const ProductDetail = () => {
     const productData = {
         name: product?.title || "Ophelia",
         code: "",
-        // ── CHANGE 1: Show product title as the "brand" label ──
         brand: product?.title || "Ophelia",
         features: ["Marine", "Contract", "Healthcare"],
         selectUse: " 100% Polyester",
@@ -155,7 +157,6 @@ const ProductDetail = () => {
         const defaultItem = {
             type: 'default',
             index: null,
-            // ── CHANGE 2: Show product title/code instead of "Default" ──
             name: product?.title || product?.code || 'Default',
             images: product.image,
             grain: '__default__',
@@ -185,14 +186,9 @@ const ProductDetail = () => {
 
     const allGrainKeys = grainGroups ? Object.keys(grainGroups) : [];
 
-    const getGrainLabel = (grainKey) => {
+    const getGrainLabel = (grainKey, grainIndex) => {
         if (grainKey === '__ungrouped__') return 'Other Variants';
-        return grainKey;
-    };
-
-    const getGrainNumberLabel = (grainKey, index) => {
-        if (grainKey === '__ungrouped__') return null;
-        return `Grain ${index + 1}`;
+        return `${grainKey}`;
     };
 
     const getAllVariantsForGrain = (grainKey) => {
@@ -202,6 +198,8 @@ const ProductDetail = () => {
     const filteredGrainKeys = selectedGrainFilter === 'all'
         ? allGrainKeys
         : allGrainKeys.filter(k => k === selectedGrainFilter);
+
+    const hasVariants = product?.variants && product.variants.length > 0;
 
     if (loading) {
         return (
@@ -268,7 +266,7 @@ const ProductDetail = () => {
         transition: 'background-color 0.3s ease',
     });
 
-    // ── Variant Card Renderer ──
+    // ── VariantCard ──
     const VariantCard = ({ item, isSelected, onClick }) => (
         <div
             onClick={onClick}
@@ -331,7 +329,6 @@ const ProductDetail = () => {
                 {item.name}
             </div>
 
-            {/* ── CHANGE 3: Blue underline indicator for selected item ── */}
             {isSelected && (
                 <div style={{
                     height: '2px',
@@ -346,42 +343,31 @@ const ProductDetail = () => {
         </div>
     );
 
-    // ── GrainRow: slider (first 5) + dropdown expand (rest) ──
-    const GrainRow = ({ grainKey, grainIndex, variants, includeDefault }) => {
+    // ── GrainRow ──
+    const GrainRow = ({ grainKey, grainIndex, variants, includeDefault, showAllGrains, grainLabel }) => {
         const [sliderOffset, setSliderOffset] = useState(0);
         const [showExtra, setShowExtra] = useState(false);
+        const [collapsed, setCollapsed] = useState(false);
 
-        // All items in this row
+        // Sync with global "See All"
+        useEffect(() => {
+            setShowExtra(showAllGrains);
+        }, [showAllGrains]);
+
         const allRowItems = includeDefault && defaultItem
             ? [defaultItem, ...variants]
             : variants;
 
         const totalItems = allRowItems.length;
         const hasMore = totalItems > ITEMS_PER_VIEW;
-
-        // Slider window — always shows ITEMS_PER_VIEW from the first set
-        const sliderItems = allRowItems.slice(0, ITEMS_PER_VIEW);
         const extraItems = allRowItems.slice(ITEMS_PER_VIEW);
 
-        // Within the slider window, offset shifts which 5 are visible
-        const visibleItems = sliderItems.slice(sliderOffset, sliderOffset + ITEMS_PER_VIEW);
-
-        // For the slider, navigate within first ITEMS_PER_VIEW items
-        // Actually slide across ALL items (standard approach)
         const visibleSlider = allRowItems.slice(sliderOffset, sliderOffset + ITEMS_PER_VIEW);
         const canGoLeft = sliderOffset > 0;
         const canGoRight = sliderOffset + ITEMS_PER_VIEW < totalItems;
 
         const shiftLeft = () => { if (canGoLeft) setSliderOffset(prev => prev - 1); };
         const shiftRight = () => { if (canGoRight) setSliderOffset(prev => prev + 1); };
-
-        // Dropdown pill label — shows currently selected variant name
-        const getDropdownLabel = () => {
-            if (selectedVariantIndex === null && includeDefault) return defaultItem.name;
-            const found = allRowItems.find(v => v.type === 'variant' && v.index === selectedVariantIndex);
-            if (found) return found.name;
-            return `${totalItems} variants`;
-        };
 
         const renderCard = (item) => {
             const isSelected = item.type === 'default'
@@ -401,392 +387,356 @@ const ProductDetail = () => {
         };
 
         return (
-            <div style={{ marginBottom: '18px', padding: '14px 0px 10px' }}>
+            <div className="grain-row-wrapper">
+                {/* ── Grain content (collapsible) ── */}
+                {!collapsed && (
+                    <>
+                        <div className="grain-slider-row">
 
-                {/* ── Dropdown pill (top-right) — clickable to expand/collapse extra items ── */}
-                {hasMore && (
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        marginBottom: '12px',
-                    }}>
-                        <button
-                            type="button"
-                            onClick={() => setShowExtra(prev => !prev)}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '5px',
-                                padding: '5px 14px',
-                                border: '1.5px solid #ddd',
-                                borderRadius: '20px',
-                                background: showExtra ? '#333' : '#fff',
-                                color: showExtra ? '#fff' : '#555',
-                                fontSize: '0.75rem',
-                                fontWeight: '500',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                                whiteSpace: 'nowrap',
-                                outline: 'none',
-                            }}
-                        >
-                            <span>See All - {getDropdownLabel()}</span>
-                            {showExtra
-                                ? <MdOutlineKeyboardArrowUp size={14} style={{ flexShrink: 0 }} />
-                                : <MdOutlineKeyboardArrowDown size={14} style={{ flexShrink: 0 }} />
-                            }
-                        </button>
-                    </div>
+                            <button
+                                type="button"
+                                onClick={shiftLeft}
+                                disabled={!canGoLeft}
+                                className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
+                            >
+                                <MdChevronLeft />
+                            </button>
+
+                            <div className="grain-cards-viewport">
+                                <div className="grain-cards-container">
+                                    {visibleSlider.map(renderCard)}
+                                </div>
+                            </div>
+
+                            {/* Right arrow — always on right */}
+                            <button
+                                type="button"
+                                onClick={shiftRight}
+                                disabled={!canGoRight}
+                                className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
+                            >
+                                <MdChevronRight />
+                            </button>
+
+                            {/* Per-grain expand pill — icon only, after right arrow */}
+                            {hasMore && (
+                                <button
+                                    type="button"
+                                    onClick={() => setShowExtra(prev => !prev)}
+                                    className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
+                                >
+                                    {showExtra
+                                        ? <MdOutlineKeyboardArrowUp size={16} />
+                                        : <MdOutlineKeyboardArrowDown size={16} />
+                                    }
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Extra items revealed by "See All" */}
+                        {showExtra && extraItems.length > 0 && (
+                            <div className="grain-extra-items">
+                                {extraItems.map(renderCard)}
+                            </div>
+                        )}
+                    </>
                 )}
-
-                {/* ── Slider row: ← [5 cards] → ── */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {/* Left arrow */}
-                    <button
-                        type="button"
-                        onClick={shiftLeft}
-                        disabled={!canGoLeft}
-                        style={{
-                            background: canGoLeft ? '#fff' : '#f5f5f5',
-                            border: '1px solid #ddd',
-                            borderRadius: '50%',
-                            width: '32px',
-                            height: '32px',
-                            cursor: canGoLeft ? 'pointer' : 'not-allowed',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '1.1rem',
-                            color: canGoLeft ? '#444' : '#ccc',
-                            flexShrink: 0,
-                            transition: 'all 0.2s ease',
-                            outline: 'none',
-                            padding: 0,
-                        }}
-                    >
-                        <MdChevronLeft />
-                    </button>
-
-                    {/* Visible cards */}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '18px',
-                        flex: 1,
-                        overflow: 'hidden',
-                    }}>
-                        {visibleSlider.map(renderCard)}
-                    </div>
-
-                    {/* Right arrow */}
-                    <button
-                        type="button"
-                        onClick={shiftRight}
-                        disabled={!canGoRight}
-                        style={{
-                            background: canGoRight ? '#fff' : '#f5f5f5',
-                            border: '1px solid #ddd',
-                            borderRadius: '50%',
-                            width: '32px',
-                            height: '32px',
-                            cursor: canGoRight ? 'pointer' : 'not-allowed',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '1.1rem',
-                            color: canGoRight ? '#444' : '#ccc',
-                            flexShrink: 0,
-                            transition: 'all 0.2s ease',
-                            outline: 'none',
-                            padding: 0,
-                        }}
-                    >
-                        <MdChevronRight />
-                    </button>
-                </div>
-
-                {/* ── Expanded extra items (below slider, revealed by dropdown pill) ── */}
-                {showExtra && extraItems.length > 0 && (
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '16px',
-                        width: '100%',
-                        justifyContent: 'start',
-                        flexWrap: 'wrap',
-                        paddingTop: '10px',
-                        paddingLeft: '44px'
-                    }}>
-                        {extraItems.map(renderCard)}
-                    </div>
-                )
-                }
-            </div >
+            </div>
         );
     };
 
     return (
         <>
             <div className="product-detail">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-lg-7 col-md-6 col-12">
-                            <div className="product-detail-image-box">
-                                <div className="product-detail-main-image">
-                                    {(selectedSwatchIndex !== null && selectedSwatch) ? (
-                                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                                            <img
-                                                src={getImageUrl(selectedSwatch)}
-                                                alt={`Swatch ${selectedSwatchIndex + 1}`}
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-                                                onError={(e) => { e.target.src = getMainImage(); }}
-                                            />
-                                            <div style={{
-                                                position: 'absolute', top: '15px', right: '15px',
-                                                backgroundColor: '#ff6b35', color: 'white',
-                                                padding: '8px 15px', borderRadius: '20px',
-                                                fontSize: '14px', fontWeight: 'bold',
-                                                boxShadow: '0 2px 8px #00000033'
-                                            }}>
-                                                Swatch {selectedSwatchIndex + 1}
-                                            </div>
-                                        </div>
-                                    ) : getMainImage() ? (
-                                        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                                            <img src={getMainImage()} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
-                                        </div>
-                                    ) : (
-                                        <div style={{ backgroundColor: '#f0f0f0', width: '100%', height: '100%', borderRadius: '8px' }}></div>
-                                    )}
-                                </div>
+                {/* ── Two-panel independent-scroll layout ── */}
+                <div className="product-detail-panels">
 
-                                <div className="product-detail-gallery-slider">
-                                    <div className="gallery-slider-header">
-                                        <div className="slider-controls">
-                                            <button className="slider-arrow prev-arrow" onClick={prevSlide} disabled={currentSlide === 0}><MdChevronLeft /></button>
-                                            <div className="gallery-slider-container">
-                                                <div className="gallery-slides" style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}>
-                                                    {galleryImages.map((image, index) => (
-                                                        <div key={image.id} className="gallery-slide">
-                                                            <div className="gallery-item" onClick={() => handleThumbnailClick(index)} style={{ cursor: 'pointer' }}>
-                                                                <img src={image.image} alt={image.title} className="gallery-img" />
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <button className="slider-arrow next-arrow" onClick={nextSlide} disabled={currentSlide >= totalSlides - itemsPerSlide}><MdChevronRight /></button>
+                    {/* ════ LEFT PANEL ════ */}
+                    <div className="pd-left-panel">
+                        <div className="product-detail-image-box">
+                            <div className="product-detail-main-image">
+                                {(selectedSwatchIndex !== null && selectedSwatch) ? (
+                                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                                        <img
+                                            src={getImageUrl(selectedSwatch)}
+                                            alt={`Swatch ${selectedSwatchIndex + 1}`}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
+                                            onError={(e) => { e.target.src = getMainImage(); }}
+                                        />
+                                        <div style={{
+                                            position: 'absolute', top: '15px', right: '15px',
+                                            backgroundColor: '#ff6b35', color: 'white',
+                                            padding: '8px 15px', borderRadius: '20px',
+                                            fontSize: '14px', fontWeight: 'bold',
+                                            boxShadow: '0 2px 8px #00000033'
+                                        }}>
+                                            Swatch {selectedSwatchIndex + 1}
                                         </div>
                                     </div>
-                                </div>
+                                ) : getMainImage() ? (
+                                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                                        <img src={getMainImage()} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                                    </div>
+                                ) : (
+                                    <div style={{ backgroundColor: '#f0f0f0', width: '100%', height: '100%', borderRadius: '8px' }}></div>
+                                )}
+                            </div>
 
-                                <div className="product-detail-thumbnail-row">
-                                    <div className="product-detail-thumbnail" style={{ backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0', position: 'relative' }}>
-                                        {getMainImage() && currentImages && currentImages.length > 1 ? (
-                                            <>
-                                                <img src={getImageUrl(currentImages[1])} alt="Second Image" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "6px" }} />
-                                                {selectedSwatch && productSwatches.length > 0 && (
-                                                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '6px', pointerEvents: 'none', overflow: 'hidden' }}>
-                                                        <img src={getImageUrl(selectedSwatch)} alt="Swatch Overlay Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, mixBlendMode: 'multiply' }} onError={(e) => { e.target.style.display = 'none'; }} />
+                            <div className="product-detail-gallery-slider">
+                                <div className="gallery-slider-header">
+                                    <div className="slider-controls">
+                                        <button className="slider-arrow prev-arrow" onClick={prevSlide} disabled={currentSlide === 0}><MdChevronLeft /></button>
+                                        <div className="gallery-slider-container">
+                                            <div className="gallery-slides" style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}>
+                                                {galleryImages.map((image, index) => (
+                                                    <div key={image.id} className="gallery-slide">
+                                                        <div className="gallery-item" onClick={() => handleThumbnailClick(index)} style={{ cursor: 'pointer' }}>
+                                                            <img src={image.image} alt={image.title} className="gallery-img" />
+                                                        </div>
                                                     </div>
-                                                )}
-                                                <div style={{ position: 'absolute', bottom: '8px', right: '8px', backgroundColor: '#ffffffe6', color: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', zIndex: 1 }}>
-                                                    {selectedImageIndex + 1}
-                                                </div>
-                                            </>
-                                        ) : null}
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <button className="slider-arrow next-arrow" onClick={nextSlide} disabled={currentSlide >= totalSlides - itemsPerSlide}><MdChevronRight /></button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div id="colClass-thumbnail-box" className="row">
-                                {bottomSampleImages.map((img, index) => {
-                                    const colClass = (index === 0 || index === 3) ? "col-7" : "col-5";
-                                    return (
-                                        <div key={index} className={colClass}>
-                                            <div className="product-detail-thumbnail-box" style={{ position: 'relative' }}>
-                                                <img src={img} alt={`Sample ${index + 2}`} className="sample-img" />
+                            <div className="product-detail-thumbnail-row">
+                                <div className="product-detail-thumbnail" style={{ backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0', position: 'relative' }}>
+                                    {getMainImage() && currentImages && currentImages.length > 1 ? (
+                                        <>
+                                            <img src={getImageUrl(currentImages[1])} alt="Second Image" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "6px" }} />
+                                            {selectedSwatch && productSwatches.length > 0 && (
+                                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '6px', pointerEvents: 'none', overflow: 'hidden' }}>
+                                                    <img src={getImageUrl(selectedSwatch)} alt="Swatch Overlay Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, mixBlendMode: 'multiply' }} onError={(e) => { e.target.style.display = 'none'; }} />
+                                                </div>
+                                            )}
+                                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', backgroundColor: '#ffffffe6', color: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', zIndex: 1 }}>
+                                                {selectedImageIndex + 1}
                                             </div>
-                                        </div>
-                                    );
-                                })}
+                                        </>
+                                    ) : null}
+                                </div>
                             </div>
                         </div>
 
-                        {/* Right Side Info Section */}
-                        <div className="col-lg-5 col-md-6 col-12">
-                            <div className="product-detail-info-box">
-                                {/* ── CHANGE 1: product title shown as brand label ── */}
-                                <div className="product-detail-brand">
-                                    <span className="brand-name">{productData.brand}</span>
-                                </div>
-
-                                <div className="product-detail-features">
-                                    {productData.features.map((feature, index) => (
-                                        <span key={index} className="feature-tag">• {feature}</span>
-                                    ))}
-                                </div>
-
-                                <div className="product-detail-select-use">
-                                    <strong>Material/Fabric : </strong> {productData.selectUse}
-                                </div>
-
-                                {/* ── GRAIN-GROUPED VARIANT SECTION with slider ── */}
-                                <div className="product-detail-color-section">
-                                    {product?.variants && product.variants.length > 0 && (
-                                        <div className="variant-slider-section">
-                                            {filteredGrainKeys.map((grainKey) => {
-                                                const isFirstGrain = allGrainKeys.indexOf(grainKey) === 0;
-                                                return (
-                                                    <GrainRow
-                                                        key={grainKey}
-                                                        grainKey={grainKey}
-                                                        grainIndex={allGrainKeys.indexOf(grainKey)}
-                                                        variants={getAllVariantsForGrain(grainKey)}
-                                                        includeDefault={isFirstGrain && !!defaultItem}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-                                    )}
-
-                                    <div className="product-detail-downloads">
-                                        <div className="download-links">
-                                            <span className="download-link"><MdOutlineFileDownload />Download Catalogue </span>
+                        <div id="colClass-thumbnail-box" className="row">
+                            {bottomSampleImages.map((img, index) => {
+                                const colClass = (index === 0 || index === 3) ? "col-7" : "col-5";
+                                return (
+                                    <div key={index} className={colClass}>
+                                        <div className="product-detail-thumbnail-box" style={{ position: 'relative' }}>
+                                            <img src={img} alt={`Sample ${index + 2}`} className="sample-img" />
                                         </div>
                                     </div>
-                                </div>
+                                );
+                            })}
+                        </div>
+                    </div>
 
-                                <hr />
+                    {/* ════ RIGHT PANEL ════ */}
+                    <div className="pd-right-panel">
+                        <div className="product-detail-info-box">
 
-                                <div className="specifications-box">
-                                    <div className="specifications">
-                                        <div className="About-Product-title">About {product.title || productData.name}</div>
-                                        <div className="Specifications">View Specifications</div>
-                                    </div>
-                                    <div className="ophelia-des">
-                                        {product.description || "Ophelia offers a cost-effective option within our Carnegie Siltech Plus line. Crafted from 100% silicone, its unique resin system allows for a reduced price without compromising on quality. With a luxurious leather look and a soft, supple hand, Ophelia is also graffiti-resistant and meets the stringent standards of IMO Part 8. As part of our value-performance Carnegie Elements brand, it seamlessly combines performance and style."}
-                                    </div>
-                                    <div className="readmore-container">
-                                        <span
-                                            className="readmore"
-                                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setExpanded(!expanded); }}
-                                            style={{ cursor: "pointer" }}
+                            {/* Brand / Title */}
+                            <div className="product-detail-brand">
+                                <span className="brand-name">{productData.brand}</span>
+                            </div>
+
+                            <div className="Applications">Applications</div>
+
+                            {/* Feature tags */}
+                            <div className="product-detail-features">
+                                {productData.features.map((feature, index) => (
+                                    <span key={index} className="feature-tag">• {feature}</span>
+                                ))}
+                            </div>
+
+                            {/* Material/Fabric + Global "See All" button */}
+                            <div className="product-detail-select-use">
+                                <div className="material-fabric-row">
+                                    <span>
+                                        <strong>Material/Fabric : </strong>
+                                        {productData.selectUse}
+                                    </span>
+                                    {hasVariants && (
+                                        <button
+                                            type="button"
+                                            className={`global-see-all-btn ${showAllGrains ? 'active' : ''}`}
+                                            onClick={() => setShowAllGrains(prev => !prev)}
                                         >
-                                            <div className="readmore-content">
-                                                <p>Key Characteristics</p>
-                                                <div className="readmore-icon">
-                                                    {expanded ? <MdOutlineKeyboardArrowUp /> : <MdOutlineKeyboardArrowDown />}
-                                                </div>
-                                            </div>
+                                            {showAllGrains ? 'Show Less' : 'See All'}
+                                            {showAllGrains
+                                                ? <MdOutlineKeyboardArrowUp size={15} style={{ marginLeft: '4px' }} />
+                                                : <MdOutlineKeyboardArrowDown size={15} style={{ marginLeft: '4px' }} />
+                                            }
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* GRAIN-GROUPED VARIANT SECTION */}
+                            <div className="product-detail-color-section">
+                                {hasVariants && (
+                                    <div className="variant-slider-section">
+                                        {filteredGrainKeys.map((grainKey, idx) => {
+                                            const isFirstGrain = allGrainKeys.indexOf(grainKey) === 0;
+                                            const label = grainKey === '__ungrouped__'
+                                                ? 'Other Variants'
+                                                : grainKey;
+                                            return (
+                                                <GrainRow
+                                                    key={grainKey}
+                                                    grainKey={grainKey}
+                                                    grainIndex={allGrainKeys.indexOf(grainKey)}
+                                                    variants={getAllVariantsForGrain(grainKey)}
+                                                    includeDefault={isFirstGrain && !!defaultItem}
+                                                    showAllGrains={showAllGrains}
+                                                    grainLabel={label}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                )}
+
+                                <div className="product-detail-downloads">
+                                    <div className="download-links">
+                                        <span className="download-link">
+                                            <MdOutlineFileDownload />Download Catalogue
                                         </span>
+                                    </div>
+                                </div>
+                            </div>
 
-                                        {expanded && (
-                                            <div className="Prodduct-extra-text">
+                            <hr />
 
-                                                {/* FLAMMABLE SECTION */}
-                                                {product.Flammable && (
-                                                    <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
-                                                        <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
-                                                            <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
-                                                                <img src="/Futura-New-42.png" alt="" style={sectionIconStyle} />
-                                                                <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>FLAMMABLE</div>
-                                                            </div>
-                                                            <div style={toggleIconStyle(flammableOpen)}>
-                                                                {flammableOpen ? <PiMinus /> : <PiPlus />}
-                                                            </div>
+                            <div className="specifications-box">
+                                <div className="specifications">
+                                    <div className="About-Product-title">About {product.title || productData.name}</div>
+                                    <div className="Specifications">View Specifications</div>
+                                </div>
+                                <div className="ophelia-des">
+                                    {product.description || "Ophelia offers a cost-effective option within our Carnegie Siltech Plus line. Crafted from 100% silicone, its unique resin system allows for a reduced price without compromising on quality. With a luxurious leather look and a soft, supple hand, Ophelia is also graffiti-resistant and meets the stringent standards of IMO Part 8. As part of our value-performance Carnegie Elements brand, it seamlessly combines performance and style."}
+                                </div>
+                                <div className="readmore-container">
+                                    <span
+                                        className="readmore"
+                                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setExpanded(!expanded); }}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <div className="readmore-content">
+                                            <p>Key Characteristics</p>
+                                            <div className="readmore-icon">
+                                                {expanded ? <MdOutlineKeyboardArrowUp /> : <MdOutlineKeyboardArrowDown />}
+                                            </div>
+                                        </div>
+                                    </span>
+
+                                    {expanded && (
+                                        <div className="Prodduct-extra-text">
+
+                                            {/* FLAMMABLE SECTION */}
+                                            {product.Flammable && (
+                                                <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                    <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
+                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                            <img src="/Futura-New-42.png" alt="" style={sectionIconStyle} />
+                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>FLAMMABLE</div>
                                                         </div>
-                                                        {flammableOpen && (
-                                                            <div className="Anti-Flamesafe-container" style={{ paddingBottom: '12px' }}>
-                                                                <div className="Anti-Flamesafe">
-                                                                    <img src="/Untitled-2.png" alt="" /> <b>Anti flammable : </b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260
+                                                        <div style={toggleIconStyle(flammableOpen)}>
+                                                            {flammableOpen ? <PiMinus /> : <PiPlus />}
+                                                        </div>
+                                                    </div>
+                                                    {flammableOpen && (
+                                                        <div className="Anti-Flamesafe-container" style={{ paddingBottom: '12px' }}>
+                                                            <div className="Anti-Flamesafe">
+                                                                <img src="/Untitled-2.png" alt="" /> <b>Anti flammable : </b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260
+                                                            </div>
+                                                            <div className="ophelia-description">{product.Flammable}</div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {/* TURTLE LIFE SECTION */}
+                                            <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
+                                                    <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                        <img src="/Futura-New-43.png" alt="" style={sectionIconStyle} />
+                                                        <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>TURTLE LIFE</div>
+                                                    </div>
+                                                    <div style={toggleIconStyle(turtleLifeOpen)}>
+                                                        {turtleLifeOpen ? <PiMinus /> : <PiPlus />}
+                                                    </div>
+                                                </div>
+                                                {turtleLifeOpen && (
+                                                    <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
+                                                        <div className="ophelia-description">
+                                                            Americana passes the requirements of the cold-crack laboratory and is an excellent outdoor upholstery option.
+                                                        </div>
+                                                        <div>
+                                                            {product.resistant && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain"><img src="/5.png" alt="" /> <b>Cold crack resistant : </b> -60 degrees F</div>
+                                                                    <div className="ophelia-description">{product.resistant}</div>
                                                                 </div>
-                                                                <div className="ophelia-description">{product.Flammable}</div>
+                                                            )}
+                                                            {product.QUV && (
+                                                                <div className="Characteristics-content">
+                                                                    <div id="Pink-Stain-container" className="Pink-Stain"><img src="/4.png" alt="" /> <div className="Pink-Stain-container-content"><b>QUV resistant : </b> {product.QUV}</div></div>
+                                                                    <div className="ophelia-description">{product.QUV}</div>
+                                                                </div>
+                                                            )}
+                                                            {product.Weatherometer && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain"><img src="/6.png" alt="" /> <b>Weatherometer : </b> 1000 Hrs</div>
+                                                                    <div className="ophelia-description">{product.Weatherometer}</div>
+                                                                </div>
+                                                            )}
+                                                            {product.Abrasion && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain"><img src="/3.png" alt="" /> <b>Abrasion : </b> Wyzenback 8 Cotton Duck 50,000 cycles</div>
+                                                                    <div className="ophelia-description">{product.Abrasion}</div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* SAFE TOUCH SECTION */}
+                                            <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
+                                                    <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                        <img src="/Futura-New-44.png" alt="" style={sectionIconStyle} />
+                                                        <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>SAFE TOUCH</div>
+                                                    </div>
+                                                    <div style={toggleIconStyle(safeTouchOpen)}>
+                                                        {safeTouchOpen ? <PiMinus /> : <PiPlus />}
+                                                    </div>
+                                                </div>
+                                                {safeTouchOpen && (
+                                                    <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
+                                                        <div className="ophelia-description">A microbial safe product</div>
+                                                        {product.AntiMicrobial && (
+                                                            <div className="Characteristics-content">
+                                                                <div className="Pink-Stain"><img src="/2.png" alt="" /> <b>Anti microbial : </b> AATCC-147</div>
+                                                                <div className="ophelia-description">{product.AntiMicrobial}</div>
+                                                            </div>
+                                                        )}
+                                                        {product.PinkStain && (
+                                                            <div className="Characteristics-content">
+                                                                <div className="Pink-Stain"><img src="/7.png" alt="" /> <b>Pink Stain : </b> ASTM 1428</div>
+                                                                <div className="ophelia-description">{product.PinkStain}</div>
                                                             </div>
                                                         )}
                                                     </div>
                                                 )}
-
-                                                {/* TURTLE LIFE SECTION */}
-                                                <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
-                                                    <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
-                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
-                                                            <img src="/Futura-New-43.png" alt="" style={sectionIconStyle} />
-                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>TURTLE LIFE</div>
-                                                        </div>
-                                                        <div style={toggleIconStyle(turtleLifeOpen)}>
-                                                            {turtleLifeOpen ? <PiMinus /> : <PiPlus />}
-                                                        </div>
-                                                    </div>
-                                                    {turtleLifeOpen && (
-                                                        <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                            <div className="ophelia-description">
-                                                                Americana passes the requirements of the cold-crack laboratory and is an excellent outdoor upholstery option.
-                                                            </div>
-                                                            <div>
-                                                                {product.resistant && (
-                                                                    <div className="Characteristics-content">
-                                                                        <div className="Pink-Stain"><img src="/5.png" alt="" /> <b>Cold crack resistant : </b> -60 degrees F</div>
-                                                                        <div className="ophelia-description">{product.resistant}</div>
-                                                                    </div>
-                                                                )}
-                                                                {product.QUV && (
-                                                                    <div className="Characteristics-content">
-                                                                        <div id="Pink-Stain-container" className="Pink-Stain"><img src="/4.png" alt="" /> <div className="Pink-Stain-container-content"><b>QUV resistant : </b> {product.QUV}</div></div>
-                                                                        <div className="ophelia-description">{product.QUV}</div>
-                                                                    </div>
-                                                                )}
-                                                                {product.Weatherometer && (
-                                                                    <div className="Characteristics-content">
-                                                                        <div className="Pink-Stain"><img src="/6.png" alt="" /> <b>Weatherometer : </b> 1000 Hrs</div>
-                                                                        <div className="ophelia-description">{product.Weatherometer}</div>
-                                                                    </div>
-                                                                )}
-                                                                {product.Abrasion && (
-                                                                    <div className="Characteristics-content">
-                                                                        <div className="Pink-Stain"><img src="/3.png" alt="" /> <b>Abrasion : </b> Wyzenback 8 Cotton Duck 50,000 cycles</div>
-                                                                        <div className="ophelia-description">{product.Abrasion}</div>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {/* SAFE TOUCH SECTION */}
-                                                <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
-                                                    <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
-                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
-                                                            <img src="/Futura-New-44.png" alt="" style={sectionIconStyle} />
-                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>SAFE TOUCH</div>
-                                                        </div>
-                                                        <div style={toggleIconStyle(safeTouchOpen)}>
-                                                            {safeTouchOpen ? <PiMinus /> : <PiPlus />}
-                                                        </div>
-                                                    </div>
-                                                    {safeTouchOpen && (
-                                                        <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                            <div className="ophelia-description">A microbial safe product</div>
-                                                            {product.AntiMicrobial && (
-                                                                <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain"><img src="/2.png" alt="" /> <b>Anti microbial : </b> AATCC-147</div>
-                                                                    <div className="ophelia-description">{product.AntiMicrobial}</div>
-                                                                </div>
-                                                            )}
-                                                            {product.PinkStain && (
-                                                                <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain"><img src="/7.png" alt="" /> <b>Pink Stain : </b> ASTM 1428</div>
-                                                                    <div className="ophelia-description">{product.PinkStain}</div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </div>
-
                                             </div>
-                                        )}
-                                    </div>
+
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

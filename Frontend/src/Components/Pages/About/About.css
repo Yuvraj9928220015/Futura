@@ -4,7 +4,6 @@
 .Futura-Line-container {
     width: 100%;
     overflow: hidden;
-    position: relative;
     display: flex;
 }
 
@@ -22,7 +21,7 @@
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
-    height: 65%;
+    height: 70%;
     background-color: #b9b9b99f;
     padding-top: 40px;
 }
@@ -32,7 +31,7 @@
     color: white;
     font-size: 52px;
     font-family: 'Gotu', sans-serif;
-    padding: 50px 30px;
+    padding: 30px 30px;
     white-space: nowrap;
     writing-mode: vertical-rl;
     text-orientation: mixed;
@@ -59,22 +58,14 @@
     cursor: grabbing;
 }
 
-.journey-img-inner {
-    display: inline-flex;
-    align-items: flex-start;
-    will-change: transform;
-}
-
 .journey-timeline-img {
-    height: 600px;
+    height: 500px;
     width: auto;
     max-width: none;
     display: block;
     flex-shrink: 0;
     object-fit: contain;
     pointer-events: none;
-    user-select: none;
-    -webkit-user-drag: none;
 }
 
 /* ─────────────────────────────────────────
@@ -332,6 +323,9 @@
     font-weight: 300;
 }
 
+/* ─────────────────────────────────────────
+   FRAME MARQUEE SECTION
+───────────────────────────────────────── */
 .frame-marquee-section {
     width: 100%;
     padding: 70px 0 90px;
@@ -345,40 +339,32 @@
     position: relative;
 }
 
-/* Track: bottom-aligned so different heights form a natural row */
 .fmq-track {
     display: flex;
     align-items: center;
     gap: 48px;
     width: max-content;
-    /* start offset so first card is partially cropped, matching screenshot */
     padding: 16px 0 28px 0;
-    will-change: transform;
 }
 
-/* Individual card wrapper — size set inline */
 .fmq-card {
     position: relative;
     flex-shrink: 0;
     cursor: pointer;
 }
 
-/* Offset shadow — position set inline via React */
 .fmq-shadow {
     position: absolute;
     background-color: #d2d2d2;
     z-index: 1;
-    /* smooth retreat on hover */
     transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .fmq-card:hover .fmq-shadow {
-    /* shadow pulls back toward center */
     transform: translate(-4px, -4px) !important;
     opacity: 0.6;
 }
 
-/* Image frame — fills card fully using absolute inset */
 .fmq-frame {
     position: absolute;
     inset: 0;
@@ -403,7 +389,6 @@
     transform: scale(1.05);
 }
 
-/* Text overlay — gradient + labels at bottom */
 .fmq-overlay {
     position: absolute;
     bottom: 0;
@@ -439,7 +424,7 @@
 }
 
 /* ================================================================
-   CERTIFICATION SECTION
+   CERTIFICATION SECTION — BASE (Desktop)
 ================================================================ */
 .About-Certification-container {
     width: 100%;
@@ -450,6 +435,7 @@
     background-size: contain;
     display: flex;
     flex-direction: row;
+    /* desktop: side by side */
     align-items: stretch;
     overflow: hidden;
 }
@@ -574,6 +560,7 @@
     height: auto;
     object-fit: contain;
     display: block;
+    image-rendering: auto;
 }
 
 .Certification-logo-label {
@@ -588,10 +575,44 @@
 }
 
 /* ================================================================
-   RESPONSIVE
+   RESPONSIVE BREAKPOINTS
 ================================================================ */
 
-/* Tablet 768–1023px */
+/* ── Large Desktop ≥ 1400px ── */
+@media (min-width: 1400px) {
+    .fmq-track {
+        gap: 45px;
+    }
+
+    .fmq-text {
+        font-size: 15px;
+    }
+
+    .fmq-subtext {
+        font-size: 12px;
+    }
+
+    .frame-marquee-section {
+        padding: 90px 0 110px;
+    }
+}
+
+/* ── Tablet Large 1024–1399px ── */
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .Golbal-Leaders-title {
+        font-size: 50px;
+    }
+
+    .Manfacturer-Box-1-title {
+        font-size: 80px;
+    }
+
+    .Futura-Textiles-container-des {
+        width: 60%;
+    }
+}
+
+/* ── Tablet 768–1023px ── */
 @media (min-width: 768px) and (max-width: 1023px) {
     .Golbal-Leaders-container {
         top: 20%;
@@ -643,6 +664,7 @@
     .Manfacturer-Box-1 {
         min-height: 400px;
         padding-bottom: 20px;
+        padding-right: 60px;
     }
 
     .Manfacturer-Box-1-title {
@@ -652,6 +674,7 @@
     .Manfacturer-Box-1-des {
         font-size: 16px;
         max-width: 90%;
+        padding-right: 30px;
     }
 
     .Manfacturer-Box-2 {
@@ -689,9 +712,12 @@
         padding: 44px 12px 14px;
     }
 
+    /* ✅ Certification: Upar-Niche (column) */
     .About-Certification-container {
         flex-direction: column;
         min-height: auto;
+        padding: 60px 0;
+        background-size: cover;
     }
 
     .About-Certification-content {
@@ -703,11 +729,11 @@
     .About-Certification-logo {
         width: 100%;
         min-height: auto;
-        padding: 40px 30px 50px;
+        padding: 20px 30px 50px;
     }
 
     .Certification-logos-grid {
-        max-width: 520px;
+        max-width: 580px;
         gap: 18px;
     }
 
@@ -715,9 +741,13 @@
         min-height: 110px;
         padding: 16px 12px;
     }
+
+    .Certification-content-description {
+        font-size: 16px;
+    }
 }
 
-/* Small tablet 600–767px */
+/* ── Small Tablet 600–767px ── */
 @media (min-width: 600px) and (max-width: 767px) {
     .About-Us-Box {
         min-height: auto;
@@ -801,20 +831,37 @@
 
     .Manfacturer-Box-1 {
         min-height: 350px;
+        padding-right: 30px;
     }
 
     .Manfacturer-Box-1-title {
         font-size: 42px;
     }
 
+    /* ✅ Certification: Upar-Niche (column) */
+    .About-Certification-container {
+        flex-direction: column;
+        min-height: auto;
+        padding: 50px 0;
+        background-size: cover;
+    }
+
     .About-Certification-content {
+        width: 100%;
+        min-height: auto;
         padding: 40px 30px;
+    }
+
+    .About-Certification-logo {
+        width: 100%;
+        min-height: auto;
+        padding: 10px 20px 40px;
     }
 
     .Certification-logos-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 14px;
-        max-width: 400px;
+        max-width: 420px;
     }
 
     .Certification-logo-item {
@@ -826,9 +873,13 @@
     .Certification-logo-item img {
         max-width: 80px;
     }
+
+    .Certification-content-description {
+        font-size: 15px;
+    }
 }
 
-/* Phone ≤ 599px */
+/* ── Phone ≤ 599px ── */
 @media (max-width: 599px) {
     .About-Us-Box {
         min-height: auto;
@@ -952,6 +1003,7 @@
     .Manfacturer-Box-1 {
         min-height: 250px;
         padding-bottom: 15px;
+        padding-right: 20px;
     }
 
     .Manfacturer-Box-1-title {
@@ -982,6 +1034,10 @@
         width: 100%;
     }
 
+    .company-tabs-line {
+        display: none;
+    }
+
     .tab-button {
         width: 100%;
         padding: 15px 20px;
@@ -989,16 +1045,36 @@
         text-align: center;
     }
 
+    /* ✅ Certification: Upar-Niche (column) */
+    .About-Certification-container {
+        flex-direction: column;
+        min-height: auto;
+        padding: 40px 0;
+        background-size: cover;
+        background-position: top center;
+    }
+
     .About-Certification-content {
+        width: 100%;
+        min-height: auto;
         padding: 35px 20px;
+    }
+
+    .About-Certification-logo {
+        width: 100%;
+        min-height: auto;
+        padding: 10px 15px 40px;
     }
 
     .Certification-content-title {
         font-size: 32px;
+        flex-direction: column;
+        gap: 4px;
     }
 
-    .About-Certification-logo {
-        padding: 30px 20px 40px;
+    .Certification-content-description {
+        font-size: 14px;
+        line-height: 1.7;
     }
 
     .Certification-logos-grid {
@@ -1009,33 +1085,49 @@
 
     .Certification-logo-item {
         min-height: 100px;
+        padding: 14px 10px;
+        border-radius: 12px;
+    }
+
+    .Certification-logo-item img {
+        max-width: 75px;
+    }
+
+    .Certification-logo-label {
+        font-size: 10px;
     }
 }
 
-/* Large desktop ≥ 1400px */
-@media (min-width: 1400px) {
-    .journey-timeline-img {
-        height: 700px;
+/* ── Extra Small ≤ 380px ── */
+@media (max-width: 380px) {
+    .Golbal-Leaders-title {
+        font-size: 26px;
+    }
+
+    .Manfacturer-Box-1-title {
+        font-size: 22px;
     }
 
     .Journey-text-inline {
-        font-size: 60px;
-        padding: 50px 30px;
+        font-size: 16px;
+        padding: 14px 10px;
     }
 
-    .fmq-track {
-        gap: 45px;
+    .Certification-logos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        max-width: 280px;
     }
 
-    .fmq-text {
-        font-size: 15px;
+    .Certification-logo-item {
+        min-height: 85px;
     }
 
-    .fmq-subtext {
-        font-size: 12px;
+    .About-Certification-content {
+        padding: 25px 15px;
     }
 
-    .frame-marquee-section {
-        padding: 90px 0 110px;
+    .About-Certification-logo {
+        padding: 5px 10px 30px;
     }
 }

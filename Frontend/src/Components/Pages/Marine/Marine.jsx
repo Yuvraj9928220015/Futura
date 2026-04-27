@@ -28,7 +28,6 @@ const MARINE_PRODUCTS = [
 function Marine() {
     const navigate = useNavigate();
 
-    // ✅ Exact same logic as Navbar.jsx handleCategoryClick
     const handleCategoryClick = (e, item) => {
         e.preventDefault();
         const slug = item.toLowerCase().replace(/\s+/g, '-');

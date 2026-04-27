@@ -1,18 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap');
 
 /* ==================== Base ==================== */
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 img {
     max-width: 100%;
     height: auto;
+    display: block;
 }
 
-.Focus-main-container {
-    padding: 0px 20px;
-    padding-top: 40px;
+.focus-root {
+    padding: clamp(12px, 3vw, 40px) clamp(8px, 3vw, 20px);
+    padding-top: clamp(20px, 4vw, 40px);
     background-color: #ffffff;
     min-height: 100vh;
     width: 100%;
@@ -20,110 +25,121 @@ img {
 }
 
 /* ==================== Features Section ==================== */
-.Features-Section {
-    padding: 0px 30px;
-    width: 100%;
-}
-
-.Focus {
-    width: 100%;
-    padding: 50px 20px;
+.features-section {
+    padding: clamp(24px, 4vw, 50px) clamp(8px, 3vw, 50px);
+    margin-bottom: clamp(20px, 4vw, 40px);
     background-color: #ffffff;
-    margin-bottom: 40px;
 }
 
-.Features-Section-Box {
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(8px, 2vw, 24px);
     width: 100%;
+}
+
+.feature-box {
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    cursor: pointer;
-    padding: 16px 8px;
-    border-radius: 8px;
-    transition: background-color 0.5s ease;
-}
-
-.Features-Section-text {
-    text-align: center;
-    font-size: 24px;
-    font-family: "Cormorant Garamond", serif;
-    line-height: 25px;
-    transition: color 0.3s ease;
-}
-
-.Features-Section-Box:hover .Features-Section-text {
-    color: #1a1a1a;
-}
-
-.Features-Section-image {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    width: 50%;
+    justify-content: center;
+    gap: clamp(8px, 1.5vw, 14px);
+    padding: clamp(12px, 2vw, 20px) clamp(8px, 1.5vw, 16px);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.4s ease;
+}
+
+.feature-box:hover {
+    background-color: #f9f9f9;
+}
+
+.feature-icon-wrap {
+    width: clamp(44px, 10vw, 72px);
+    height: clamp(44px, 10vw, 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     will-change: transform;
 }
 
-.Features-Section-Box:hover .Features-Section-image {
-    transform: scale(1.25);
+.feature-box:hover .feature-icon-wrap {
+    transform: scale(1.2);
 }
 
-.Features-Section-image img {
+.feature-icon-wrap img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: contain;
 }
 
-/* ==================== Latest Stories Section ==================== */
-.Latest-Stories-Section {
-    padding: 40px 30px 100px 30px;
+.feature-label {
+    text-align: center;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(14px, 2.5vw, 24px);
+    line-height: 1.3;
+    color: #1a1a1a;
+    transition: color 0.3s ease;
+}
+
+/* ==================== Stories Section ==================== */
+.stories-section {
+    padding: clamp(20px, 4vw, 40px) clamp(8px, 3vw, 30px) clamp(40px, 8vw, 100px);
     background-color: #ffffff;
 }
 
-.Latest-Stories-Heading {
+.stories-section-heading {
     font-family: 'Gotu', sans-serif;
-    font-size: clamp(30px, 5vw, 30px);
+    font-size: clamp(22px, 4vw, 30px);
     font-weight: 400;
     color: #1a1a1a;
-    margin: 0 0 32px 0;
-    letter-spacing: -0.5px;
+    margin-bottom: clamp(18px, 3vw, 32px);
+    letter-spacing: -0.3px;
     line-height: 1.1;
 }
 
-/* ===== Small Story Cards ===== */
-.Story-Cards-Stack {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.stories-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 3vw, 40px);
+    align-items: start;
 }
 
-.Story-Card {
+/* ==================== Story Cards ==================== */
+.story-cards-stack {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 3vw, 28px);
+}
+
+.story-card {
     display: flex;
     flex-direction: row;
-    gap: 24px;
+    gap: clamp(12px, 2vw, 24px);
     align-items: flex-start;
     cursor: pointer;
     animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
 }
 
-.Story-Card:nth-child(1) {
+.story-card:nth-child(1) {
     animation-delay: 0.1s;
 }
 
-.Story-Card:nth-child(2) {
+.story-card:nth-child(2) {
     animation-delay: 0.22s;
 }
 
-.Story-Card-Thumb {
-    flex: 0 0 220px;
-    width: 220px;
-    height: 160px;
+.story-card-thumb {
+    flex: 0 0 clamp(90px, 20vw, 220px);
+    width: clamp(90px, 20vw, 220px);
+    height: clamp(70px, 14vw, 160px);
     border-radius: 12px;
     overflow: hidden;
 }
 
-.Story-Card-Thumb img {
+.story-card-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -131,179 +147,175 @@ img {
     transition: transform 0.4s ease;
 }
 
-.Story-Card:hover .Story-Card-Thumb img {
+.story-card:hover .story-card-thumb img {
     transform: scale(1.05);
 }
 
-.Story-Card-Body {
-    height: 100%;
+.story-card-body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding-top: 10px;
+    justify-content: flex-start;
+    padding-top: clamp(4px, 1vw, 10px);
+    min-width: 0;
 }
 
-.Story-Card-Date {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'Georgia', serif;
-    font-size: 13px;
-    color: #888;
-}
-
-.Story-Card-Title {
+.story-card-title {
     font-family: 'Gotu', sans-serif;
-    font-size: 50px;
+    font-size: clamp(22px, 5vw, 50px);
     font-weight: 400;
     color: #1a1a1a;
     margin: 0;
+    line-height: 1;
     transition: color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.Story-Card:hover .Story-Card-Title {
+.story-card:hover .story-card-title {
     color: #555;
 }
 
-.Story-Card-SubTitle {
+.story-card-excerpt {
     font-family: 'Gotu', sans-serif;
-    font-size: 20px;
-    font-style: italic;
-    font-weight: 500;
-    color: #333;
-    margin: 4px 0 6px 0;
-}
-
-.Story-Card-container {
-    padding-top: 80px;
-}
-
-.Story-Card-Des {
-    font-size: 18px;
-    color: #666;
-    line-height: 1.4;
-    margin: 0;
-}
-
-.Story-Card-excerpt {
-    font-family: 'Gotu', sans-serif;
-    font-size: 60px;
+    font-size: clamp(26px, 6vw, 60px);
     color: #0a0a0a;
     line-height: 1;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.Story-Card-explore {
+.story-card-explore {
     display: inline-block;
-    margin-top: 16px;
-    padding: 10px 26px;
+    margin-top: clamp(10px, 2vw, 16px);
+    padding: clamp(7px, 1.2vw, 10px) clamp(16px, 3vw, 26px);
     border-radius: 50px;
     border: 1.5px solid #1a1a1a;
     background-color: transparent;
     color: #1a1a1a;
     font-family: 'Gotu', sans-serif;
-    font-size: 13px;
+    font-size: clamp(11px, 1.8vw, 13px);
     letter-spacing: 0.8px;
     cursor: pointer;
     width: fit-content;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-.Story-Card:hover .Story-Card-explore {
+.story-card:hover .story-card-explore {
     background-color: #1a1a1a;
     color: #ffffff;
     border-color: #1a1a1a;
 }
 
-/* =====================================================
-   FEATURED SLIDER  —  FIXED
-   ===================================================== */
-.Featured-Slider {
+.story-card-explore a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.story-card-container {
+    padding-top: clamp(30px, 6vw, 80px);
+}
+
+.story-card-subtitle {
+    font-family: 'Gotu', sans-serif;
+    font-size: clamp(13px, 2vw, 20px);
+    font-style: italic;
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 clamp(4px, 1vw, 8px) 0;
+}
+
+.story-card-des {
+    font-size: clamp(13px, 1.8vw, 18px);
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* ==================== Featured Slider ==================== */
+.featured-slider {
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 390px;
+    min-height: clamp(220px, 40vw, 520px);
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
     user-select: none;
-    /* ✅ GPU-accelerate the whole slider */
     transform: translateZ(0);
     will-change: transform;
 }
 
-.Featured-Slider-Viewport {
+.featured-slider-viewport {
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 390px;
+    min-height: inherit;
     border-radius: 20px;
     overflow: hidden;
-    /* ✅ Clip perfectly so no flash outside bounds */
     isolation: isolate;
 }
 
-/* ── Every slide sits in the same spot ── */
-.Featured-Slide {
+.featured-slide {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     border-radius: 20px;
     overflow: hidden;
-    /* ✅ Default: hidden until given an animation class */
     opacity: 0;
     will-change: transform, opacity;
 }
 
-.Featured-Slide-Img {
+.featured-slide-img {
     width: 100%;
     height: 100%;
-    min-height: 400px;
+    min-height: clamp(220px, 40vw, 520px);
     object-fit: cover;
     display: block;
     border-radius: 20px;
-    /* ✅ Prevent flicker on image load */
     backface-visibility: hidden;
 }
 
-.Featured-Slide video.Featured-Slide-Img {
+video.featured-slide-img {
     background-color: #000;
 }
 
-.Featured-Card-Overlay {
+.featured-card-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 70px 28px 50px 28px;
+    padding: clamp(40px, 8vw, 70px) clamp(16px, 3vw, 28px) clamp(24px, 4vw, 50px);
     background: linear-gradient(to top, #000000cc 0%, #00000066 55%, transparent 100%);
     border-radius: 0 0 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: clamp(6px, 1.2vw, 10px);
 }
 
-.Featured-Card-Date {
+.featured-card-date {
     display: flex;
     align-items: center;
     gap: 6px;
     font-family: 'Gotu', sans-serif;
-    font-size: 13px;
+    font-size: clamp(11px, 1.6vw, 13px);
     color: #ffffffd1;
 }
 
-.Featured-Card-Title {
+.featured-card-title {
     font-family: 'Georgia', 'Playfair Display', serif;
-    font-size: clamp(17px, 2vw, 25px);
+    font-size: clamp(14px, 2.5vw, 25px);
     font-weight: 600;
     color: #ffffff;
     line-height: 1.35;
     margin: 0;
 }
 
-.Featured-Video-Badge {
+.featured-video-badge {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -320,24 +332,7 @@ img {
     width: fit-content;
 }
 
-.Featured-Video-Badge svg {
-    width: 11px;
-    height: 11px;
-    flex-shrink: 0;
-}
-
-/* ─────────────────────────────────────────
-   SLIDE TRANSITION ANIMATIONS  —  FIXED
-   
-   KEY FIX: 
-   • Active slide → fully visible, no animation
-   • Enter slide  → slides IN from right/left,   z-index 3 (on top)
-   • Exit slide   → slides OUT to left/right,    z-index 2 (below)
-   • animation-fill-mode: forwards keeps final
-     keyframe state so no flash back
-──────────────────────────────────────────── */
-
-/* Active — just sits there, fully visible */
+/* ==================== Slide Animations ==================== */
 .slide-active {
     z-index: 1;
     opacity: 1;
@@ -345,34 +340,29 @@ img {
     animation: none;
 }
 
-/* ── NEXT direction: new slide enters from RIGHT ── */
 .slide-enter-next {
     z-index: 3;
-    animation: slideEnterFromRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideEnterRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .slide-exit-next {
     z-index: 2;
     opacity: 1;
-    /* ✅ start visible so exit is smooth */
-    animation: slideExitToLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideExitLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* ── PREV direction: new slide enters from LEFT ── */
 .slide-enter-prev {
     z-index: 3;
-    animation: slideEnterFromLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideEnterLeft 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .slide-exit-prev {
     z-index: 2;
     opacity: 1;
-    /* ✅ start visible so exit is smooth */
-    animation: slideExitToRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: slideExitRight 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* ── Keyframes ── */
-@keyframes slideEnterFromRight {
+@keyframes slideEnterRight {
     from {
         transform: translateX(100%);
         opacity: 0.8;
@@ -384,7 +374,7 @@ img {
     }
 }
 
-@keyframes slideEnterFromLeft {
+@keyframes slideEnterLeft {
     from {
         transform: translateX(-100%);
         opacity: 0.8;
@@ -396,7 +386,7 @@ img {
     }
 }
 
-@keyframes slideExitToLeft {
+@keyframes slideExitLeft {
     from {
         transform: translateX(0);
         opacity: 1;
@@ -408,7 +398,7 @@ img {
     }
 }
 
-@keyframes slideExitToRight {
+@keyframes slideExitRight {
     from {
         transform: translateX(0);
         opacity: 1;
@@ -420,14 +410,14 @@ img {
     }
 }
 
-/* ─── Arrows ─── */
-.Slider-Arrow {
+/* ==================== Arrows ==================== */
+.slider-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    width: 40px;
-    height: 40px;
+    width: clamp(30px, 5vw, 40px);
+    height: clamp(30px, 5vw, 40px);
     border-radius: 50%;
     border: 1.5px solid #ffffff8c;
     background: #00000047;
@@ -441,56 +431,55 @@ img {
     -webkit-backdrop-filter: blur(6px);
 }
 
-.Slider-Arrow:hover {
+.slider-arrow:hover {
     background: #0000009e;
     border-color: #ffffffe6;
     transform: translateY(-50%) scale(1.08);
 }
 
-.Slider-Arrow--prev {
-    left: 14px;
+.slider-arrow--prev {
+    left: clamp(8px, 2vw, 14px);
 }
 
-.Slider-Arrow--next {
-    right: 14px;
+.slider-arrow--next {
+    right: clamp(8px, 2vw, 14px);
 }
 
-/* ─── Dots ─── */
-.Slider-Dots {
+/* ==================== Dots ==================== */
+.slider-dots {
     position: absolute;
-    bottom: 18px;
+    bottom: clamp(10px, 2vw, 18px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     display: flex;
-    gap: 8px;
+    gap: clamp(5px, 1vw, 8px);
     align-items: center;
 }
 
-.Slider-Dot {
-    width: 8px;
-    height: 8px;
+.slider-dot {
+    width: clamp(6px, 1.2vw, 8px);
+    height: clamp(6px, 1.2vw, 8px);
     border-radius: 50%;
     background: #ffffff73;
     border: none;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
     padding: 0;
+    transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
 }
 
-.Slider-Dot.active {
+.slider-dot.active {
     background: #ffffff;
-    width: 24px;
+    width: clamp(18px, 3.5vw, 24px);
     border-radius: 4px;
-    transform: none;
 }
 
-.Slider-Dot--video {
+.slider-dot--video {
     background: #ffffff8c;
     position: relative;
 }
 
-.Slider-Dot--video::after {
+.slider-dot--video::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -503,219 +492,14 @@ img {
     border-left: 4px solid #ffffffe6;
 }
 
-.Slider-Dot--video.active {
+.slider-dot--video.active {
     background: #ffffffe6;
-    width: 24px;
+    width: clamp(18px, 3.5vw, 24px);
     border-radius: 4px;
 }
 
-.Slider-Dot--video.active::after {
+.slider-dot--video.active::after {
     border-left-color: #00000099;
-}
-
-.Story-Card-explore a {
-    text-decoration: none;
-    color: black;
-}
-
-/* Correct hover */
-.Story-Card-explore:hover a {
-    color: white;
-}
-
-/* ==================== Responsive ==================== */
-@media (min-width: 1200px) {
-    .Story-Card-Thumb {
-        flex: 0 0 400px;
-        width: 400px;
-        height: 216px;
-    }
-
-    .Featured-Slider,
-    .Featured-Slider-Viewport {
-        min-height: 430px;
-    }
-
-    .Featured-Slide-Img {
-        min-height: 430px;
-    }
-
-    .Features-Section-image img {
-        width: 70%;
-    }
-}
-
-@media (max-width: 1199px) and (min-width: 992px) {
-    .Story-Card-Thumb {
-        flex: 0 0 180px;
-        width: 180px;
-        height: 140px;
-    }
-
-    .Features-Section-image img {
-        width: 75%;
-    }
-}
-
-@media (max-width: 991px) and (min-width: 768px) {
-    .Latest-Stories-Section {
-        padding: 30px 15px 60px 15px;
-    }
-
-    .Story-Card-Thumb {
-        flex: 0 0 160px;
-        width: 160px;
-        height: 120px;
-    }
-
-    .Featured-Slider,
-    .Featured-Slider-Viewport {
-        min-height: 320px;
-    }
-
-    .Featured-Slide-Img {
-        min-height: 320px;
-    }
-
-    .Focus {
-        padding: 60px 15px;
-    }
-
-    .Features-Section {
-        padding: 0px 15px;
-    }
-
-    .Features-Section-image img {
-        width: 85%;
-    }
-}
-
-@media (max-width: 767px) and (min-width: 576px) {
-    .Latest-Stories-Section {
-        padding: 20px 10px 40px 10px;
-    }
-
-    .Story-Card-Thumb {
-        flex: 0 0 140px;
-        width: 140px;
-        height: 110px;
-    }
-
-    .Featured-Slider,
-    .Featured-Slider-Viewport {
-        min-height: 270px;
-    }
-
-    .Featured-Slide-Img {
-        min-height: 270px;
-    }
-
-    .Focus {
-        padding: 40px 10px;
-    }
-
-    .Features-Section {
-        padding: 0px 10px;
-    }
-
-    .Features-Section-image img {
-        width: 90%;
-    }
-}
-
-@media (max-width: 575px) {
-    .Focus-main-container {
-        padding: 15px 5px;
-    }
-
-    .Focus {
-        padding: 30px 5px;
-        margin-bottom: 20px;
-    }
-
-    .Features-Section {
-        padding: 0px 5px;
-    }
-
-    .Latest-Stories-Section {
-        padding: 16px 5px 36px 5px;
-    }
-
-    .Story-Card {
-        gap: 14px;
-    }
-
-    .Story-Card-Thumb {
-        flex: 0 0 120px;
-        width: 120px;
-        height: 95px;
-    }
-
-    .Story-Card-Title {
-        font-size: 15px;
-    }
-
-    .Story-Card-excerpt {
-        font-size: 13px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .Story-Card-explore {
-        font-size: 12px;
-        padding: 8px 18px;
-    }
-
-    .Featured-Slider,
-    .Featured-Slider-Viewport {
-        min-height: 240px;
-    }
-
-    .Featured-Slide-Img {
-        min-height: 240px;
-    }
-
-    .Features-Section-text {
-        font-size: 19px;
-        letter-spacing: 1px;
-    }
-
-    .Features-Section-Box:hover .Features-Section-image {
-        transform: scale(1.15);
-    }
-
-    .Slider-Arrow {
-        width: 34px;
-        height: 34px;
-    }
-}
-
-@media (max-width: 399px) {
-    .Story-Card-Thumb {
-        flex: 0 0 100px;
-        width: 100px;
-        height: 80px;
-    }
-
-    .Featured-Slider,
-    .Featured-Slider-Viewport {
-        min-height: 200px;
-    }
-
-    .Featured-Slide-Img {
-        min-height: 200px;
-    }
-
-    .Features-Section-text {
-        font-size: 16px;
-    }
-
-    .Slider-Arrow {
-        width: 30px;
-        height: 30px;
-    }
 }
 
 /* ==================== Animations ==================== */
@@ -731,20 +515,162 @@ img {
     }
 }
 
+/* ==================== Responsive Breakpoints ==================== */
+
+/* Large Desktop: 1200px+ */
+@media (min-width: 1200px) {
+    .story-card-thumb {
+        flex: 0 0 clamp(200px, 25vw, 400px);
+        width: clamp(200px, 25vw, 400px);
+        height: clamp(130px, 15vw, 216px);
+    }
+
+    .featured-slider,
+    .featured-slider-viewport {
+        min-height: 430px;
+    }
+
+    .featured-slide-img {
+        min-height: 430px;
+    }
+}
+
+/* Tablet Landscape: 992px – 1199px */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .story-card-thumb {
+        flex: 0 0 180px;
+        width: 180px;
+        height: 140px;
+    }
+}
+
+/* Tablet Portrait: 768px – 991px */
+@media (max-width: 991px) and (min-width: 768px) {
+    .features-section {
+        padding: 40px 15px;
+    }
+
+    .story-card-thumb {
+        flex: 0 0 160px;
+        width: 160px;
+        height: 120px;
+    }
+
+    .featured-slider,
+    .featured-slider-viewport {
+        min-height: 320px;
+    }
+
+    .featured-slide-img {
+        min-height: 320px;
+    }
+}
+
+/* Mobile: up to 767px — stack layout vertically */
+@media (max-width: 767px) {
+    .stories-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .featured-slider {
+        margin-top: 20px;
+        min-height: clamp(220px, 56vw, 340px);
+    }
+
+    .featured-slider-viewport {
+        min-height: clamp(220px, 56vw, 340px);
+    }
+
+    .featured-slide-img {
+        min-height: clamp(220px, 56vw, 340px);
+    }
+}
+
+/* Mobile: up to 575px */
+@media (max-width: 575px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .features-section {
+        padding: 24px 8px;
+    }
+
+    .stories-section {
+        padding: 16px 8px 40px;
+    }
+
+    .story-card-thumb {
+        flex: 0 0 120px;
+        width: 120px;
+        height: 95px;
+    }
+
+    .story-card-title {
+        font-size: clamp(18px, 4.5vw, 28px);
+    }
+
+    .story-card-excerpt {
+        font-size: clamp(20px, 5.5vw, 36px);
+    }
+
+    .story-card-explore {
+        font-size: 11px;
+        padding: 7px 16px;
+    }
+}
+
+/* Small Mobile: up to 399px */
+@media (max-width: 399px) {
+    .story-card-thumb {
+        flex: 0 0 95px;
+        width: 95px;
+        height: 76px;
+    }
+
+    .story-card-title {
+        font-size: 16px;
+    }
+
+    .story-card-excerpt {
+        font-size: 18px;
+    }
+
+    .feature-label {
+        font-size: 12px;
+    }
+}
+
+/* Extra Small: up to 359px */
+@media (max-width: 359px) {
+    .story-card-title {
+        font-size: 14px;
+    }
+
+    .story-card-excerpt {
+        font-size: 16px;
+    }
+
+    .feature-label {
+        font-size: 11px;
+    }
+}
+
 /* ==================== Print ==================== */
 @media print {
-    .Focus-main-container {
+    .focus-root {
         padding: 20px;
         background-color: white;
     }
 
-    .Featured-Slide-Img {
+    .featured-slide-img {
         height: auto;
         max-height: 300px;
     }
 
-    .Slider-Arrow,
-    .Slider-Dots {
+    .slider-arrow,
+    .slider-dots {
         display: none;
     }
 }
