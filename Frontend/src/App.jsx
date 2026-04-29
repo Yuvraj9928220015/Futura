@@ -1,7 +1,4 @@
-// import Header from "./Components/Header/Header"
 import Footer from "./Components/Footer/Footer"
-// import Home from "./Components/Home/Home"
-// import Navbar from "./Components/Navbar/Navbar"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import About from "./Components/Pages/About/About";
 import Automotive from "./Components/Pages/Automotive/Automotive";
@@ -20,44 +17,42 @@ import Homepage from "./Components/Homepage/Home";
 import HeaderNew from "./Components/HeaderNew/Header";
 import NavbarNew from "./Components/NavbarNew/Navbar";
 import PopupForm from "./Components/Pages/PopupForm/PopupForm";
-
+import { CartProvider } from "./Components/Pages/Cartcontext/Cartcontext"; // ← add this
 
 function App() {
   AOS.init({
     duration: 1000,
     once: true,
   });
+
   return (
     <>
-
       <BrowserRouter>
-        {/* <Header /> */}
-        <HeaderNew />
-        {/* <Navbar /> */}
-        <NavbarNew />
-        <PopupForm />
-        <Routes>
-          {/* <Route path="/" element={<Home />} /> */}
-          <Route path="/" element={<Homepage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/automotive" element={<Automotive />} />
-          <Route path="/marine" element={<Marine />} />
-          <Route path="/contract" element={<Contract />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/product" element={<Product />} />
-          <Route path="/productDetail/:id" element={<ProductDetail />} />
-          <Route path="/apollo" element={<Apollo />} />
-          <Route path="/preformance" element={<Preformance />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/productList" element={<ProductList />} />
-          <Route path="/sustainability" element={<Sustainability />} />
-          <Route path="/global-Presence" element={<GlobalPresence />} />
-        </Routes>
-        <Footer />
+        <CartProvider>  {/* ← wrap everything inside BrowserRouter */}
+          <HeaderNew />
+          <NavbarNew />
+          <PopupForm />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/automotive" element={<Automotive />} />
+            <Route path="/marine" element={<Marine />} />
+            <Route path="/contract" element={<Contract />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/productDetail/:id" element={<ProductDetail />} />
+            <Route path="/apollo" element={<Apollo />} />
+            <Route path="/preformance" element={<Preformance />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/productList" element={<ProductList />} />
+            <Route path="/sustainability" element={<Sustainability />} />
+            <Route path="/global-Presence" element={<GlobalPresence />} />
+          </Routes>
+          <Footer />
+        </CartProvider>  {/* ← close here */}
       </BrowserRouter>
-
     </>
-  )
+  );
 }
 
-export default App
+export default App;

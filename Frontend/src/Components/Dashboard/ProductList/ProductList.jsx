@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./ProductList.css";
 
-const API_URL = "http://localhost:8000/api/products";
+const API_URL = "https://api.futuratextiles.in/api/products";
 const LOGIN_API_URL = "https://api.futuratextiles.in/api/auth/login";
 const BASE_URL = "https://api.futuratextiles.in";
 
@@ -14,7 +14,6 @@ const getImageUrl = (imagePath) => {
     return `${BASE_URL}/uploads/${clean}`;
 };
 
-// ✅ Build full URL for PDF (same logic as images)
 const getPdfUrl = (pdfPath) => {
     if (!pdfPath || pdfPath === '') return '';
     const clean = String(pdfPath).trim();
@@ -66,6 +65,7 @@ function ProductList() {
         category: '',
         price: '',
         color: '',
+        colorName: '',      // ✅ NEW: product-level colorName
         Flammable: '',
         resistant: '',
         QUV: '',
@@ -86,9 +86,9 @@ function ProductList() {
     const [newProductSwatches, setNewProductSwatches] = useState([]);
     const [newProductSwatchPreviews, setNewProductSwatchPreviews] = useState([]);
     const [newProductVariants, setNewProductVariants] = useState([]);
-    // ✅ NEW: PDF state for add product
     const [newProductPdf, setNewProductPdf] = useState(null);
     const [newProductPdfName, setNewProductPdfName] = useState('');
+    const [newProductBaseVariantName, setNewProductBaseVariantName] = useState('');
 
     // ─── Edit Product State ───
     const [editProductFormData, setEditProductFormData] = useState({ ...emptyFormData });
@@ -106,11 +106,11 @@ function ProductList() {
     const [editProductSwatchPreviews, setEditProductSwatchPreviews] = useState([]);
     const [existingSwatches, setExistingSwatches] = useState([]);
     const [editProductVariants, setEditProductVariants] = useState([]);
-    // ✅ NEW: PDF state for edit product
     const [existingPdf, setExistingPdf] = useState(null);
     const [editProductPdf, setEditProductPdf] = useState(null);
     const [editProductPdfName, setEditProductPdfName] = useState('');
     const [removeExistingPdf, setRemoveExistingPdf] = useState(false);
+    const [editProductBaseVariantName, setEditProductBaseVariantName] = useState('');
 
     useEffect(() => {
         const isLoggedIn = sessionStorage.getItem('isAuthenticated');
@@ -242,7 +242,6 @@ function ProductList() {
         setError(null);
     };
 
-    // ✅ NEW: PDF change handler for new product
     const handleNewProductPdfChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -312,7 +311,8 @@ function ProductList() {
 
     // ─── Variants — New Product ───
     const handleAddVariant = () => {
-        setNewProductVariants(prev => [...prev, { name: '', color: '', grain: '', images: [], previews: [] }]);
+        // ✅ colorName added to initial variant object
+        setNewProductVariants(prev => [...prev, { name: '', color: '', colorName: '', grain: '', images: [], previews: [] }]);
     };
 
     const handleRemoveVariant = (variantIndex) => {
@@ -331,6 +331,15 @@ function ProductList() {
         setNewProductVariants(prev => {
             const updated = [...prev];
             updated[variantIndex].color = value;
+            return updated;
+        });
+    };
+
+    // ✅ NEW: colorName change handler for new product variants
+    const handleVariantColorNameChange = (variantIndex, value) => {
+        setNewProductVariants(prev => {
+            const updated = [...prev];
+            updated[variantIndex].colorName = value;
             return updated;
         });
     };
@@ -378,11 +387,14 @@ function ProductList() {
         }
     };
 
-    // ✅ Submit new product — includes PDF in FormData
+    // ✅ FIXED: handleNewProductSubmit — colorName included
     const handleNewProductSubmit = async (e) => {
         e.preventDefault();
 
-        if (!newProductFormData.title || !newProductFormData.price || !newProductFormData.category || !newProductFormData.description) {
+        const productTitle = newProductFormData.title.trim();
+        const baseVariantLabel = newProductBaseVariantName.trim() || productTitle;
+
+        if (!productTitle || !newProductFormData.price || !newProductFormData.category || !newProductFormData.description) {
             setError('Please fill all required fields');
             return;
         }
@@ -410,11 +422,13 @@ function ProductList() {
             setError(null);
 
             const formDataToSend = new FormData();
-            formDataToSend.append('title', newProductFormData.title);
+            formDataToSend.append('title', productTitle);
             formDataToSend.append('description', newProductFormData.description);
             formDataToSend.append('category', newProductFormData.category);
             formDataToSend.append('price', newProductFormData.price);
             formDataToSend.append('color', newProductFormData.color);
+            formDataToSend.append('colorName', newProductFormData.colorName); // ✅ NEW
+            formDataToSend.append('baseVariantName', baseVariantLabel);
 
             if (newProductFormData.Flammable) formDataToSend.append('Flammable', newProductFormData.Flammable);
             if (newProductFormData.resistant) formDataToSend.append('resistant', newProductFormData.resistant);
@@ -426,8 +440,6 @@ function ProductList() {
 
             validImages.forEach(image => formDataToSend.append('images', image));
             if (newProductVideo) formDataToSend.append('video', newProductVideo);
-
-            // ✅ Append PDF if selected
             if (newProductPdf) formDataToSend.append('pdf', newProductPdf);
 
             const validIcons = newProductIcons.filter(i => i !== null);
@@ -439,6 +451,7 @@ function ProductList() {
             if (newProductVariants.length > 0) {
                 formDataToSend.append('variantNames', JSON.stringify(newProductVariants.map(v => v.name)));
                 formDataToSend.append('variantColors', JSON.stringify(newProductVariants.map(v => v.color || '')));
+                formDataToSend.append('variantColorNames', JSON.stringify(newProductVariants.map(v => v.colorName || ''))); // ✅ NEW
                 formDataToSend.append('variantGrain', JSON.stringify(newProductVariants.map(v => v.grain || '')));
 
                 newProductVariants.forEach((variant, index) => {
@@ -465,8 +478,9 @@ function ProductList() {
             setNewProductSwatches([]);
             setNewProductSwatchPreviews([]);
             setNewProductVariants([]);
-            setNewProductPdf(null);       // ✅ reset pdf
+            setNewProductPdf(null);
             setNewProductPdfName('');
+            setNewProductBaseVariantName('');
             setShowAddProductModal(false);
             fetchProducts(colorFilter);
             setTimeout(() => setSuccessMessage(''), 3000);
@@ -489,6 +503,7 @@ function ProductList() {
             category: product.category,
             price: product.price,
             color: product.color || '',
+            colorName: product.colorName || '',  // ✅ NEW
             grain: product.grain || '',
             Flammable: product.Flammable || '',
             resistant: product.resistant || '',
@@ -503,15 +518,18 @@ function ProductList() {
         setExistingIcons(product.icons || []);
         setExistingSwatches(product.swatches || []);
 
-        // ✅ Load existing PDF
         setExistingPdf(product.pdf || null);
         setEditProductPdf(null);
         setEditProductPdfName('');
         setRemoveExistingPdf(false);
 
+        setEditProductBaseVariantName(product.baseVariantName || product.title);
+
+        // ✅ colorName added to existing variants
         const existingVariants = (product.variants || []).map(v => ({
             name: v.name,
             color: v.color || '',
+            colorName: v.colorName || '',  // ✅ NEW
             grain: v.grain || '',
             existingImages: v.images || [],
             newImages: [],
@@ -590,7 +608,6 @@ function ProductList() {
         setError(null);
     };
 
-    // ✅ NEW: PDF change handler for edit product
     const handleEditProductPdfChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -601,7 +618,7 @@ function ProductList() {
             }
             setEditProductPdf(file);
             setEditProductPdfName(file.name);
-            setRemoveExistingPdf(false); // uploading new one, don't remove flag
+            setRemoveExistingPdf(false);
             e.target.value = '';
             setError(null);
         }
@@ -720,7 +737,8 @@ function ProductList() {
 
     // ─── Variants — Edit Product ───
     const handleAddEditVariant = () => {
-        setEditProductVariants(prev => [...prev, { name: '', color: '', grain: '', existingImages: [], newImages: [], newPreviews: [] }]);
+        // ✅ colorName added
+        setEditProductVariants(prev => [...prev, { name: '', color: '', colorName: '', grain: '', existingImages: [], newImages: [], newPreviews: [] }]);
     };
 
     const handleRemoveEditVariant = (variantIndex) => {
@@ -739,6 +757,15 @@ function ProductList() {
         setEditProductVariants(prev => {
             const updated = [...prev];
             updated[variantIndex].color = value;
+            return updated;
+        });
+    };
+
+    // ✅ NEW: colorName change handler for edit product variants
+    const handleEditVariantColorNameChange = (variantIndex, value) => {
+        setEditProductVariants(prev => {
+            const updated = [...prev];
+            updated[variantIndex].colorName = value;
             return updated;
         });
     };
@@ -809,11 +836,14 @@ function ProductList() {
         }
     };
 
-    // ✅ Submit edit product — includes PDF in FormData
+    // ✅ FIXED: handleEditProductSubmit — colorName included
     const handleEditProductSubmit = async (e) => {
         e.preventDefault();
 
-        if (!editProductFormData.title || !editProductFormData.price || !editProductFormData.category || !editProductFormData.description) {
+        const productTitle = editProductFormData.title.trim();
+        const baseVariantLabel = editProductBaseVariantName.trim() || productTitle;
+
+        if (!productTitle || !editProductFormData.price || !editProductFormData.category || !editProductFormData.description) {
             setError('Please fill all required fields');
             return;
         }
@@ -844,11 +874,14 @@ function ProductList() {
             setError(null);
 
             const formDataToSend = new FormData();
-            formDataToSend.append('title', editProductFormData.title);
+            formDataToSend.append('title', productTitle);
             formDataToSend.append('description', editProductFormData.description);
             formDataToSend.append('category', editProductFormData.category);
             formDataToSend.append('price', editProductFormData.price);
             formDataToSend.append('color', editProductFormData.color);
+            formDataToSend.append('colorName', editProductFormData.colorName); // ✅ NEW
+            formDataToSend.append('baseVariantName', baseVariantLabel);
+
             formDataToSend.append('Flammable', editProductFormData.Flammable);
             formDataToSend.append('resistant', editProductFormData.resistant);
             formDataToSend.append('QUV', editProductFormData.QUV);
@@ -857,14 +890,12 @@ function ProductList() {
             formDataToSend.append('AntiMicrobial', editProductFormData.AntiMicrobial);
             formDataToSend.append('PinkStain', editProductFormData.PinkStain);
 
-            // Image order
             const imageOrder = [];
             validExistingImages.forEach(img => imageOrder.push(img));
             validNewImages.forEach((_, index) => imageOrder.push(`NEW_FILE_${index}`));
             formDataToSend.append('imageOrder', JSON.stringify(imageOrder));
             validNewImages.forEach(image => formDataToSend.append('images', image));
 
-            // Icon order
             const validExistingIcons = existingIcons.filter(i => i !== null);
             const validNewIcons = editProductIcons.filter(i => i !== null);
             const iconOrder = [];
@@ -873,7 +904,6 @@ function ProductList() {
             formDataToSend.append('iconOrder', JSON.stringify(iconOrder));
             validNewIcons.forEach(icon => formDataToSend.append('icons', icon));
 
-            // Swatch order
             const validExistingSwatches = existingSwatches.filter(s => s !== null);
             const validNewSwatches = editProductSwatches.filter(s => s !== null);
             const swatchOrder = [];
@@ -888,7 +918,6 @@ function ProductList() {
                 formDataToSend.append('removeVideo', 'true');
             }
 
-            // ✅ PDF handling
             if (editProductPdf) {
                 formDataToSend.append('pdf', editProductPdf);
             } else if (removeExistingPdf) {
@@ -898,6 +927,7 @@ function ProductList() {
             if (editProductVariants.length > 0) {
                 formDataToSend.append('variantNames', JSON.stringify(editProductVariants.map(v => v.name)));
                 formDataToSend.append('variantColors', JSON.stringify(editProductVariants.map(v => v.color || '')));
+                formDataToSend.append('variantColorNames', JSON.stringify(editProductVariants.map(v => v.colorName || ''))); // ✅ NEW
                 formDataToSend.append('variantGrains', JSON.stringify(editProductVariants.map(v => v.grain || '')));
 
                 const variantOrders = editProductVariants.map(variant => {
@@ -1026,29 +1056,6 @@ function ProductList() {
                             <button onClick={() => setError(null)} className="close-btn">×</button>
                         </div>
                     )}
-
-                    {/* COLOR FILTER BAR */}
-                    <div className="color-filter-bar">
-                        <label htmlFor="color-filter-input">
-                            <i className="fas fa-palette"></i> Filter by Color:
-                        </label>
-                        <input
-                            type="text"
-                            id="color-filter-input"
-                            placeholder="e.g. Red, Blue, #FF0000"
-                            value={colorFilter}
-                            onChange={(e) => setColorFilter(e.target.value)}
-                            onKeyDown={(e) => { if (e.key === 'Enter') handleColorFilterApply(); }}
-                        />
-                        <button className="color-filter-btn apply-btn" onClick={handleColorFilterApply}>
-                            <i className="fas fa-search"></i> Apply
-                        </button>
-                        {colorFilter && (
-                            <button className="color-filter-btn clear-btn" onClick={handleColorFilterClear}>
-                                <i className="fas fa-times"></i> Clear
-                            </button>
-                        )}
-                    </div>
                 </div>
 
                 <div className="products-content">
@@ -1083,6 +1090,19 @@ function ProductList() {
                                             <div className="product-variants-section">
                                                 <h4 className="variants-title">Available Variants:</h4>
                                                 <div className="variants-grid">
+                                                    <button
+                                                        className={`variant-btn ${selectedVariantIndex === null || selectedVariantIndex === undefined ? 'active' : ''}`}
+                                                        onClick={(e) => { e.preventDefault(); handleVariantSelect(product._id, null); }}
+                                                    >
+                                                        {product.color && (
+                                                            <span
+                                                                className="variant-color-dot"
+                                                                style={{ backgroundColor: product.color }}
+                                                            />
+                                                        )}
+                                                        {product.baseVariantName || product.title}
+                                                    </button>
+
                                                     {product.variants.map((variant, index) => (
                                                         <button key={index}
                                                             className={`variant-btn ${selectedVariantIndex === index ? 'active' : ''}`}
@@ -1098,19 +1118,22 @@ function ProductList() {
                                                             {variant.name}
                                                         </button>
                                                     ))}
-                                                    <button
-                                                        className={`variant-btn ${selectedVariantIndex === null || selectedVariantIndex === undefined ? 'active' : ''}`}
-                                                        onClick={(e) => { e.preventDefault(); handleVariantSelect(product._id, null); }}>
-                                                        Default
-                                                    </button>
                                                 </div>
 
-                                                {activeVariant && (activeVariant.color || activeVariant.grain) && (
+                                                {/* ✅ Show colorName in variant meta display */}
+                                                {activeVariant && (activeVariant.color || activeVariant.colorName || activeVariant.grain) && (
                                                     <div className="variant-meta-display">
                                                         {activeVariant.color && (
                                                             <div className="variant-color-display">
                                                                 <i className="fas fa-circle" style={{ color: activeVariant.color, marginRight: '6px' }}></i>
                                                                 Variant Color: <strong>{activeVariant.color}</strong>
+                                                            </div>
+                                                        )}
+                                                        {/* ✅ NEW: Show colorName */}
+                                                        {activeVariant.colorName && (
+                                                            <div className="variant-colorname-display">
+                                                                <i className="fas fa-tag" style={{ marginRight: '6px' }}></i>
+                                                                Color Name: <strong>{activeVariant.colorName}</strong>
                                                             </div>
                                                         )}
                                                         {activeVariant.grain && (
@@ -1147,11 +1170,16 @@ function ProductList() {
                                                     <span className="color-label">
                                                         <i className="fas fa-circle" style={{ color: product.color, marginRight: '6px' }}></i>
                                                         Color: <strong>{product.color}</strong>
+                                                        {/* ✅ Show product-level colorName if set */}
+                                                        {product.colorName && (
+                                                            <span style={{ marginLeft: '8px', color: '#666' }}>
+                                                                ({product.colorName})
+                                                            </span>
+                                                        )}
                                                     </span>
                                                 </div>
                                             )}
 
-                                            {/* ✅ PDF download link shown on product card */}
                                             {product.pdf && (
                                                 <div className="product-pdf-section">
                                                     <a
@@ -1204,7 +1232,10 @@ function ProductList() {
                                 <div className="form-group">
                                     <label htmlFor="new-product-title">Product Title *</label>
                                     <input type="text" id="new-product-title" name="title"
-                                        value={newProductFormData.title} onChange={handleNewProductInputChange} required />
+                                        value={newProductFormData.title}
+                                        onChange={handleNewProductInputChange}
+                                        placeholder="e.g. AMERICANA, FUERTE"
+                                        required />
                                 </div>
 
                                 <div className="form-group">
@@ -1227,13 +1258,24 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="new-product-color">
-                                        <i className="fas fa-palette"></i> Product Color (Optional)
-                                    </label>
-                                    <input type="text" id="new-product-color" name="color"
-                                        value={newProductFormData.color} onChange={handleNewProductInputChange}
-                                        placeholder="e.g. Red, Navy Blue, #FF5733" />
+                                {/* ✅ Color + ColorName side by side */}
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label htmlFor="new-product-color">
+                                            <i className="fas fa-palette"></i> Product Color (Optional)
+                                        </label>
+                                        <input type="text" id="new-product-color" name="color"
+                                            value={newProductFormData.color} onChange={handleNewProductInputChange}
+                                            placeholder="e.g. Red, #FF5733" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="new-product-colorName">
+                                            <i className="fas fa-tag"></i> Color Name (Optional)
+                                        </label>
+                                        <input type="text" id="new-product-colorName" name="colorName"
+                                            value={newProductFormData.colorName} onChange={handleNewProductInputChange}
+                                            placeholder="e.g. Midnight Blue, Scarlet Red" />
+                                    </div>
                                 </div>
 
                                 <div className="form-section">
@@ -1276,7 +1318,24 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                {/* Images */}
+                                {/* Default Variant Button Name */}
+                                <div className="variant-item" style={{ marginBottom: '16px' }}>
+                                    <div className="form-group">
+                                        <label style={{ fontWeight: '600' }}>
+                                            Default Variant Button Name
+                                            <span style={{ fontWeight: '400', color: '#888', fontSize: '13px', marginLeft: '6px' }}>
+                                                (Variant buttons mein pehle button ka naam — Product Title se alag)
+                                            </span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={newProductBaseVariantName}
+                                            onChange={(e) => setNewProductBaseVariantName(e.target.value)}
+                                            placeholder={`Default: "${newProductFormData.title || 'Product Title'}" (leave empty to use product title)`}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="form-group image-upload-group">
                                     <label>Product Images * (Max 30)</label>
                                     <div className="image-input-grid">
@@ -1348,7 +1407,7 @@ function ProductList() {
                                     <p className="uploaded-icon-count">{newProductIcons.filter(i => i !== null).length} icon(s) uploaded</p>
                                 </div>
 
-                                {/* ✅ PDF Upload — Add Product */}
+                                {/* PDF Upload */}
                                 <div className="form-group pdf-upload-group">
                                     <label>
                                         <i className="fas fa-file-pdf"></i> Product PDF (Optional — 1 file only)
@@ -1395,6 +1454,7 @@ function ProductList() {
                                                     placeholder="e.g., Navy Blue, Size L" required />
                                             </div>
 
+                                            {/* ✅ Color + ColorName + Grain — 3 columns */}
                                             <div className="form-row">
                                                 <div className="form-group">
                                                     <label><i className="fas fa-palette"></i> Variant Color (Optional)</label>
@@ -1407,6 +1467,13 @@ function ProductList() {
                                                                 style={{ backgroundColor: variant.color }} title={variant.color} />
                                                         )}
                                                     </div>
+                                                </div>
+                                                <div className="form-group">
+                                                    {/* ✅ NEW: colorName input */}
+                                                    <label><i className="fas fa-tag"></i> Color Name (Optional)</label>
+                                                    <input type="text" value={variant.colorName}
+                                                        onChange={(e) => handleVariantColorNameChange(variantIndex, e.target.value)}
+                                                        placeholder="e.g. Midnight Blue, Scarlet" />
                                                 </div>
                                                 <div className="form-group">
                                                     <label><i className="fas fa-layer-group"></i> Variant Grain (Optional)</label>
@@ -1473,7 +1540,9 @@ function ProductList() {
                                 <div className="form-group">
                                     <label htmlFor="edit-product-title">Product Title *</label>
                                     <input type="text" id="edit-product-title" name="title"
-                                        value={editProductFormData.title} onChange={handleEditProductInputChange} required />
+                                        value={editProductFormData.title}
+                                        onChange={handleEditProductInputChange}
+                                        required />
                                 </div>
 
                                 <div className="form-group">
@@ -1496,13 +1565,24 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="edit-product-color">
-                                        <i className="fas fa-palette"></i> Product Color (Optional)
-                                    </label>
-                                    <input type="text" id="edit-product-color" name="color"
-                                        value={editProductFormData.color} onChange={handleEditProductInputChange}
-                                        placeholder="e.g. Red, Navy Blue, #FF5733" />
+                                {/* ✅ Color + ColorName side by side */}
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label htmlFor="edit-product-color">
+                                            <i className="fas fa-palette"></i> Product Color (Optional)
+                                        </label>
+                                        <input type="text" id="edit-product-color" name="color"
+                                            value={editProductFormData.color} onChange={handleEditProductInputChange}
+                                            placeholder="e.g. Red, Navy Blue, #FF5733" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="edit-product-colorName">
+                                            <i className="fas fa-tag"></i> Color Name (Optional)
+                                        </label>
+                                        <input type="text" id="edit-product-colorName" name="colorName"
+                                            value={editProductFormData.colorName} onChange={handleEditProductInputChange}
+                                            placeholder="e.g. Midnight Blue, Scarlet Red" />
+                                    </div>
                                 </div>
 
                                 <div className="form-section">
@@ -1545,7 +1625,24 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                {/* Existing + New Images */}
+                                {/* Default Variant Button Name */}
+                                <div className="variant-item" style={{ marginBottom: '16px' }}>
+                                    <div className="form-group">
+                                        <label style={{ fontWeight: '600' }}>
+                                            Default Variant Button Name
+                                            <span style={{ fontWeight: '400', color: '#888', fontSize: '13px', marginLeft: '6px' }}>
+                                                (Variant buttons mein pehle button ka naam — Product Title se alag)
+                                            </span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={editProductBaseVariantName}
+                                            onChange={(e) => setEditProductBaseVariantName(e.target.value)}
+                                            placeholder={`Default: "${editProductFormData.title}" (leave empty to use product title)`}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="form-group image-upload-group">
                                     <label>Product Images * - Remove & Replace at position</label>
                                     <div className="image-input-grid">
@@ -1663,13 +1760,12 @@ function ProductList() {
                                     </p>
                                 </div>
 
-                                {/* ✅ PDF Upload — Edit Product */}
+                                {/* PDF Upload — Edit Product */}
                                 <div className="form-group pdf-upload-group">
                                     <label>
                                         <i className="fas fa-file-pdf"></i> Product PDF (Optional — 1 file only)
                                     </label>
 
-                                    {/* Show existing PDF if present and not removed */}
                                     {existingPdf && !editProductPdf && (
                                         <div className="pdf-preview-box existing-pdf">
                                             <i className="fas fa-file-pdf pdf-icon-large"></i>
@@ -1682,7 +1778,6 @@ function ProductList() {
                                         </div>
                                     )}
 
-                                    {/* Show newly selected PDF */}
                                     {editProductPdf && (
                                         <div className="pdf-preview-box new-pdf">
                                             <i className="fas fa-file-pdf pdf-icon-large"></i>
@@ -1693,7 +1788,6 @@ function ProductList() {
                                         </div>
                                     )}
 
-                                    {/* Upload button — shown when no new pdf is staged */}
                                     {!editProductPdf && (
                                         <label htmlFor="edit-product-pdf" className="pdf-upload-placeholder" style={{ marginTop: existingPdf ? '8px' : '0' }}>
                                             <i className="fas fa-upload"></i>
@@ -1728,6 +1822,7 @@ function ProductList() {
                                                     placeholder="e.g., Navy Blue, Size L" required />
                                             </div>
 
+                                            {/* ✅ Color + ColorName + Grain — 3 columns */}
                                             <div className="form-row">
                                                 <div className="form-group variant-color-field">
                                                     <label><i className="fas fa-palette"></i> Variant Color (Optional)</label>
@@ -1740,6 +1835,13 @@ function ProductList() {
                                                                 style={{ backgroundColor: variant.color }} title={variant.color} />
                                                         )}
                                                     </div>
+                                                </div>
+                                                <div className="form-group">
+                                                    {/* ✅ NEW: colorName input in edit */}
+                                                    <label><i className="fas fa-tag"></i> Color Name (Optional)</label>
+                                                    <input type="text" value={variant.colorName}
+                                                        onChange={(e) => handleEditVariantColorNameChange(variantIndex, e.target.value)}
+                                                        placeholder="e.g. Midnight Blue, Scarlet" />
                                                 </div>
                                                 <div className="form-group variant-grain-field">
                                                     <label><i className="fas fa-layer-group"></i> Variant Grain (Optional)</label>

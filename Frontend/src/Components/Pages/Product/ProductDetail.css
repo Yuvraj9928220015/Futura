@@ -199,10 +199,6 @@
 }
 
 /* ── Bottom thumbnails ── */
-#colClass-thumbnail-box {
-    /* padding-right handled by pd-left-panel */
-}
-
 .product-detail-thumbnail-box {
     width: 100%;
     height: 350px;
@@ -308,7 +304,6 @@
     padding: 10px 0;
 }
 
-/* Grain header (label + collapse toggle) */
 .grain-row-header {
     display: flex;
     align-items: center;
@@ -337,7 +332,6 @@
     color: #444;
 }
 
-/* Slider row — arrows + cards + see-all pill — always horizontal, never wraps */
 .grain-slider-row {
     display: flex;
     flex-direction: row;
@@ -347,11 +341,9 @@
     width: 100%;
 }
 
-/* Viewport: clips overflow without clipping the card borders/shadows */
 .grain-cards-viewport {
     flex: 1;
     min-width: 0;
-    /* prevent flex child blowout */
     overflow: hidden;
     padding: 6px 4px;
     margin: -6px -4px;
@@ -371,7 +363,6 @@
     padding-bottom: 24px;
 }
 
-/* Arrow buttons */
 .grain-arrow-btn {
     background: #fff;
     border: 1px solid #ddd;
@@ -401,7 +392,6 @@
     cursor: not-allowed;
 }
 
-/* Per-grain pill — icon-only circular button placed after right arrow */
 .grain-see-all-pill {
     display: inline-flex;
     align-items: center;
@@ -431,7 +421,6 @@
     border-color: #333;
 }
 
-/* Extra items (expanded) */
 .grain-extra-items {
     display: flex;
     align-items: flex-start;
@@ -444,38 +433,64 @@
 }
 
 /* ============================================================
-   DOWNLOADS / SPEC SECTIONS
+   PRODUCT CART ROW — Download Catalogue + Add To Cart
    ============================================================ */
 .product-detail-color-section {
     margin-top: 30px;
 }
 
+/* ── FIXED: Both buttons on the same line ── */
+.Product-Cart {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: nowrap;
+    padding: 14px 18px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* ── FIXED: Remove block-level styles from downloads wrapper ── */
 .product-detail-downloads {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 48px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
 }
 
 .download-links {
-    width: 100%;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
 .download-link {
-    color: #666;
+    color: #555;
     font-size: 0.9rem;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: color 0.2s ease;
 }
 
+.download-link:hover {
+    color: #111;
+}
+
+/* ============================================================
+   SPECIFICATIONS / ABOUT SECTION
+   ============================================================ */
 .specifications {
     display: flex;
     justify-content: space-between;
@@ -624,7 +639,69 @@
 }
 
 .variant-slider-section {
-    margin-bottom: 60px;
+    margin-bottom: 30px;
+}
+
+/* ============================================================
+   ADD TO CART BUTTON
+   ============================================================ */
+.add-to-cart-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 22px;
+    height: 42px;
+    background: #111111;
+    color: #ffffff;
+    border: none;
+    border-radius: 100px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px #0000002e;
+    min-width: 140px;
+}
+
+.add-to-cart-btn:hover {
+    background: #333333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px #00000038;
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px #00000029;
+}
+
+.add-to-cart-btn--added {
+    background: #2e7d32;
+    box-shadow: 0 4px 14px #2e7d3259;
+    animation: cartBtnPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.add-to-cart-btn--added:hover {
+    background: #256427;
+}
+
+@keyframes cartBtnPop {
+    from {
+        transform: scale(0.94);
+        opacity: 0.8;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* ============================================================
@@ -679,7 +756,6 @@
         padding: 20px 40px;
     }
 
-    /* On tablet/mobile, stack panels and let the whole page scroll */
     .product-detail-panels {
         flex-direction: column;
         height: auto;
@@ -726,13 +802,9 @@
         gap: 12px;
     }
 
-    .grain-see-all-pill {
-        font-size: 0.68rem;
-        padding: 4px 10px;
-    }
-
     .download-links {
         flex-direction: column;
+        gap: 6px;
     }
 
     .gallery-slider-header {
@@ -775,6 +847,19 @@
     .grain-row-label {
         font-size: 0.72rem;
     }
+
+    .Product-Cart {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        height: 46px;
+        font-size: 14.5px;
+        border-radius: 12px;
+        min-width: unset;
+    }
 }
 
 /* ============================================================
@@ -785,14 +870,22 @@
         font-size: 1.5rem;
     }
 
-    .product-detail-downloads {
+    .Product-Cart {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        height: 46px;
+        font-size: 14.5px;
+        border-radius: 12px;
+        min-width: unset;
     }
 
     .download-links {
-        width: 100%;
-        justify-content: space-between;
+        justify-content: center;
     }
 }
 
@@ -809,4 +902,15 @@
     .product-detail-gallery-slider {
         display: none;
     }
+}
+
+.product-color-name-display {
+    margin: 4px 0 10px 0;
+}
+
+.color-name-text {
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+    letter-spacing: 0.02em;
 }

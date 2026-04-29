@@ -12,6 +12,12 @@ const variantSchema = new mongoose.Schema({
         default: "",
         trim: true
     },
+    // ✅ COLOR NAME per Variant (display text)
+    colorName: {
+        type: String,
+        default: "",
+        trim: true
+    },
     // ✅ GRAIN per Variant
     grain: {
         type: String,
@@ -61,6 +67,12 @@ const productSchema = new mongoose.Schema({
         default: "",
         trim: true
     },
+    // ✅ Product-level colorName
+    colorName: {
+        type: String,
+        default: "",
+        trim: true
+    },
     grain: {
         type: String,
         default: "",
@@ -74,7 +86,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    // ✅ NEW: PDF file path (one per product)
+    // ✅ PDF file path (one per product)
     pdf: {
         type: String,
         default: null
@@ -90,6 +102,10 @@ const productSchema = new mongoose.Schema({
     variants: {
         type: [variantSchema],
         default: []
+    },
+    baseVariantName: {
+        type: String,
+        default: ""
     },
     Flammable: {
         type: String,

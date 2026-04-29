@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { PiPlus, PiMinus } from "react-icons/pi";
 import { useParams } from "react-router-dom";
-import { MdOutlineFileDownload, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdOutlineFileDownload, MdChevronLeft, MdChevronRight, MdShoppingBag, MdCheckCircle } from "react-icons/md";
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
+import { useCart } from "../../Pages/Cartcontext/Cartcontext";
 
 import "./ProductDetail.css"
 
@@ -12,34 +13,40 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in
 const getImageUrl = (imagePath) => {
     if (!imagePath) return "/no-image.png";
     const cleanedPath = imagePath.replace(/\\/g, '/');
-    if (cleanedPath.startsWith('http')) {
-        return cleanedPath;
-    }
+    if (cleanedPath.startsWith('http')) return cleanedPath;
     return `${BASE_URL}/${cleanedPath}`;
+};
+
+const getPdfUrl = (pdfPath) => {
+    if (!pdfPath || pdfPath === '') return '';
+    const clean = String(pdfPath).trim().replace(/\\/g, '/');
+    if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+    if (clean.startsWith('/uploads/')) return `${BASE_URL}${clean}`;
+    if (clean.startsWith('uploads/')) return `${BASE_URL}/${clean}`;
+    return `${BASE_URL}/uploads/${clean}`;
 };
 
 const ITEMS_PER_VIEW = 5;
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const [selectedSwatchIndex, setSelectedSwatchIndex] = useState(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [expanded, setExpanded] = useState(true);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(null);
-
     const [flammableOpen, setFlammableOpen] = useState(false);
     const [turtleLifeOpen, setTurtleLifeOpen] = useState(false);
     const [safeTouchOpen, setSafeTouchOpen] = useState(false);
-
     const [selectedGrainFilter, setSelectedGrainFilter] = useState('all');
-
-    // Global "See All" state — expands all grain rows at once
     const [showAllGrains, setShowAllGrains] = useState(false);
+
+    // ── Cart state ──
+    const { addToCart } = useCart();
+    const [addedToCart, setAddedToCart] = useState(false);
+    const addedTimerRef = useRef(null);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -53,11 +60,7 @@ const ProductDetail = () => {
                         'Accept': 'application/json',
                     },
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch product: ${response.status} ${response.statusText}`);
-                }
-
+                if (!response.ok) throw new Error(`Failed to fetch product: ${response.status} ${response.statusText}`);
                 const data = await response.json();
                 setProduct(data);
             } catch (err) {
@@ -67,11 +70,11 @@ const ProductDetail = () => {
                 setLoading(false);
             }
         };
-
-        if (id) {
-            fetchProduct();
-        }
+        if (id) fetchProduct();
     }, [id]);
+
+    // Clean up timer on unmount
+    useEffect(() => () => clearTimeout(addedTimerRef.current), []);
 
     const productData = {
         name: product?.title || "Ophelia",
@@ -106,40 +109,26 @@ const ProductDetail = () => {
             { id: 8, type: "collection", title: "Full Collection", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" }
         ];
 
-    const productSwatches = product?.swatches || [];
-    const selectedSwatch = selectedSwatchIndex !== null ? productSwatches[selectedSwatchIndex] : null;
-
     const itemsPerSlide = 4;
     const totalSlides = galleryImages.length;
-
-    const handleSwatchSelect = (index) => { setSelectedSwatchIndex(index); };
 
     const handleVariantSelect = useCallback((index) => {
         setSelectedVariantIndex(index);
         setSelectedImageIndex(0);
-        setSelectedSwatchIndex(null);
-    }, []);
-
-    const handleDefaultSelect = useCallback(() => {
-        setSelectedVariantIndex(null);
-        setSelectedImageIndex(0);
-        setSelectedSwatchIndex(null);
+        setAddedToCart(false);
+        clearTimeout(addedTimerRef.current);
     }, []);
 
     const nextSlide = () => { if (currentSlide < totalSlides - itemsPerSlide) setCurrentSlide((prev) => prev + 1); };
     const prevSlide = () => { if (currentSlide > 0) setCurrentSlide((prev) => prev - 1); };
 
     const getMainImage = () => {
-        if (currentImages && currentImages.length > 0) {
-            return getImageUrl(currentImages[selectedImageIndex]);
-        }
+        if (currentImages && currentImages.length > 0) return getImageUrl(currentImages[selectedImageIndex]);
         return null;
     };
 
     const getBottomSampleImages = () => {
-        if (currentImages && currentImages.length > 0) {
-            return currentImages.slice(-4).map(img => getImageUrl(img));
-        }
+        if (currentImages && currentImages.length > 0) return currentImages.slice(-4).map(img => getImageUrl(img));
         return [
             "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop",
             "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
@@ -150,20 +139,19 @@ const ProductDetail = () => {
 
     const handleThumbnailClick = (index) => { setSelectedImageIndex(index + 2); };
 
+    // ── Add to Cart handler ──
+    const handleAddToCart = () => {
+        if (!product) return;
+        addToCart(product, selectedVariantIndex);
+        setAddedToCart(true);
+        clearTimeout(addedTimerRef.current);
+        addedTimerRef.current = setTimeout(() => setAddedToCart(false), 2500);
+    };
+
     // ── Build grain-grouped data ──
     const buildGrainGroups = () => {
-        if (!product) return {};
-
-        const defaultItem = {
-            type: 'default',
-            index: null,
-            name: product?.title || product?.code || 'Default',
-            images: product.image,
-            grain: '__default__',
-        };
-
+        if (!product) return { groups: {} };
         const groups = {};
-
         if (product.variants) {
             product.variants.forEach((variant, index) => {
                 const grain = (variant.grain && variant.grain.trim()) ? variant.grain.trim() : '__ungrouped__';
@@ -178,28 +166,29 @@ const ProductDetail = () => {
                 });
             });
         }
-
-        return { defaultItem, groups };
+        return { groups };
     };
 
-    const { defaultItem, groups: grainGroups } = buildGrainGroups();
-
+    const { groups: grainGroups } = buildGrainGroups();
     const allGrainKeys = grainGroups ? Object.keys(grainGroups) : [];
-
-    const getGrainLabel = (grainKey, grainIndex) => {
-        if (grainKey === '__ungrouped__') return 'Other Variants';
-        return `${grainKey}`;
-    };
-
-    const getAllVariantsForGrain = (grainKey) => {
-        return grainGroups[grainKey] || [];
-    };
-
+    const getAllVariantsForGrain = (grainKey) => grainGroups[grainKey] || [];
     const filteredGrainKeys = selectedGrainFilter === 'all'
         ? allGrainKeys
         : allGrainKeys.filter(k => k === selectedGrainFilter);
 
     const hasVariants = product?.variants && product.variants.length > 0;
+    const cataloguePdfUrl = product?.pdf ? getPdfUrl(product.pdf) : null;
+
+    // ── Get active colorName ──
+    const getActiveColorName = () => {
+        if (
+            selectedVariantIndex !== null &&
+            product?.variants?.[selectedVariantIndex]?.colorName
+        ) {
+            return product.variants[selectedVariantIndex].colorName;
+        }
+        return product?.colorName || null;
+    };
 
     if (loading) {
         return (
@@ -238,6 +227,7 @@ const ProductDetail = () => {
     }
 
     const bottomSampleImages = getBottomSampleImages();
+    const activeColorName = getActiveColorName();
 
     const toggleHeaderStyle = {
         display: 'flex',
@@ -268,10 +258,7 @@ const ProductDetail = () => {
 
     // ── VariantCard ──
     const VariantCard = ({ item, isSelected, onClick }) => (
-        <div
-            onClick={onClick}
-            style={{ cursor: 'pointer', flexShrink: 0, textAlign: 'center', width: '100px' }}
-        >
+        <div onClick={onClick} style={{ cursor: 'pointer', flexShrink: 0, textAlign: 'center', width: '100px' }}>
             <div style={{
                 width: '100px',
                 height: '100px',
@@ -312,7 +299,6 @@ const ProductDetail = () => {
                     </div>
                 )}
             </div>
-
             <div style={{
                 fontSize: '0.7rem',
                 color: '#333',
@@ -328,7 +314,6 @@ const ProductDetail = () => {
             }}>
                 {item.name}
             </div>
-
             {isSelected && (
                 <div style={{
                     height: '2px',
@@ -344,20 +329,15 @@ const ProductDetail = () => {
     );
 
     // ── GrainRow ──
-    const GrainRow = ({ grainKey, grainIndex, variants, includeDefault, showAllGrains, grainLabel }) => {
+    const GrainRow = ({ grainKey, variants, showAllGrains }) => {
         const [sliderOffset, setSliderOffset] = useState(0);
         const [showExtra, setShowExtra] = useState(false);
-        const [collapsed, setCollapsed] = useState(false);
 
-        // Sync with global "See All"
         useEffect(() => {
             setShowExtra(showAllGrains);
         }, [showAllGrains]);
 
-        const allRowItems = includeDefault && defaultItem
-            ? [defaultItem, ...variants]
-            : variants;
-
+        const allRowItems = variants;
         const totalItems = allRowItems.length;
         const hasMore = totalItems > ITEMS_PER_VIEW;
         const extraItems = allRowItems.slice(ITEMS_PER_VIEW);
@@ -370,76 +350,62 @@ const ProductDetail = () => {
         const shiftRight = () => { if (canGoRight) setSliderOffset(prev => prev + 1); };
 
         const renderCard = (item) => {
-            const isSelected = item.type === 'default'
-                ? selectedVariantIndex === null
-                : selectedVariantIndex === item.index;
+            const isSelected = selectedVariantIndex === item.index;
             return (
                 <VariantCard
-                    key={item.type === 'default' ? 'default' : `variant-${item.index}`}
+                    key={`variant-${item.index}`}
                     item={item}
                     isSelected={isSelected}
-                    onClick={() => {
-                        if (item.type === 'default') handleDefaultSelect();
-                        else handleVariantSelect(item.index);
-                    }}
+                    onClick={() => handleVariantSelect(item.index)}
                 />
             );
         };
 
         return (
             <div className="grain-row-wrapper">
-                {/* ── Grain content (collapsible) ── */}
-                {!collapsed && (
-                    <>
-                        <div className="grain-slider-row">
+                <div className="grain-slider-row">
+                    <button
+                        type="button"
+                        onClick={shiftLeft}
+                        disabled={!canGoLeft}
+                        className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
+                    >
+                        <MdChevronLeft />
+                    </button>
 
-                            <button
-                                type="button"
-                                onClick={shiftLeft}
-                                disabled={!canGoLeft}
-                                className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
-                            >
-                                <MdChevronLeft />
-                            </button>
-
-                            <div className="grain-cards-viewport">
-                                <div className="grain-cards-container">
-                                    {visibleSlider.map(renderCard)}
-                                </div>
-                            </div>
-
-                            {/* Right arrow — always on right */}
-                            <button
-                                type="button"
-                                onClick={shiftRight}
-                                disabled={!canGoRight}
-                                className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
-                            >
-                                <MdChevronRight />
-                            </button>
-
-                            {/* Per-grain expand pill — icon only, after right arrow */}
-                            {hasMore && (
-                                <button
-                                    type="button"
-                                    onClick={() => setShowExtra(prev => !prev)}
-                                    className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
-                                >
-                                    {showExtra
-                                        ? <MdOutlineKeyboardArrowUp size={16} />
-                                        : <MdOutlineKeyboardArrowDown size={16} />
-                                    }
-                                </button>
-                            )}
+                    <div className="grain-cards-viewport">
+                        <div className="grain-cards-container">
+                            {visibleSlider.map(renderCard)}
                         </div>
+                    </div>
 
-                        {/* Extra items revealed by "See All" */}
-                        {showExtra && extraItems.length > 0 && (
-                            <div className="grain-extra-items">
-                                {extraItems.map(renderCard)}
-                            </div>
-                        )}
-                    </>
+                    <button
+                        type="button"
+                        onClick={shiftRight}
+                        disabled={!canGoRight}
+                        className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
+                    >
+                        <MdChevronRight />
+                    </button>
+
+                    {hasMore && (
+                        <button
+                            type="button"
+                            onClick={() => setShowExtra(prev => !prev)}
+                            className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
+                        >
+                            {showExtra
+                                ? <MdOutlineKeyboardArrowUp size={16} />
+                                : <MdOutlineKeyboardArrowDown size={16} />
+                            }
+                        </button>
+                    )}
+                </div>
+
+                {showExtra && extraItems.length > 0 && (
+                    <div className="grain-extra-items">
+                        {extraItems.map(renderCard)}
+                    </div>
                 )}
             </div>
         );
@@ -448,34 +414,19 @@ const ProductDetail = () => {
     return (
         <>
             <div className="product-detail">
-                {/* ── Two-panel independent-scroll layout ── */}
                 <div className="product-detail-panels">
 
                     {/* ════ LEFT PANEL ════ */}
                     <div className="pd-left-panel">
                         <div className="product-detail-image-box">
                             <div className="product-detail-main-image">
-                                {(selectedSwatchIndex !== null && selectedSwatch) ? (
+                                {getMainImage() ? (
                                     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                                         <img
-                                            src={getImageUrl(selectedSwatch)}
-                                            alt={`Swatch ${selectedSwatchIndex + 1}`}
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }}
-                                            onError={(e) => { e.target.src = getMainImage(); }}
+                                            src={getMainImage()}
+                                            alt={product.title}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
                                         />
-                                        <div style={{
-                                            position: 'absolute', top: '15px', right: '15px',
-                                            backgroundColor: '#ff6b35', color: 'white',
-                                            padding: '8px 15px', borderRadius: '20px',
-                                            fontSize: '14px', fontWeight: 'bold',
-                                            boxShadow: '0 2px 8px #00000033'
-                                        }}>
-                                            Swatch {selectedSwatchIndex + 1}
-                                        </div>
-                                    </div>
-                                ) : getMainImage() ? (
-                                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                                        <img src={getMainImage()} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
                                     </div>
                                 ) : (
                                     <div style={{ backgroundColor: '#f0f0f0', width: '100%', height: '100%', borderRadius: '8px' }}></div>
@@ -506,13 +457,17 @@ const ProductDetail = () => {
                                 <div className="product-detail-thumbnail" style={{ backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0', position: 'relative' }}>
                                     {getMainImage() && currentImages && currentImages.length > 1 ? (
                                         <>
-                                            <img src={getImageUrl(currentImages[1])} alt="Second Image" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "6px" }} />
-                                            {selectedSwatch && productSwatches.length > 0 && (
-                                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: '6px', pointerEvents: 'none', overflow: 'hidden' }}>
-                                                    <img src={getImageUrl(selectedSwatch)} alt="Swatch Overlay Thumbnail" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7, mixBlendMode: 'multiply' }} onError={(e) => { e.target.style.display = 'none'; }} />
-                                                </div>
-                                            )}
-                                            <div style={{ position: 'absolute', bottom: '8px', right: '8px', backgroundColor: '#ffffffe6', color: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '14px', fontWeight: 'bold', zIndex: 1 }}>
+                                            <img
+                                                src={getImageUrl(currentImages[1])}
+                                                alt="Second Image"
+                                                style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "6px" }}
+                                            />
+                                            <div style={{
+                                                position: 'absolute', bottom: '8px', right: '8px',
+                                                backgroundColor: '#ffffffe6', color: '#333',
+                                                padding: '4px 8px', borderRadius: '4px',
+                                                fontSize: '14px', fontWeight: 'bold', zIndex: 1
+                                            }}>
                                                 {selectedImageIndex + 1}
                                             </div>
                                         </>
@@ -539,14 +494,20 @@ const ProductDetail = () => {
                     <div className="pd-right-panel">
                         <div className="product-detail-info-box">
 
-                            {/* Brand / Title */}
+                            {/* ── Brand / Title ── */}
                             <div className="product-detail-brand">
                                 <span className="brand-name">{productData.brand}</span>
                             </div>
 
+                            {/* ── Color Name — shown below title, updates on variant select ── */}
+                            {activeColorName && (
+                                <div className="product-color-name-display">
+                                    <span className="color-name-text">{activeColorName}</span>
+                                </div>
+                            )}
+
                             <div className="Applications">Applications</div>
 
-                            {/* Feature tags */}
                             <div className="product-detail-features">
                                 {productData.features.map((feature, index) => (
                                     <span key={index} className="feature-tag">• {feature}</span>
@@ -576,36 +537,66 @@ const ProductDetail = () => {
                                 </div>
                             </div>
 
-                            {/* GRAIN-GROUPED VARIANT SECTION */}
+                            {/* Variant selector */}
                             <div className="product-detail-color-section">
                                 {hasVariants && (
                                     <div className="variant-slider-section">
-                                        {filteredGrainKeys.map((grainKey, idx) => {
-                                            const isFirstGrain = allGrainKeys.indexOf(grainKey) === 0;
-                                            const label = grainKey === '__ungrouped__'
-                                                ? 'Other Variants'
-                                                : grainKey;
-                                            return (
-                                                <GrainRow
-                                                    key={grainKey}
-                                                    grainKey={grainKey}
-                                                    grainIndex={allGrainKeys.indexOf(grainKey)}
-                                                    variants={getAllVariantsForGrain(grainKey)}
-                                                    includeDefault={isFirstGrain && !!defaultItem}
-                                                    showAllGrains={showAllGrains}
-                                                    grainLabel={label}
-                                                />
-                                            );
-                                        })}
+                                        {filteredGrainKeys.map((grainKey) => (
+                                            <GrainRow
+                                                key={grainKey}
+                                                grainKey={grainKey}
+                                                variants={getAllVariantsForGrain(grainKey)}
+                                                showAllGrains={showAllGrains}
+                                            />
+                                        ))}
                                     </div>
                                 )}
 
-                                <div className="product-detail-downloads">
-                                    <div className="download-links">
-                                        <span className="download-link">
-                                            <MdOutlineFileDownload />Download Catalogue
-                                        </span>
+                                {/* ── Download Catalogue + Add To Cart ── */}
+                                <div className="Product-Cart">
+                                    <div className="product-detail-downloads">
+                                        <div className="download-links">
+                                            {cataloguePdfUrl ? (
+                                                <a
+                                                    href={cataloguePdfUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="download-link"
+                                                >
+                                                    <MdOutlineFileDownload size={18} />
+                                                    Download Catalogue
+                                                </a>
+                                            ) : (
+                                                <span
+                                                    className="download-link"
+                                                    style={{ opacity: 0.4, cursor: 'not-allowed' }}
+                                                    title="No catalogue available"
+                                                >
+                                                    <MdOutlineFileDownload size={18} />
+                                                    Download Catalogue
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
+
+                                    {/* ── Add to Cart Button ── */}
+                                    <button
+                                        className={`add-to-cart-btn ${addedToCart ? 'add-to-cart-btn--added' : ''}`}
+                                        onClick={handleAddToCart}
+                                        aria-label="Add to cart"
+                                    >
+                                        {addedToCart ? (
+                                            <>
+                                                <MdCheckCircle size={17} style={{ flexShrink: 0 }} />
+                                                <span>Added!</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <MdShoppingBag size={17} style={{ flexShrink: 0 }} />
+                                                <span>Add To Cart</span>
+                                            </>
+                                        )}
+                                    </button>
                                 </div>
                             </div>
 
@@ -636,7 +627,7 @@ const ProductDetail = () => {
                                     {expanded && (
                                         <div className="Prodduct-extra-text">
 
-                                            {/* FLAMMABLE SECTION */}
+                                            {/* FLAMMABLE */}
                                             {product.Flammable && (
                                                 <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                     <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
@@ -659,7 +650,7 @@ const ProductDetail = () => {
                                                 </div>
                                             )}
 
-                                            {/* TURTLE LIFE SECTION */}
+                                            {/* TURTLE LIFE */}
                                             <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                 <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
                                                     <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
@@ -705,7 +696,7 @@ const ProductDetail = () => {
                                                 )}
                                             </div>
 
-                                            {/* SAFE TOUCH SECTION */}
+                                            {/* SAFE TOUCH */}
                                             <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                 <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
                                                     <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>

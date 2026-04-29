@@ -78,12 +78,14 @@ const PopupForm = () => {
     const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
-        const hasSeenPopup = localStorage.getItem("futura_popup_seen");
+        // ✅ FIX: localStorage → sessionStorage
+        // sessionStorage tab-specific hoti hai, isliye har naye tab mein popup show hoga
+        const hasSeenPopup = sessionStorage.getItem("futura_popup_seen");
 
         if (!hasSeenPopup) {
             const timer = setTimeout(() => {
                 setIsOpen(true);
-                localStorage.setItem("futura_popup_seen", "true");
+                sessionStorage.setItem("futura_popup_seen", "true"); // ✅ sessionStorage
             }, 1000);
             return () => clearTimeout(timer);
         } else {

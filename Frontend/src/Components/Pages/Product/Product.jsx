@@ -196,23 +196,23 @@ const CategoryPriorityModal = ({ categories, priorityOrder, onSave, onClose }) =
 
     return (
         <div style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 9999,
+            position: 'fixed', inset: 0, background: '#0000008c', zIndex: 9999,
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
         }}>
             <div style={{
                 background: '#fff', borderRadius: '16px', width: '100%', maxWidth: '480px',
-                boxShadow: '0 25px 60px rgba(0,0,0,0.3)', overflow: 'hidden'
+                boxShadow: '0 25px 60px #0000004d', overflow: 'hidden'
             }}>
                 <div style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)', padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
                         <h2 style={{ color: '#fff', margin: 0, fontSize: '1.1rem', fontWeight: 700, letterSpacing: '0.02em' }}>
                             Category Display Order
                         </h2>
-                        <p style={{ color: 'rgba(255,255,255,0.6)', margin: '0.25rem 0 0', fontSize: '0.78rem' }}>
+                        <p style={{ color: '#ffffff99', margin: '0.25rem 0 0', fontSize: '0.78rem' }}>
                             Drag or use arrows to set priority • #1 shows first
                         </p>
                     </div>
-                    <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: '#fff', display: 'flex' }}>
+                    <button onClick={onClose} style={{ background: '#ffffff26', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', color: '#fff', display: 'flex' }}>
                         <X size={18} />
                     </button>
                 </div>
@@ -309,7 +309,7 @@ const Product = () => {
     const [selectedFilters, setSelectedFilters] = useState({
         parentCategory: null,
         category: [],
-        color: [],        // array of color slugs (e.g. ['navy-blue', 'red'])
+        color: [],
         performance: [],
         features: []
     });
@@ -319,8 +319,6 @@ const Product = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // ── Dynamic filters derived from backend data ──
-    // colorMap: slug → { label: string, cssColor: string, count: number }
     const [colorMap, setColorMap] = useState(new Map());
 
     // ── Category Priority State ──
@@ -330,7 +328,6 @@ const Product = () => {
 
     useEffect(() => { fetchProducts(); }, []);
 
-    // Apply ?category= URL param after products load
     useEffect(() => {
         const categoryParam = searchParams.get('category');
         if (categoryParam) {
@@ -367,12 +364,7 @@ const Product = () => {
         finally { setLoading(false); }
     };
 
-    // ─────────────────────────────────────────────────────────────────
-    // buildDynFilters — extract real colors from product.color AND
-    // product.variants[*].color, deduplicate, sort alphabetically
-    // ─────────────────────────────────────────────────────────────────
     const buildDynFilters = (products) => {
-        // colorMap: slug → { label, cssColor, count }
         const cmap = new Map();
 
         const addColor = (rawColor) => {
@@ -389,7 +381,7 @@ const Product = () => {
                 } else {
                     cmap.set(slug, {
                         slug,
-                        label: colorStr,            // preserve original casing
+                        label: colorStr,
                         cssColor: colorToCss(colorStr),
                         count: 1
                     });
@@ -409,17 +401,12 @@ const Product = () => {
             }
         });
 
-        // Sort alphabetically by label
         const sorted = new Map(
             [...cmap.entries()].sort((a, b) => a[1].label.localeCompare(b[1].label))
         );
         setColorMap(sorted);
     };
 
-    // ─────────────────────────────────────────────────────────────────
-    // productMatchesColor — returns true if any of the selectedColors
-    // match the product's own color OR any of its variant colors
-    // ─────────────────────────────────────────────────────────────────
     const productMatchesColor = (product, selectedColors) => {
         if (selectedColors.length === 0) return true;
 
@@ -440,7 +427,6 @@ const Product = () => {
 
     const handleFilter = (type, val) => {
         setSelectedFilters(prev => {
-            // ── Color: single-select only — click same = deselect, click new = replace ──
             if (type === 'color') {
                 const next = prev.color.includes(val) ? [] : [val];
                 return { ...prev, color: next };

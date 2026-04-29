@@ -66,67 +66,69 @@ export default function HeaderNew() {
     };
 
     return (
-        <div className="Header">
-            <div className="Header-container">
-                {/* LEFT: Language + Title */}
-                <div className="header-left">
-                    <div className="header-lang-wrap" ref={countrySelectRef}>
-                        <div
-                            className="country-select"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setShowCountryDropdown(prev => !prev);
-                            }}
-                        >
-                            <img
-                                src={`https://flagcdn.com/w20/${country.code}.png`}
-                                alt={country.name}
-                                className="country-flag-img"
-                            />
-                            {t('LANGUAGE')}
+        <>
+            <div className="Header">
+                <div className="Header-container">
+                    {/* LEFT: Language + Title */}
+                    <div className="header-left">
+                        <div className="header-lang-wrap" ref={countrySelectRef}>
+                            <div
+                                className="country-select"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowCountryDropdown(prev => !prev);
+                                }}
+                            >
+                                <img
+                                    src={`https://flagcdn.com/w20/${country.code}.png`}
+                                    alt={country.name}
+                                    className="country-flag-img"
+                                />
+                                {t('LANGUAGE')}
+                            </div>
+
+                            {showCountryDropdown && (
+                                <div ref={dropdownRef} className="country-dropdown">
+                                    {countries.map((c) => (
+                                        <div
+                                            key={c.code}
+                                            className="country-item"
+                                            onClick={(e) => handleCountryChange(c, e)}
+                                        >
+                                            <img
+                                                src={`https://flagcdn.com/w20/${c.code}.png`}
+                                                alt={c.name}
+                                            />
+                                            <span>{c.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
-                        {showCountryDropdown && (
-                            <div ref={dropdownRef} className="country-dropdown">
-                                {countries.map((c) => (
-                                    <div
-                                        key={c.code}
-                                        className="country-item"
-                                        onClick={(e) => handleCountryChange(c, e)}
-                                    >
-                                        <img
-                                            src={`https://flagcdn.com/w20/${c.code}.png`}
-                                            alt={c.name}
-                                        />
-                                        <span>{c.name}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        <div className="Header-container-title">
+                            <a href="/News">
+                                <img src="/Futura-New-38.png" alt="" />
+                                Events &amp; Exhibition
+                            </a>
+                        </div>
                     </div>
 
-                    <div className="Header-container-title">
-                        <a href="/News">
-                            <img src="/Futura-New-38.png" alt="" />
-                            Events &amp; Exhibition
-                        </a>
+                    {/* RIGHT: Contact info */}
+                    <div className="Header-container-Box">
+                        <span>
+                            <a href="/contact">
+                                <IoMdCall />(877) 426-8177
+                            </a>
+                        </span>
+                        <span className="hide-on-tablet">
+                            <a href="/contact">
+                                <MdEmail /> customerservice@futuratextiles.com
+                            </a>
+                        </span>
                     </div>
-                </div>
-
-                {/* RIGHT: Contact info */}
-                <div className="Header-container-Box">
-                    <span>
-                        <a href="/contact">
-                            <IoMdCall />(877) 426-8177
-                        </a>
-                    </span>
-                    <span className="hide-on-tablet">
-                        <a href="/contact">
-                            <MdEmail /> customerservice@futuratextiles.com
-                        </a>
-                    </span>
                 </div>
             </div>
-        </div>
+        </>
     );
 }

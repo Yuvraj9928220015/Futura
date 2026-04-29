@@ -2,9 +2,7 @@ const Product = require('../models/productModels');
 const fs = require('fs');
 const path = require('path');
 
-// ─────────────────────────────────────────────
-// Helper: Delete uploaded files on error
-// ─────────────────────────────────────────────
+
 const deleteFilesOnError = (files) => {
     if (!files) return;
     const allFiles = [];
@@ -12,7 +10,7 @@ const deleteFilesOnError = (files) => {
     if (files.video) allFiles.push(...files.video);
     if (files.icons) allFiles.push(...files.icons);
     if (files.swatches) allFiles.push(...files.swatches);
-    if (files.pdf) allFiles.push(...files.pdf); // ✅ include pdf
+    if (files.pdf) allFiles.push(...files.pdf);
 
     Object.keys(files).forEach(key => {
         if (key.startsWith('variant_')) {
@@ -28,9 +26,7 @@ const deleteFilesOnError = (files) => {
     });
 };
 
-// ─────────────────────────────────────────────
-// Helper: Safely delete a single file
-// ─────────────────────────────────────────────
+
 const deleteFile = (filePath) => {
     if (!filePath) return;
     const fullPath = path.resolve(filePath);
@@ -110,6 +106,8 @@ exports.addProduct = async (req, res) => {
             category,
             description,
             color,
+            colorName,
+            baseVariantName,
             Flammable,
             resistant,
             QUV,
@@ -119,6 +117,7 @@ exports.addProduct = async (req, res) => {
             PinkStain,
             variantNames,
             variantColors,
+            variantColorNames,
             variantGrain
         } = req.body;
 
@@ -128,7 +127,6 @@ exports.addProduct = async (req, res) => {
         const swatches = req.files?.swatches || [];
         const video = videoArr.length > 0 ? videoArr[0] : null;
 
-        // ✅ Extract uploaded PDF (single file)
         const pdfArr = req.files?.pdf || [];
         const pdfFile = pdfArr.length > 0 ? pdfArr[0] : null;
 
@@ -156,13 +154,14 @@ exports.addProduct = async (req, res) => {
         const videoPath = video ? video.path : null;
         const iconPaths = icons.map(f => f.path);
         const swatchPaths = swatches.map(f => f.path);
-        const pdfPath = pdfFile ? pdfFile.path : null; // ✅
+        const pdfPath = pdfFile ? pdfFile.path : null;
 
         // ── Variants ──
         let variants = [];
         if (variantNames) {
             let parsedVariantNames;
             let parsedVariantColors = [];
+            let parsedVariantColorNames = [];
             let parsedVariantGrains = [];
 
             try {
@@ -175,6 +174,12 @@ exports.addProduct = async (req, res) => {
             if (variantColors) {
                 try { parsedVariantColors = JSON.parse(variantColors); }
                 catch { parsedVariantColors = []; }
+            }
+
+            // ✅ Parse variantColorNames
+            if (variantColorNames) {
+                try { parsedVariantColorNames = JSON.parse(variantColorNames); }
+                catch { parsedVariantColorNames = []; }
             }
 
             if (variantGrain) {
@@ -203,6 +208,7 @@ exports.addProduct = async (req, res) => {
                 variants.push({
                     name: parsedVariantNames[i].trim(),
                     color: parsedVariantColors[i] ? parsedVariantColors[i].trim() : '',
+                    colorName: parsedVariantColorNames[i] ? parsedVariantColorNames[i].trim() : '',
                     grain: parsedVariantGrains[i] ? parsedVariantGrains[i].trim() : '',
                     images: variantImages.map(f => f.path)
                 });
@@ -217,9 +223,11 @@ exports.addProduct = async (req, res) => {
             description: description.trim(),
             price: priceValue,
             color: color ? color.trim() : '',
+            colorName: colorName ? colorName.trim() : '',
+            baseVariantName: baseVariantName ? baseVariantName.trim() : '',
             image: imagePaths,
             video: videoPath,
-            pdf: pdfPath,   // ✅ save pdf path
+            pdf: pdfPath,
             icons: iconPaths,
             swatches: swatchPaths,
             variants: variants,
@@ -268,11 +276,14 @@ exports.updateProduct = async (req, res) => {
             category,
             description,
             color,
+            colorName, 
+            baseVariantName,
             imageOrder,
             iconOrder,
             swatchOrder,
             variantNames,
             variantColors,
+            variantColorNames,
             variantGrains,
             variantOrders,
             Flammable,
@@ -290,7 +301,6 @@ exports.updateProduct = async (req, res) => {
         const newSwatchFiles = req.files?.swatches || [];
         const newVideoFile = newVideoArr.length > 0 ? newVideoArr[0] : null;
 
-        // ✅ Extract new PDF if uploaded
         const newPdfArr = req.files?.pdf || [];
         const newPdfFile = newPdfArr.length > 0 ? newPdfArr[0] : null;
 
@@ -308,6 +318,7 @@ exports.updateProduct = async (req, res) => {
         if (variantNames) {
             let parsedVariantNames, parsedVariantOrders;
             let parsedVariantColors = [];
+            let parsedVariantColorNames = []; // ✅ NEW
             let parsedVariantGrains = [];
 
             try {
@@ -321,6 +332,12 @@ exports.updateProduct = async (req, res) => {
             if (variantColors) {
                 try { parsedVariantColors = JSON.parse(variantColors); }
                 catch { parsedVariantColors = []; }
+            }
+
+            // ✅ Parse variantColorNames
+            if (variantColorNames) {
+                try { parsedVariantColorNames = JSON.parse(variantColorNames); }
+                catch { parsedVariantColorNames = []; }
             }
 
             if (variantGrains) {
@@ -358,6 +375,7 @@ exports.updateProduct = async (req, res) => {
                     });
                 }
 
+                // ── Resolve color ──
                 let resolvedVariantColor = '';
                 if (parsedVariantColors[i] !== undefined && parsedVariantColors[i] !== null) {
                     resolvedVariantColor = parsedVariantColors[i].trim();
@@ -365,6 +383,15 @@ exports.updateProduct = async (req, res) => {
                     resolvedVariantColor = product.variants[i].color || '';
                 }
 
+                // ✅ Resolve colorName
+                let resolvedVariantColorName = '';
+                if (parsedVariantColorNames[i] !== undefined && parsedVariantColorNames[i] !== null) {
+                    resolvedVariantColorName = parsedVariantColorNames[i].trim();
+                } else if (product.variants && product.variants[i]) {
+                    resolvedVariantColorName = product.variants[i].colorName || '';
+                }
+
+                // ── Resolve grain ──
                 let resolvedVariantGrain = '';
                 if (parsedVariantGrains[i] !== undefined && parsedVariantGrains[i] !== null) {
                     resolvedVariantGrain = parsedVariantGrains[i].trim();
@@ -375,6 +402,7 @@ exports.updateProduct = async (req, res) => {
                 finalVariants.push({
                     name: parsedVariantNames[i].trim(),
                     color: resolvedVariantColor,
+                    colorName: resolvedVariantColorName,
                     grain: resolvedVariantGrain,
                     images: finalVariantImages
                 });
@@ -501,16 +529,14 @@ exports.updateProduct = async (req, res) => {
         }
 
         // ──────────────────────────────────────
-        // ✅ Handle PDF
+        // Handle PDF
         // ──────────────────────────────────────
         let finalPdfPath = product.pdf;
 
         if (newPdfFile) {
-            // Replace existing PDF — delete old one first
             if (product.pdf) deleteFile(product.pdf);
             finalPdfPath = newPdfFile.path;
         } else if (req.body.removePdf === 'true') {
-            // Explicit remove requested
             if (product.pdf) deleteFile(product.pdf);
             finalPdfPath = null;
         }
@@ -535,10 +561,12 @@ exports.updateProduct = async (req, res) => {
         product.description = description && description.trim() ? description.trim() : product.description;
         product.price = priceValue;
         product.color = color !== undefined && color !== null ? color.trim() : product.color;
+        product.colorName = colorName !== undefined && colorName !== null ? colorName.trim() : product.colorName;
+        product.baseVariantName = baseVariantName !== undefined ? baseVariantName.trim() : product.baseVariantName;
 
         product.image = finalImagePaths;
         product.video = finalVideoPath;
-        product.pdf = finalPdfPath;   // ✅ update pdf path
+        product.pdf = finalPdfPath;
         product.icons = finalIconPaths;
         product.swatches = finalSwatchPaths;
 
@@ -596,7 +624,7 @@ exports.deleteProduct = async (req, res) => {
         (product.icons || []).forEach(p => deleteFile(p));
         (product.swatches || []).forEach(p => deleteFile(p));
         if (product.video) deleteFile(product.video);
-        if (product.pdf) deleteFile(product.pdf); // ✅ delete pdf on product delete
+        if (product.pdf) deleteFile(product.pdf);
 
         (product.variants || []).forEach(variant => {
             (variant.images || []).forEach(p => deleteFile(p));
