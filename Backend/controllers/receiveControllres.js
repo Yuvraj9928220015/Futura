@@ -1,4 +1,4 @@
-const Receive = require('../models/receiveModels');  // ✅ receiveModels (with s)
+const Receive = require('../models/receiveModels');  // receiveModels (with s)
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({

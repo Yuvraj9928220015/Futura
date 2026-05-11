@@ -44,7 +44,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Health check
 app.get('/', (req, res) => {
     res.json({
-        message: '✅ Futura Textiles API is running!',
+        message: ' Futura Textiles API is running!',
         status: 'OK',
         timestamp: new Date().toISOString()
     });
@@ -54,12 +54,12 @@ app.get('/', (req, res) => {
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const receiveRoutes = require('./routes/receiveRoutes');
-const contactRoutes = require('./routes/contactRoutes');   // ✅ NEW
+const contactRoutes = require('./routes/contactRoutes');   // NEW
 
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/receive', receiveRoutes);
-app.use('/api/contact', contactRoutes);                    // ✅ NEW
+app.use('/api/contact', contactRoutes);                    // NEW
 
 // 404 handler
 app.use((req, res) => {
@@ -78,12 +78,12 @@ app.use((err, req, res, next) => {
 // MongoDB connect
 mongoose.connect(MONGO_URL)
     .then(() => {
-        console.log('✅ Connected to MongoDB successfully');
+        console.log(' Connected to MongoDB successfully');
         app.listen(PORT, () => {
             console.log(`🚀 Server running on port ${PORT}`);
             console.log(`📦 Products API:  http://localhost:${PORT}/api/products`);
             console.log(`🔐 Auth API:      http://localhost:${PORT}/api/auth`);
-            console.log(`📩 Contact API:   http://localhost:${PORT}/api/contact`);   // ✅ NEW
+            console.log(`📩 Contact API:   http://localhost:${PORT}/api/contact`);   // NEW
         });
     })
     .catch((error) => {

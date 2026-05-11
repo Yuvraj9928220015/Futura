@@ -1,6 +1,6 @@
 const Contact = require('../models/contactModels');
 
-// ✅ POST - New enquiry submit karna
+// POST - New enquiry submit karna
 const submitEnquiry = async (req, res) => {
     try {
         const {
@@ -66,7 +66,7 @@ const submitEnquiry = async (req, res) => {
     }
 };
 
-// ✅ GET - Saari enquiries fetch karna (Admin ke liye)
+// GET - Saari enquiries fetch karna (Admin ke liye)
 const getAllEnquiries = async (req, res) => {
     try {
         const { status, page = 1, limit = 10 } = req.query;
@@ -101,7 +101,7 @@ const getAllEnquiries = async (req, res) => {
     }
 };
 
-// ✅ PATCH - Enquiry ka status update karna (Admin ke liye)
+// PATCH - Enquiry ka status update karna (Admin ke liye)
 const updateEnquiryStatus = async (req, res) => {
     try {
         const { id } = req.params;
@@ -142,7 +142,7 @@ const updateEnquiryStatus = async (req, res) => {
     }
 };
 
-// ✅ DELETE - Enquiry delete karna (Admin ke liye)
+// DELETE - Enquiry delete karna (Admin ke liye)
 const deleteEnquiry = async (req, res) => {
     try {
         const { id } = req.params;

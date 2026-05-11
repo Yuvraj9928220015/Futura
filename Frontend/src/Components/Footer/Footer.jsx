@@ -4,12 +4,12 @@ import { MdOutlinePhone } from "react-icons/md";
 import { MdFax } from "react-icons/md";
 import { IoLocationOutline } from "react-icons/io5";
 
-// ✅ Automatically detect: localhost ya production
+// Automatically detect: localhost ya production
 const BASE_URL = window.location.hostname === "localhost"
     ? "http://localhost:8000"
     : "https://api.futuratextiles.in";
 
-// ✅ FIX: Critical styles inline rakho taaki production me CSS override na ho
+// FIX: Critical styles inline rakho taaki production me CSS override na ho
 const footerStyle = {
     backgroundColor: "#7a6b64",
     color: "white",
@@ -53,7 +53,7 @@ export default function Footer() {
             const data = await res.json();
 
             if (data.success) {
-                setMessage({ text: "✅ Successfully subscribed!", type: "success" });
+                setMessage({ text: " Successfully subscribed!", type: "success" });
                 setFormData({ firstName: "", lastName: "", emailAddress: "" });
             } else {
                 setMessage({ text: data.message, type: "error" });
@@ -69,7 +69,7 @@ export default function Footer() {
         <>
             <div className="Footer-Top"></div>
 
-            {/* ✅ FIX: style prop se inline backgroundColor diya — production me kabhi override nahi hoga */}
+            {/* FIX: style prop se inline backgroundColor diya — production me kabhi override nahi hoga */}
             <div className="Footer" style={footerStyle}>
                 <div className="container-fluid">
                     <div className="row">
@@ -96,7 +96,7 @@ export default function Footer() {
                                     <div className="address-title">Futura textiles</div>
                                     <div className="address-item">
                                         <IoLocationOutline className="address-icon" />
-                                        <span>8709 Caroma St. Olive Branch, MS 38654</span>
+                                        <span>6211 highway 305 olive branch ms 38654</span>
                                     </div>
                                     <div className="map-button-section">
                                         <button className="google-maps-btn">Google Maps</button>

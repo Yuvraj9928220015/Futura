@@ -148,7 +148,7 @@ export default function News() {
     return (
         <div className="news-container">
 
-            {/* ✅ Hero Section - Video Banner */}
+            {/* Hero Section - Video Banner */}
             {/* <div className="About">
                 <div className="About-Banner">
                     <video

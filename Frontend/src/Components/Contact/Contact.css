@@ -11,6 +11,12 @@
     background: #f8f7f4;
 }
 
+h1.contact-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /* Header Section */
 .contact-header {
     text-align: center;

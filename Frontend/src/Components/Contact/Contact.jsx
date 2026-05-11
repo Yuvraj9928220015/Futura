@@ -61,7 +61,7 @@ export default function Contact() {
                 throw new Error(data.message || 'Something went wrong. Please try again.');
             }
 
-            // ✅ Success
+            // Success
             setIsSubmitted(true);
 
             // 4 seconds baad form reset karo
@@ -333,7 +333,7 @@ export default function Contact() {
                     <div className="hq-card">
                         <h3>Address</h3>
                         <p className="address">Futura Textiles</p>
-                        <p className="phone">8709 Caroma St. Olive Branch, MS 38654</p>
+                        <p className="phone">6211 highway 305 olive branch ms 38654</p>
                     </div>
 
                     <div className="hq-card">

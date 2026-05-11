@@ -193,47 +193,49 @@ function FrameImageMarquee({ slides, speed = 0.9, pauseOnHover = true }) {
     }, [speed]);
 
     return (
-        <div
-            ref={outerRef}
-            className="fmq-outer"
-            onMouseEnter={() => { if (pauseOnHover) pausedRef.current = true; }}
-            onMouseLeave={() => { pausedRef.current = false; }}
-        >
-            {/* No transform on track — scrollLeft on outer handles movement */}
-            <div className="fmq-track">
-                {allSlides.map((slide, i) => {
-                    const c = configs[i % configs.length];
-                    const shadowStyle = {
-                        width: c.w,
-                        height: c.h,
-                        top: c.st > 0 ? c.st : 'auto',
-                        bottom: c.st < 0 ? Math.abs(c.st) : 'auto',
-                        left: c.sl > 0 ? c.sl : 'auto',
-                        right: c.sl < 0 ? Math.abs(c.sl) : 'auto',
-                    };
+        <>
+            <div
+                ref={outerRef}
+                className="fmq-outer"
+                onMouseEnter={() => { if (pauseOnHover) pausedRef.current = true; }}
+                onMouseLeave={() => { pausedRef.current = false; }}
+            >
+                {/* No transform on track — scrollLeft on outer handles movement */}
+                <div className="fmq-track">
+                    {allSlides.map((slide, i) => {
+                        const c = configs[i % configs.length];
+                        const shadowStyle = {
+                            width: c.w,
+                            height: c.h,
+                            top: c.st > 0 ? c.st : 'auto',
+                            bottom: c.st < 0 ? Math.abs(c.st) : 'auto',
+                            left: c.sl > 0 ? c.sl : 'auto',
+                            right: c.sl < 0 ? Math.abs(c.sl) : 'auto',
+                        };
 
-                    return (
-                        <div key={i} className="fmq-card" style={{ width: c.w, height: c.h }}>
-                            <div className="fmq-shadow" style={shadowStyle} />
-                            <div className="fmq-frame">
-                                <img
-                                    src={slide.src}
-                                    alt={slide.alt}
-                                    className="fmq-img"
-                                    draggable="false"
-                                    loading="eager"
-                                    decoding="async"
-                                />
-                                <div className="fmq-overlay">
-                                    <span className="fmq-text">{slide.text}</span>
-                                    <span className="fmq-subtext">{slide.subtext}</span>
+                        return (
+                            <div key={i} className="fmq-card" style={{ width: c.w, height: c.h }}>
+                                <div className="fmq-shadow" style={shadowStyle} />
+                                <div className="fmq-frame">
+                                    <img
+                                        src={slide.src}
+                                        alt={slide.alt}
+                                        className="fmq-img"
+                                        draggable="false"
+                                        loading="eager"
+                                        decoding="async"
+                                    />
+                                    <div className="fmq-overlay">
+                                        <span className="fmq-text">{slide.text}</span>
+                                        <span className="fmq-subtext">{slide.subtext}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
@@ -325,7 +327,7 @@ export default function About() {
                         <div className="Manfacturer-Box-1-title">OUR PLANT <span>IN INDIA</span></div>
                     </div>
                     <div className="Manfacturer-Box-2">
-                        <div className="Manfacturer-Box-1-line-2"></div> 
+                        <div className="Manfacturer-Box-1-line-2"></div>
                         <div className="Manfacturer-Box-1-des">
                             <p>
                                 We are the largest manufacturer of artificial leather, using the 'Release Paper Transfer

@@ -9,7 +9,7 @@ const MARINE_PRODUCTS = [
     },
     {
 
-        title: 'Marine Revolution',
+        title: ' Matrix',
         image: '/Mayur-1.jpg',
         description: 'Next-gen marine fabric with cutting-edge weaving technology and a rich color palette inspired by global oceanic trends.',
     },
@@ -131,7 +131,7 @@ function Marine() {
                                         <div className="Overview-Box-contant">
                                             <div className="Overview-Box-contant-title">{title}</div>
                                             <div className="Overview-Box-contant-des">{description}</div>
-                                            {/* ✅ Exact same as Navbar handleCategoryClick */}
+                                            {/* Exact same as Navbar handleCategoryClick */}
                                             <button onClick={(e) => handleCategoryClick(e, title)}>
                                                 View
                                             </button>

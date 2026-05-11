@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { PiPlus, PiMinus } from "react-icons/pi";
 import { useParams } from "react-router-dom";
-import { MdOutlineFileDownload, MdChevronLeft, MdChevronRight, MdShoppingBag, MdCheckCircle } from "react-icons/md";
+import { MdOutlineFileDownload, MdChevronLeft, MdChevronRight, MdShoppingBag, MdCheckCircle, MdClose, MdZoomIn, MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { useCart } from "../../Pages/Cartcontext/Cartcontext";
 
@@ -28,6 +28,93 @@ const getPdfUrl = (pdfPath) => {
 
 const ITEMS_PER_VIEW = 5;
 
+// ══════════════════════════════════════════════════
+//  LIGHTBOX COMPONENT
+// ══════════════════════════════════════════════════
+const Lightbox = ({ images, currentIndex, onClose, onPrev, onNext }) => {
+    useEffect(() => {
+        const handleKey = (e) => {
+            if (e.key === 'Escape') onClose();
+            if (e.key === 'ArrowLeft') onPrev();
+            if (e.key === 'ArrowRight') onNext();
+        };
+        document.addEventListener('keydown', handleKey);
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.removeEventListener('keydown', handleKey);
+            document.body.style.overflow = '';
+        };
+    }, [onClose, onPrev, onNext]);
+
+    const hasPrev = currentIndex > 0;
+    const hasNext = currentIndex < images.length - 1;
+
+    return (
+        <div
+            className="lightbox-overlay"
+            onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            {/* Close Button */}
+            <button className="lightbox-close-btn" onClick={onClose} aria-label="Close">
+                <MdClose size={24} />
+            </button>
+
+            {/* Counter */}
+            {images.length > 1 && (
+                <div className="lightbox-counter">
+                    {currentIndex + 1} / {images.length}
+                </div>
+            )}
+
+            {/* Prev Arrow */}
+            {hasPrev && (
+                <button
+                    className="lightbox-nav-btn lightbox-nav-prev"
+                    onClick={onPrev}
+                    aria-label="Previous image"
+                >
+                    <MdArrowBackIos size={22} />
+                </button>
+            )}
+
+            {/* Image */}
+            <div className="lightbox-image-wrapper">
+                <img
+                    src={images[currentIndex]}
+                    alt={`Image ${currentIndex + 1}`}
+                    className="lightbox-image"
+                />
+            </div>
+
+            {/* Next Arrow */}
+            {hasNext && (
+                <button
+                    className="lightbox-nav-btn lightbox-nav-next"
+                    onClick={onNext}
+                    aria-label="Next image"
+                >
+                    <MdArrowForwardIos size={22} />
+                </button>
+            )}
+
+            {/* Thumbnail strip (when multiple images) */}
+            {images.length > 1 && (
+                <div className="lightbox-thumbnails">
+                    {images.map((img, idx) => (
+                        <div
+                            key={idx}
+                            className={`lightbox-thumb ${idx === currentIndex ? 'lightbox-thumb--active' : ''}`}
+                            onClick={() => { }}
+                        >
+                            <img src={img} alt={`Thumb ${idx + 1}`} />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
 const ProductDetail = () => {
     const { id } = useParams();
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -43,10 +130,36 @@ const ProductDetail = () => {
     const [selectedGrainFilter, setSelectedGrainFilter] = useState('all');
     const [showAllGrains, setShowAllGrains] = useState(false);
 
+    // ── Lightbox state ──
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImages, setLightboxImages] = useState([]);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
     // ── Cart state ──
     const { addToCart } = useCart();
     const [addedToCart, setAddedToCart] = useState(false);
     const addedTimerRef = useRef(null);
+
+    // ── Lightbox helpers ──
+    const openLightbox = useCallback((imageList, startIndex = 0) => {
+        setLightboxImages(imageList);
+        setLightboxIndex(startIndex);
+        setLightboxOpen(true);
+    }, []);
+
+    const closeLightbox = useCallback(() => {
+        setLightboxOpen(false);
+        setLightboxImages([]);
+        setLightboxIndex(0);
+    }, []);
+
+    const lightboxPrev = useCallback(() => {
+        setLightboxIndex(prev => Math.max(0, prev - 1));
+    }, []);
+
+    const lightboxNext = useCallback(() => {
+        setLightboxIndex(prev => Math.min(lightboxImages.length - 1, prev + 1));
+    }, [lightboxImages.length]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -73,7 +186,6 @@ const ProductDetail = () => {
         if (id) fetchProduct();
     }, [id]);
 
-    // Clean up timer on unmount
     useEffect(() => () => clearTimeout(addedTimerRef.current), []);
 
     const productData = {
@@ -100,14 +212,14 @@ const ProductDetail = () => {
             title: `${product.title} - View ${index + 3}`,
             image: getImageUrl(img)
         }))
-        : [
-            { id: 3, type: "pattern", title: "Pattern Close-up", image: "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop" },
-            { id: 4, type: "application", title: "Hospitality Setting", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop" },
-            { id: 5, type: "samples", title: "Color Variations", image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&h=300&fit=crop" },
-            { id: 6, type: "room", title: "Modern Interior", image: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&h=300&fit=crop" },
-            { id: 7, type: "detail", title: "Material Quality", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" },
-            { id: 8, type: "collection", title: "Full Collection", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop" }
-        ];
+        : currentImages && currentImages.length > 0
+            ? currentImages.map((img, index) => ({
+                id: index + 1,
+                type: "product",
+                title: `${product.title} - View ${index + 1}`,
+                image: getImageUrl(img)
+            }))
+            : [];
 
     const itemsPerSlide = 4;
     const totalSlides = galleryImages.length;
@@ -129,17 +241,29 @@ const ProductDetail = () => {
 
     const getBottomSampleImages = () => {
         if (currentImages && currentImages.length > 0) return currentImages.slice(-4).map(img => getImageUrl(img));
-        return [
-            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop",
-            "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
-            "https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=200&h=200&fit=crop",
-            "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop"
-        ];
+        return [];
     };
 
     const handleThumbnailClick = (index) => { setSelectedImageIndex(index + 2); };
 
-    // ── Add to Cart handler ──
+    // ── Main image click → open lightbox with all currentImages ──
+    const handleMainImageClick = () => {
+        if (!currentImages || currentImages.length === 0) return;
+        const allUrls = currentImages.map(img => getImageUrl(img));
+        openLightbox(allUrls, selectedImageIndex);
+    };
+
+    // ── Gallery thumbnail click → sirf main image change karo, no lightbox ──
+    const handleGalleryImageClick = (index) => {
+        handleThumbnailClick(index);
+    };
+
+    // ── Bottom sample image click → open lightbox ──
+    const handleBottomImageClick = (index) => {
+        const bottomUrls = getBottomSampleImages();
+        openLightbox(bottomUrls, index);
+    };
+
     const handleAddToCart = () => {
         if (!product) return;
         addToCart(product, selectedVariantIndex);
@@ -148,7 +272,6 @@ const ProductDetail = () => {
         addedTimerRef.current = setTimeout(() => setAddedToCart(false), 2500);
     };
 
-    // ── Build grain-grouped data ──
     const buildGrainGroups = () => {
         if (!product) return { groups: {} };
         const groups = {};
@@ -163,6 +286,7 @@ const ProductDetail = () => {
                     images: variant.images,
                     grain,
                     color: variant.color || '',
+                    colorName: variant.colorName || '',
                 });
             });
         }
@@ -178,17 +302,6 @@ const ProductDetail = () => {
 
     const hasVariants = product?.variants && product.variants.length > 0;
     const cataloguePdfUrl = product?.pdf ? getPdfUrl(product.pdf) : null;
-
-    // ── Get active colorName ──
-    const getActiveColorName = () => {
-        if (
-            selectedVariantIndex !== null &&
-            product?.variants?.[selectedVariantIndex]?.colorName
-        ) {
-            return product.variants[selectedVariantIndex].colorName;
-        }
-        return product?.colorName || null;
-    };
 
     if (loading) {
         return (
@@ -206,7 +319,7 @@ const ProductDetail = () => {
         return (
             <div className="product-detail">
                 <div className="container-fluid">
-                    <div style={{ background: '#fee', color: '#c33', padding: '1rem', borderRadius: '8px', margin: '1rem 0', textAlign: 'center' }}>
+                    <div style={{ background: '#fee', color: '#d63232', padding: '1rem', borderRadius: '8px', margin: '1rem 0', textAlign: 'center' }}>
                         Error: {error}
                     </div>
                 </div>
@@ -227,7 +340,6 @@ const ProductDetail = () => {
     }
 
     const bottomSampleImages = getBottomSampleImages();
-    const activeColorName = getActiveColorName();
 
     const toggleHeaderStyle = {
         display: 'flex',
@@ -314,6 +426,23 @@ const ProductDetail = () => {
             }}>
                 {item.name}
             </div>
+            {item.colorName && (
+                <div style={{
+                    fontSize: '0.70rem',
+                    color: isSelected ? '#2196f3' : '#1b1b1b',
+                    textAlign: 'center',
+                    marginTop: '7px',
+                    textTransform: 'capitalize',
+                    fontWeight: isSelected ? '500' : '400',
+                    lineHeight: '1.2',
+                    width: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                }}>
+                    {item.colorName}
+                </div>
+            )}
             {isSelected && (
                 <div style={{
                     height: '2px',
@@ -362,52 +491,54 @@ const ProductDetail = () => {
         };
 
         return (
-            <div className="grain-row-wrapper">
-                <div className="grain-slider-row">
-                    <button
-                        type="button"
-                        onClick={shiftLeft}
-                        disabled={!canGoLeft}
-                        className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
-                    >
-                        <MdChevronLeft />
-                    </button>
-
-                    <div className="grain-cards-viewport">
-                        <div className="grain-cards-container">
-                            {visibleSlider.map(renderCard)}
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        onClick={shiftRight}
-                        disabled={!canGoRight}
-                        className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
-                    >
-                        <MdChevronRight />
-                    </button>
-
-                    {hasMore && (
+            <>
+                <div className="grain-row-wrapper">
+                    <div className="grain-slider-row">
                         <button
                             type="button"
-                            onClick={() => setShowExtra(prev => !prev)}
-                            className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
+                            onClick={shiftLeft}
+                            disabled={!canGoLeft}
+                            className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
                         >
-                            {showExtra
-                                ? <MdOutlineKeyboardArrowUp size={16} />
-                                : <MdOutlineKeyboardArrowDown size={16} />
-                            }
+                            <MdChevronLeft />
                         </button>
+
+                        <div className="grain-cards-viewport">
+                            <div className="grain-cards-container">
+                                {visibleSlider.map(renderCard)}
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={shiftRight}
+                            disabled={!canGoRight}
+                            className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
+                        >
+                            <MdChevronRight />
+                        </button>
+
+                        {hasMore && (
+                            <button
+                                type="button"
+                                onClick={() => setShowExtra(prev => !prev)}
+                                className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
+                            >
+                                {showExtra
+                                    ? <MdOutlineKeyboardArrowUp size={16} />
+                                    : <MdOutlineKeyboardArrowDown size={16} />
+                                }
+                            </button>
+                        )}
+                    </div>
+
+                    {showExtra && extraItems.length > 0 && (
+                        <div className="grain-extra-items">
+                            {extraItems.map(renderCard)}
+                        </div>
                     )}
                 </div>
-
-                {showExtra && extraItems.length > 0 && (
-                    <div className="grain-extra-items">
-                        {extraItems.map(renderCard)}
-                    </div>
-                )}
-            </div>
+            </>
         );
     };
 
@@ -421,40 +552,54 @@ const ProductDetail = () => {
                         <div className="product-detail-image-box">
                             <div className="product-detail-main-image">
                                 {getMainImage() ? (
-                                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                                    <div
+                                        className="main-image-clickable"
+                                        onClick={handleMainImageClick}
+                                        title="Click to zoom"
+                                    >
                                         <img
                                             src={getMainImage()}
                                             alt={product.title}
                                             style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }}
                                         />
+                                        <div className="image-zoom-hint">
+                                            <MdZoomIn size={20} />
+                                        </div>
                                     </div>
                                 ) : (
                                     <div style={{ backgroundColor: '#f0f0f0', width: '100%', height: '100%', borderRadius: '8px' }}></div>
                                 )}
                             </div>
 
-                            <div className="product-detail-gallery-slider">
-                                <div className="gallery-slider-header">
-                                    <div className="slider-controls">
-                                        <button className="slider-arrow prev-arrow" onClick={prevSlide} disabled={currentSlide === 0}><MdChevronLeft /></button>
-                                        <div className="gallery-slider-container">
-                                            <div className="gallery-slides" style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}>
-                                                {galleryImages.map((image, index) => (
-                                                    <div key={image.id} className="gallery-slide">
-                                                        <div className="gallery-item" onClick={() => handleThumbnailClick(index)} style={{ cursor: 'pointer' }}>
-                                                            <img src={image.image} alt={image.title} className="gallery-img" />
+                            {galleryImages.length > 0 && (
+                                <div className="product-detail-gallery-slider">
+                                    <div className="gallery-slider-header">
+                                        <div className="slider-controls">
+                                            <div className="gallery-slider-container">
+                                                <div className="gallery-slides" style={{ transform: `translateX(-${currentSlide * (100 / itemsPerSlide)}%)` }}>
+                                                    {galleryImages.map((image, index) => (
+                                                        <div key={image.id} className="gallery-slide">
+                                                            <div
+                                                                className="gallery-item"
+                                                                onClick={() => handleGalleryImageClick(index)}
+                                                                style={{ cursor: 'pointer' }}
+                                                            >
+                                                                <img src={image.image} alt={image.title} className="gallery-img" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))}
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
-                                        <button className="slider-arrow next-arrow" onClick={nextSlide} disabled={currentSlide >= totalSlides - itemsPerSlide}><MdChevronRight /></button>
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
                             <div className="product-detail-thumbnail-row">
-                                <div className="product-detail-thumbnail" style={{ backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0', position: 'relative' }}>
+                                <div
+                                    className="product-detail-thumbnail"
+                                    style={{ backgroundColor: getMainImage() ? 'transparent' : '#f0f0f0', position: 'relative' }}
+                                >
                                     {getMainImage() && currentImages && currentImages.length > 1 ? (
                                         <>
                                             <img
@@ -476,35 +621,37 @@ const ProductDetail = () => {
                             </div>
                         </div>
 
-                        <div id="colClass-thumbnail-box" className="row">
-                            {bottomSampleImages.map((img, index) => {
-                                const colClass = (index === 0 || index === 3) ? "col-7" : "col-5";
-                                return (
-                                    <div key={index} className={colClass}>
-                                        <div className="product-detail-thumbnail-box" style={{ position: 'relative' }}>
-                                            <img src={img} alt={`Sample ${index + 2}`} className="sample-img" />
+                        {/* ── Bottom sample images ── */}
+                        {bottomSampleImages.length > 0 && (
+                            <div id="colClass-thumbnail-box" className="row">
+                                {bottomSampleImages.map((img, index) => {
+                                    const colClass = (index === 0 || index === 3) ? "col-7" : "col-5";
+                                    return (
+                                        <div key={index} className={colClass}>
+                                            <div
+                                                className="product-detail-thumbnail-box bottom-img-clickable"
+                                                onClick={() => handleBottomImageClick(index)}
+                                                title="Click to zoom"
+                                            >
+                                                <img src={img} alt={`Sample ${index + 2}`} className="sample-img" />
+                                                <div className="bottom-zoom-overlay">
+                                                    <MdZoomIn size={18} />
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* ════ RIGHT PANEL ════ */}
                     <div className="pd-right-panel">
                         <div className="product-detail-info-box">
 
-                            {/* ── Brand / Title ── */}
                             <div className="product-detail-brand">
                                 <span className="brand-name">{productData.brand}</span>
                             </div>
-
-                            {/* ── Color Name — shown below title, updates on variant select ── */}
-                            {activeColorName && (
-                                <div className="product-color-name-display">
-                                    <span className="color-name-text">{activeColorName}</span>
-                                </div>
-                            )}
 
                             <div className="Applications">Applications</div>
 
@@ -514,7 +661,6 @@ const ProductDetail = () => {
                                 ))}
                             </div>
 
-                            {/* Material/Fabric + Global "See All" button */}
                             <div className="product-detail-select-use">
                                 <div className="material-fabric-row">
                                     <span>
@@ -537,7 +683,6 @@ const ProductDetail = () => {
                                 </div>
                             </div>
 
-                            {/* Variant selector */}
                             <div className="product-detail-color-section">
                                 {hasVariants && (
                                     <div className="variant-slider-section">
@@ -552,7 +697,6 @@ const ProductDetail = () => {
                                     </div>
                                 )}
 
-                                {/* ── Download Catalogue + Add To Cart ── */}
                                 <div className="Product-Cart">
                                     <div className="product-detail-downloads">
                                         <div className="download-links">
@@ -579,7 +723,6 @@ const ProductDetail = () => {
                                         </div>
                                     </div>
 
-                                    {/* ── Add to Cart Button ── */}
                                     <button
                                         className={`add-to-cart-btn ${addedToCart ? 'add-to-cart-btn--added' : ''}`}
                                         onClick={handleAddToCart}
@@ -627,7 +770,6 @@ const ProductDetail = () => {
                                     {expanded && (
                                         <div className="Prodduct-extra-text">
 
-                                            {/* FLAMMABLE */}
                                             {product.Flammable && (
                                                 <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                     <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
@@ -650,7 +792,6 @@ const ProductDetail = () => {
                                                 </div>
                                             )}
 
-                                            {/* TURTLE LIFE */}
                                             <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                 <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
                                                     <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
@@ -696,7 +837,6 @@ const ProductDetail = () => {
                                                 )}
                                             </div>
 
-                                            {/* SAFE TOUCH */}
                                             <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                 <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
                                                     <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
@@ -734,6 +874,19 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </div>
+
+            {/* ══════════════════════════════════════════
+                LIGHTBOX PORTAL
+            ══════════════════════════════════════════ */}
+            {lightboxOpen && lightboxImages.length > 0 && (
+                <Lightbox
+                    images={lightboxImages}
+                    currentIndex={lightboxIndex}
+                    onClose={closeLightbox}
+                    onPrev={lightboxPrev}
+                    onNext={lightboxNext}
+                />
+            )}
         </>
     );
 };

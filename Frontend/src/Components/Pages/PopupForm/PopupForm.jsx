@@ -69,7 +69,7 @@ const PopupForm = () => {
         link.click();
         document.body.removeChild(link);
     };
-
+    
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [formData, setFormData] = useState({
@@ -142,7 +142,7 @@ const PopupForm = () => {
                                     </div>
                                     <div className="pf-info-text">
                                         <p className="pf-info-name">Futura Textiles</p>
-                                        <p className="pf-info-sub">8709 Caroma St. Olive Branch, MS 38654</p>
+                                        <p className="pf-info-sub">6211 highway 305 olive branch ms 38654</p>
                                     </div>
                                 </div>
 

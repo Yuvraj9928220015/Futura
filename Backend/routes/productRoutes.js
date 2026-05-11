@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
     }
 });
 
-// ✅ Updated file filter — now also allows PDF for the 'pdf' field
+// Updated file filter — now also allows PDF for the 'pdf' field
 const fileFilter = (req, file, cb) => {
     const imageTypes = /jpeg|jpg|png|gif|webp|svg/;
     const videoTypes = /mp4|mov|avi|wmv|mkv|flv|webm/;
@@ -38,7 +38,7 @@ const fileFilter = (req, file, cb) => {
     const extname = path.extname(file.originalname).toLowerCase().slice(1);
     const mimetype = file.mimetype;
 
-    // ✅ PDF field — only application/pdf allowed
+    // PDF field — only application/pdf allowed
     if (file.fieldname === 'pdf') {
         const isValidPdf = extname === 'pdf' && mimetype === 'application/pdf';
         if (isValidPdf) return cb(null, true);
@@ -70,19 +70,19 @@ const upload = multer({
     storage,
     fileFilter,
     limits: {
-        fileSize: 100 * 1024 * 1024, // 100MB (covers large PDFs too)
+        fileSize: 100 * 1024 * 1024,
         files: 121 // +1 for pdf
     }
 });
 
-// ✅ Updated upload middleware — pdf field added
+// Updated upload middleware — pdf field added
 const handleUpload = (req, res, next) => {
     const uploadFields = [
         { name: 'images', maxCount: 20 },
         { name: 'video', maxCount: 1 },
         { name: 'icons', maxCount: 5 },
         { name: 'swatches', maxCount: 30 },
-        { name: 'pdf', maxCount: 1 },   // ✅ ONE pdf per product
+        { name: 'pdf', maxCount: 1 },
     ];
 
     for (let i = 0; i < 30; i++) {
@@ -101,7 +101,6 @@ const handleUpload = (req, res, next) => {
     });
 };
 
-// ✅ Image compression middleware — skips PDFs and videos
 const compressImagesMiddleware = async (req, res, next) => {
     try {
         if (!req.files) return next();
@@ -110,7 +109,6 @@ const compressImagesMiddleware = async (req, res, next) => {
             for (let file of filesArray) {
                 const inputPath = file.path;
 
-                // ✅ Skip videos and PDFs — only compress images
                 if (file.mimetype.startsWith('video/')) continue;
                 if (file.mimetype === 'application/pdf') continue;
 

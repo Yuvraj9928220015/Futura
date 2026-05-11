@@ -17,7 +17,7 @@ function Contract() {
         },
         {
             id: 2,
-            title: "Marine Revolution",
+            title: "Matrix",
             description: "Marine-grade fabrics designed for extreme weather conditions. Water-resistant and UV-protected for lasting performance.",
             image: "/Mayur-1.jpg"
         },
@@ -36,7 +36,7 @@ function Contract() {
         { number: 1000000, suffix: '+', label: 'Happy Customers', isLarge: true }
     ];
 
-    // ✅ Exact same logic as Navbar.jsx
+    // Exact same logic as Navbar.jsx
     const handleCategoryClick = (e, item) => {
         e.preventDefault();
         const slug = item.toLowerCase().replace(/\s+/g, '-');
@@ -188,7 +188,7 @@ function Contract() {
                                             <p className="Overview-Box-content-des">{product.description}</p>
                                         </div>
                                         <div className="Overview-Box-contant">
-                                            {/* ✅ Exact same as Navbar.jsx handleCategoryClick */}
+                                            {/* Exact same as Navbar.jsx handleCategoryClick */}
                                             <button onClick={(e) => handleCategoryClick(e, product.title)}>
                                                 View
                                             </button>

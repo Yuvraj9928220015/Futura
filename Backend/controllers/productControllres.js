@@ -176,7 +176,7 @@ exports.addProduct = async (req, res) => {
                 catch { parsedVariantColors = []; }
             }
 
-            // ✅ Parse variantColorNames
+            // Parse variantColorNames
             if (variantColorNames) {
                 try { parsedVariantColorNames = JSON.parse(variantColorNames); }
                 catch { parsedVariantColorNames = []; }
@@ -318,7 +318,7 @@ exports.updateProduct = async (req, res) => {
         if (variantNames) {
             let parsedVariantNames, parsedVariantOrders;
             let parsedVariantColors = [];
-            let parsedVariantColorNames = []; // ✅ NEW
+            let parsedVariantColorNames = [];
             let parsedVariantGrains = [];
 
             try {
@@ -334,7 +334,7 @@ exports.updateProduct = async (req, res) => {
                 catch { parsedVariantColors = []; }
             }
 
-            // ✅ Parse variantColorNames
+            // Parse variantColorNames
             if (variantColorNames) {
                 try { parsedVariantColorNames = JSON.parse(variantColorNames); }
                 catch { parsedVariantColorNames = []; }
@@ -383,7 +383,7 @@ exports.updateProduct = async (req, res) => {
                     resolvedVariantColor = product.variants[i].color || '';
                 }
 
-                // ✅ Resolve colorName
+                // Resolve colorName
                 let resolvedVariantColorName = '';
                 if (parsedVariantColorNames[i] !== undefined && parsedVariantColorNames[i] !== null) {
                     resolvedVariantColorName = parsedVariantColorNames[i].trim();

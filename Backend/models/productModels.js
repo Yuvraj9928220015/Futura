@@ -6,19 +6,19 @@ const variantSchema = new mongoose.Schema({
         required: [true, 'Variant name is required'],
         trim: true
     },
-    // ✅ COLOR per Variant
+    // COLOR per Variant
     color: {
         type: String,
         default: "",
         trim: true
     },
-    // ✅ COLOR NAME per Variant (display text)
+    // COLOR NAME per Variant (display text)
     colorName: {
         type: String,
         default: "",
         trim: true
     },
-    // ✅ GRAIN per Variant
+    // GRAIN per Variant
     grain: {
         type: String,
         default: "",
@@ -61,13 +61,13 @@ const productSchema = new mongoose.Schema({
         required: [true, 'Product price is required'],
         min: [0, 'Price cannot be negative']
     },
-    // ✅ Product-level color (default / base color)
+    // Product-level color (default / base color)
     color: {
         type: String,
         default: "",
         trim: true
     },
-    // ✅ Product-level colorName
+    // Product-level colorName
     colorName: {
         type: String,
         default: "",
@@ -86,7 +86,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    // ✅ PDF file path (one per product)
+    // PDF file path (one per product)
     pdf: {
         type: String,
         default: null

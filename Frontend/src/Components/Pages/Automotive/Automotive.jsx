@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 function Automotive() {
     const navigate = useNavigate();
 
-    // ✅ Exact same logic as Navbar.jsx
+    // Exact same logic as Navbar.jsx
     const handleCategoryClick = (e, item) => {
         e.preventDefault();
         const slug = item.toLowerCase().replace(/\s+/g, '-');
@@ -18,8 +18,18 @@ function Automotive() {
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos repudiandae velit.',
         },
         {
-            title: 'Automotive',
-            image: '/image-2.png',
+            title: 'Xtreme',
+            image: '/New-crative-1.png',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos repudiandae velit.',
+        },
+        {
+            title: 'Marine Revolution',
+            image: '/New-crative-2.png',
+            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos repudiandae velit.',
+        },
+        {
+            title: 'Runabout',
+            image: '/American-image-2.png',
             description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Fugit omnis eveniet molestias voluptatibus ullam expedita corporis illo quos repudiandae velit.',
         },
     ];
@@ -121,7 +131,7 @@ function Automotive() {
                                         <div className="Overview-Box-contant">
                                             <div className="Overview-Box-contant-title">{title}</div>
                                             <div className="Overview-Box-contant-des">{description}</div>
-                                            {/* ✅ Exact same as Navbar.jsx handleCategoryClick */}
+                                            {/* Exact same as Navbar.jsx handleCategoryClick */}
                                             <button onClick={(e) => handleCategoryClick(e, title)}>
                                                 View
                                             </button>
