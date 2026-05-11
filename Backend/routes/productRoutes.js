@@ -13,13 +13,34 @@ const {
     deleteProduct
 } = require('../controllers/productControllres');
 
-// ensure uploads folder
+// ─────────────────────────────────────────────
+// CONSTANTS — ek jagah badlo, sab jagah update
+// ─────────────────────────────────────────────
+const MAX_VARIANTS = 100;
+const MAX_IMAGES_PER_VARIANT = 30;
+const MAX_PRODUCT_IMAGES = 20;
+const MAX_ICONS = 5;
+const MAX_SWATCHES = 30;
+
+const MAX_TOTAL_FILES =
+    MAX_PRODUCT_IMAGES +
+    1 +
+    MAX_ICONS +
+    MAX_SWATCHES +
+    1 +
+    MAX_VARIANTS * MAX_IMAGES_PER_VARIANT;
+
+// ─────────────────────────────────────────────
+// Ensure uploads folder exists
+// ─────────────────────────────────────────────
 const uploadPath = './uploads';
 if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true });
 }
 
-// multer storage
+// ─────────────────────────────────────────────
+// Multer storage config
+// ─────────────────────────────────────────────
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './uploads/');
@@ -30,7 +51,9 @@ const storage = multer.diskStorage({
     }
 });
 
-// Updated file filter — now also allows PDF for the 'pdf' field
+// ─────────────────────────────────────────────
+// File filter — image / video / pdf validation
+// ─────────────────────────────────────────────
 const fileFilter = (req, file, cb) => {
     const imageTypes = /jpeg|jpg|png|gif|webp|svg/;
     const videoTypes = /mp4|mov|avi|wmv|mkv|flv|webm/;
@@ -45,6 +68,7 @@ const fileFilter = (req, file, cb) => {
         return cb(new Error('Only PDF files are allowed for the pdf field'));
     }
 
+    // Image fields
     if (
         file.fieldname === 'images' ||
         file.fieldname === 'icons' ||
@@ -56,6 +80,7 @@ const fileFilter = (req, file, cb) => {
         return cb(new Error(`${file.fieldname} must be image format`));
     }
 
+    // Video field
     if (file.fieldname === 'video') {
         const isValidVideo = videoTypes.test(extname) && mimetype.startsWith('video/');
         if (isValidVideo) return cb(null, true);
@@ -65,37 +90,45 @@ const fileFilter = (req, file, cb) => {
     cb(new Error('Invalid file type'));
 };
 
-// multer config
+// ─────────────────────────────────────────────
+// Multer instance
+// ─────────────────────────────────────────────
 const upload = multer({
     storage,
     fileFilter,
     limits: {
         fileSize: 100 * 1024 * 1024,
-        files: 121 // +1 for pdf
+        files: MAX_TOTAL_FILES
     }
 });
 
-// Updated upload middleware — pdf field added
+// ─────────────────────────────────────────────
+// Upload middleware
+// ─────────────────────────────────────────────
 const handleUpload = (req, res, next) => {
     const uploadFields = [
-        { name: 'images', maxCount: 20 },
+        { name: 'images', maxCount: MAX_PRODUCT_IMAGES },
         { name: 'video', maxCount: 1 },
-        { name: 'icons', maxCount: 5 },
-        { name: 'swatches', maxCount: 30 },
+        { name: 'icons', maxCount: MAX_ICONS },
+        { name: 'swatches', maxCount: MAX_SWATCHES },
         { name: 'pdf', maxCount: 1 },
     ];
 
-    for (let i = 0; i < 30; i++) {
-        uploadFields.push({ name: `variant_${i}`, maxCount: 30 });
+    for (let i = 0; i < MAX_VARIANTS; i++) {
+        uploadFields.push({ name: `variant_${i}`, maxCount: MAX_IMAGES_PER_VARIANT });
     }
 
     const uploadHandler = upload.fields(uploadFields);
 
     uploadHandler(req, res, (err) => {
-        if (err) {
+        if (err instanceof multer.MulterError) {
             return res.status(400).json({
-                message: err.message || 'Upload error'
+                message: `Upload error: ${err.message}`,
+                code: err.code
             });
+        }
+        if (err) {
+            return res.status(400).json({ message: err.message || 'Upload error' });
         }
         next();
     });
@@ -109,6 +142,7 @@ const compressImagesMiddleware = async (req, res, next) => {
             for (let file of filesArray) {
                 const inputPath = file.path;
 
+                // Skip videos and PDFs
                 if (file.mimetype.startsWith('video/')) continue;
                 if (file.mimetype === 'application/pdf') continue;
 
@@ -120,10 +154,10 @@ const compressImagesMiddleware = async (req, res, next) => {
                     .webp({ quality: 70 })
                     .toFile(outputPath);
 
-                // delete original
+                // Delete original
                 fs.unlinkSync(inputPath);
 
-                // replace file info
+                // Update file metadata
                 file.path = outputPath;
                 file.filename = outputFileName;
             }
@@ -140,7 +174,9 @@ const compressImagesMiddleware = async (req, res, next) => {
     }
 };
 
-// debug middleware
+// ─────────────────────────────────────────────
+// Debug middleware (remove in production)
+// ─────────────────────────────────────────────
 const debugMiddleware = (req, res, next) => {
     console.log('=== DEBUG ===');
     console.log('Body:', req.body);
@@ -149,7 +185,9 @@ const debugMiddleware = (req, res, next) => {
     next();
 };
 
+// ─────────────────────────────────────────────
 // ROUTES
+// ─────────────────────────────────────────────
 router.get('/', getProducts);
 router.get('/:id', getProductById);
 
@@ -158,7 +196,9 @@ router.put('/:id', debugMiddleware, handleUpload, compressImagesMiddleware, upda
 
 router.delete('/:id', deleteProduct);
 
-// error handler
+// ─────────────────────────────────────────────
+// Global error handler
+// ─────────────────────────────────────────────
 router.use((error, req, res, next) => {
     console.error(error);
     res.status(500).json({
