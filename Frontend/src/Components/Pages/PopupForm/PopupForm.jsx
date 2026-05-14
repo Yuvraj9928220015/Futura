@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { TiSocialLinkedin } from "react-icons/ti";
 import "./PopupForm.css";
 
+// ─────────────────────────────────────────────
+// SVG Icons
+// ─────────────────────────────────────────────
 const MapPinIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -59,6 +62,15 @@ const ChatIcon = () => (
     </svg>
 );
 
+// ─────────────────────────────────────────────
+// API Base URL — .env se aata hai
+// .env mein add karo:  VITE_API_URL=http://localhost:8000
+// ─────────────────────────────────────────────
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+// ─────────────────────────────────────────────
+// PopupForm Component
+// ─────────────────────────────────────────────
 const PopupForm = () => {
 
     const handleDownload = () => {
@@ -69,23 +81,28 @@ const PopupForm = () => {
         link.click();
         document.body.removeChild(link);
     };
-    
-    const [isOpen, setIsOpen] = useState(false);
+
+    const [isOpen, setIsOpen]         = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
+    const [isLoading, setIsLoading]   = useState(false);  // ✅ loading state
+    const [errorMsg, setErrorMsg]     = useState('');     // ✅ error state
+    const [submitted, setSubmitted]   = useState(false);
+
     const [formData, setFormData] = useState({
-        name: "", email: "", phone: "", emailAddress: "", message: "",
+        name: '',
+        lastName: '',
+        phone: '',
+        emailAddress: '',
+        message: '',
     });
-    const [submitted, setSubmitted] = useState(false);
 
+    // Auto-open popup on first visit (per session)
     useEffect(() => {
-        // ✅ FIX: localStorage → sessionStorage
-        // sessionStorage tab-specific hoti hai, isliye har naye tab mein popup show hoga
         const hasSeenPopup = sessionStorage.getItem("futura_popup_seen");
-
         if (!hasSeenPopup) {
             const timer = setTimeout(() => {
                 setIsOpen(true);
-                sessionStorage.setItem("futura_popup_seen", "true"); // ✅ sessionStorage
+                sessionStorage.setItem("futura_popup_seen", "true");
             }, 1000);
             return () => clearTimeout(timer);
         } else {
@@ -96,34 +113,69 @@ const PopupForm = () => {
     const handleClose = () => {
         setIsOpen(false);
         setIsMinimized(true);
+        setErrorMsg('');
     };
 
     const handleOpen = () => {
         setIsOpen(true);
         setIsMinimized(false);
         setSubmitted(false);
+        setErrorMsg('');
     };
 
     const handleChange = (e) => {
+        setErrorMsg(''); // clear error on type
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSubmit = (e) => {
+    // ✅ API call with proper error handling
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form Data:", formData);
-        setSubmitted(true);
-        setTimeout(() => {
-            setIsOpen(false);
-            setIsMinimized(true);
-            setSubmitted(false);
-            setFormData({ name: "", email: "", phone: "", emailAddress: "", message: "" });
-        }, 2000);
+        setIsLoading(true);
+        setErrorMsg('');
+
+        try {
+            const response = await fetch(`${API_URL}/api/popup/submit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Server-side validation error
+                setErrorMsg(data.message || 'Something went wrong. Please try again.');
+                setIsLoading(false);
+                return;
+            }
+
+            // ✅ Success
+            setSubmitted(true);
+            setTimeout(() => {
+                setIsOpen(false);
+                setIsMinimized(true);
+                setSubmitted(false);
+                setFormData({ name: '', lastName: '', phone: '', emailAddress: '', message: '' });
+            }, 2500);
+
+        } catch (error) {
+            console.error('❌ Form submit error:', error);
+            setErrorMsg('Network error. Please check your connection and try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <>
             {isOpen && (
-                <div className="pf-overlay" onClick={(e) => e.target === e.currentTarget && handleClose()}>
+                <div
+                    className="pf-overlay"
+                    onClick={(e) => e.target === e.currentTarget && handleClose()}
+                >
                     <div className="pf-modal">
 
                         {/* Close Button */}
@@ -131,15 +183,13 @@ const PopupForm = () => {
                             <CloseIcon />
                         </button>
 
-                        {/* LEFT — Call Us */}
+                        {/* ── LEFT — Call Us ── */}
                         <div className="pf-left">
                             <h2 className="pf-left-heading">Call Us</h2>
                             <div className="pf-info-block-container">
 
                                 <div className="pf-info-block">
-                                    <div className="pf-icon-circle">
-                                        <MapPinIcon />
-                                    </div>
+                                    <div className="pf-icon-circle"><MapPinIcon /></div>
                                     <div className="pf-info-text">
                                         <p className="pf-info-name">Futura Textiles</p>
                                         <p className="pf-info-sub">6211 highway 305 olive branch ms 38654</p>
@@ -147,9 +197,7 @@ const PopupForm = () => {
                                 </div>
 
                                 <div className="pf-info-block">
-                                    <div className="pf-icon-circle">
-                                        <PhoneIcon />
-                                    </div>
+                                    <div className="pf-icon-circle"><PhoneIcon /></div>
                                     <div className="pf-info-text">
                                         <p className="pf-info-sub">
                                             <span className="pf-label">Phone:</span> (877) 426-8177
@@ -159,10 +207,9 @@ const PopupForm = () => {
                                         </p>
                                     </div>
                                 </div>
+
                                 <div className="pf-info-block">
-                                    <div className="pf-icon-circle">
-                                        <EmailIcon />
-                                    </div>
+                                    <div className="pf-icon-circle"><EmailIcon /></div>
                                     <div className="pf-info-text">
                                         <p className="pf-info-sub">
                                             <span className="pf-label">Email:</span>{" "}
@@ -188,40 +235,42 @@ const PopupForm = () => {
                                     <a href="#" className="pf-social-icon" aria-label="YouTube"><YoutubeIcon /></a>
                                     <a href="#" className="pf-social-icon-2" aria-label="Linkedin"><TiSocialLinkedin /></a>
                                 </div>
-                                <div className="pf-socials-btn">
-                                    <div className="pf-socials-btn" onClick={handleDownload} style={{ cursor: "pointer" }}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            width="30"
-                                            height="30"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2.2"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                        >
-                                            <path d="M12 3v13" />
-                                            <path d="M7 12l5 5 5-5" />
-                                            <path d="M5 20h14" />
-                                        </svg>
-                                    </div>
+                                <div className="pf-socials-btn" onClick={handleDownload} style={{ cursor: "pointer" }}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        width="30"
+                                        height="30"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2.2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    >
+                                        <path d="M12 3v13" />
+                                        <path d="M7 12l5 5 5-5" />
+                                        <path d="M5 20h14" />
+                                    </svg>
                                 </div>
                             </div>
                         </div>
 
-                        {/* RIGHT — Let's Connect */}
+                        {/* ── RIGHT — Let's Connect ── */}
                         <div className="pf-right">
                             <h2 className="pf-right-heading">Let's Connect</h2>
-                            <p className="pf-right-sub">Connect with our experts to discuss your specific requirements.</p>
+                            <p className="pf-right-sub">
+                                Connect with our experts to discuss your specific requirements.
+                            </p>
 
                             {submitted ? (
+                                // ✅ Success State
                                 <div className="pf-success">
                                     <div className="pf-success-icon">✓</div>
                                     <p>Thank you! We'll be in touch soon.</p>
                                 </div>
                             ) : (
                                 <form className="pf-form" onSubmit={handleSubmit}>
+
                                     <div className="pf-row">
                                         <div className="pf-field">
                                             <input
@@ -231,6 +280,7 @@ const PopupForm = () => {
                                                 value={formData.name}
                                                 onChange={handleChange}
                                                 required
+                                                disabled={isLoading}
                                                 className="pf-input"
                                             />
                                         </div>
@@ -242,6 +292,7 @@ const PopupForm = () => {
                                                 value={formData.lastName}
                                                 onChange={handleChange}
                                                 required
+                                                disabled={isLoading}
                                                 className="pf-input"
                                             />
                                         </div>
@@ -255,6 +306,7 @@ const PopupForm = () => {
                                                 placeholder="Enter Your Phone No."
                                                 value={formData.phone}
                                                 onChange={handleChange}
+                                                disabled={isLoading}
                                                 className="pf-input"
                                             />
                                         </div>
@@ -265,6 +317,7 @@ const PopupForm = () => {
                                                 placeholder="Your Email Address"
                                                 value={formData.emailAddress}
                                                 onChange={handleChange}
+                                                disabled={isLoading}
                                                 className="pf-input"
                                             />
                                         </div>
@@ -276,12 +329,26 @@ const PopupForm = () => {
                                             placeholder="Messages..."
                                             value={formData.message}
                                             onChange={handleChange}
+                                            disabled={isLoading}
                                             className="pf-textarea"
                                             rows={5}
                                         />
                                     </div>
 
-                                    <button type="submit" className="pf-submit">Submit</button>
+                                    {/* ✅ Error Message */}
+                                    {errorMsg && (
+                                        <p className="pf-error">{errorMsg}</p>
+                                    )}
+
+                                    {/* ✅ Submit Button with loading state */}
+                                    <button
+                                        type="submit"
+                                        className="pf-submit"
+                                        disabled={isLoading}
+                                    >
+                                        {isLoading ? 'Sending...' : 'Submit'}
+                                    </button>
+
                                 </form>
                             )}
                         </div>
