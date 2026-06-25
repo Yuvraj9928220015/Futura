@@ -23,7 +23,7 @@ export default function Focus() {
                                     <div className="Features-Section-Box">
                                         <div className="Features-Section-image">
                                             <img src="/futara-icons-ethical.png" alt="" />
-                                        </div>
+                                        </div> 
                                         <div className="Features-Section-text">
                                             Ethical
                                         </div>

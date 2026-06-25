@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MdLocationOn } from 'react-icons/md';
 import './Contact.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in';
 
 export default function Contact() {
     const [formData, setFormData] = useState({
@@ -120,7 +120,7 @@ export default function Contact() {
                     ) : (
                         <form onSubmit={handleSubmit} className="contact-form">
 
-                            {/* ✅ Error message banner */}
+                            {/* Error message banner */}
                             {errorMessage && (
                                 <div className="error-banner">
                                     ⚠️ {errorMessage}
@@ -167,20 +167,6 @@ export default function Contact() {
                                         required
                                     />
                                 </div>
-                                <div className="form-group phone-group">
-                                    <input
-                                        type="tel"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleInputChange}
-                                        placeholder="Telephone number*"
-                                        className="form-input phone-input"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-row">
                                 <div className="form-group">
                                     <input
                                         type="text"
@@ -189,6 +175,20 @@ export default function Contact() {
                                         onChange={handleInputChange}
                                         placeholder="Last Name*"
                                         className="form-input"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group phone-group">
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
+                                        placeholder="Contact number*"
+                                        className="form-input phone-input"
                                         required
                                     />
                                 </div>
@@ -310,7 +310,7 @@ export default function Contact() {
                                 </div>
                             </div>
 
-                            {/* ✅ Loading state button */}
+                            {/* Loading state button */}
                             <button
                                 type="submit"
                                 className="submit-btn"
@@ -339,7 +339,6 @@ export default function Contact() {
                     <div className="hq-card">
                         <h3>Phone</h3>
                         <p className="address">(877) 426-8177</p>
-                        <p className="phone">Tel: <a href="tel:+16629328934">(662) 932-8934</a></p>
                     </div>
 
                     <div className="hq-card">

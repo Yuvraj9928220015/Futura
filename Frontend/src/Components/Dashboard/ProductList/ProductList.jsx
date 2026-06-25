@@ -65,7 +65,7 @@ function ProductList() {
         category: '',
         price: '',
         color: '',
-        colorName: '',      // ✅ NEW: product-level colorName
+        colorName: '',
         Flammable: '',
         resistant: '',
         QUV: '',
@@ -73,6 +73,13 @@ function ProductList() {
         Abrasion: '',
         AntiMicrobial: '',
         PinkStain: '',
+        Antiflammable: '',
+        Cold: '',
+        QUVResistant: '',
+        Weath: '',
+        Wyzenback: '',
+        SafeAnti: '',
+        SafePink: '',
     };
 
     // ─── New Product State ───
@@ -83,6 +90,7 @@ function ProductList() {
     const [newProductVideoPreview, setNewProductVideoPreview] = useState(null);
     const [newProductIcons, setNewProductIcons] = useState([]);
     const [newProductIconPreviews, setNewProductIconPreviews] = useState([]);
+    const [newProductIconNames, setNewProductIconNames] = useState([]);   // NEW
     const [newProductSwatches, setNewProductSwatches] = useState([]);
     const [newProductSwatchPreviews, setNewProductSwatchPreviews] = useState([]);
     const [newProductVariants, setNewProductVariants] = useState([]);
@@ -101,7 +109,9 @@ function ProductList() {
     const [removeExistingVideo, setRemoveExistingVideo] = useState(false);
     const [editProductIcons, setEditProductIcons] = useState([]);
     const [editProductIconPreviews, setEditProductIconPreviews] = useState([]);
+    const [editProductIconNames, setEditProductIconNames] = useState([]);  // NEW
     const [existingIcons, setExistingIcons] = useState([]);
+    const [existingIconNames, setExistingIconNames] = useState([]);        // NEW
     const [editProductSwatches, setEditProductSwatches] = useState([]);
     const [editProductSwatchPreviews, setEditProductSwatchPreviews] = useState([]);
     const [existingSwatches, setExistingSwatches] = useState([]);
@@ -224,8 +234,17 @@ function ProductList() {
         }
         setNewProductIcons(prev => [...prev, ...files]);
         setNewProductIconPreviews(prev => [...prev, ...files.map(f => URL.createObjectURL(f))]);
+        setNewProductIconNames(prev => [...prev, ...files.map(() => '')]);  // NEW: blank names
         e.target.value = '';
         setError(null);
+    };
+
+    const handleNewProductIconNameChange = (index, value) => {
+        setNewProductIconNames(prev => {
+            const updated = [...prev];
+            updated[index] = value;
+            return updated;
+        });
     };
 
     const handleNewProductSwatchChange = (e) => {
@@ -293,6 +312,7 @@ function ProductList() {
     const handleRemoveNewIcon = (index) => {
         setNewProductIcons(prev => { const u = [...prev]; u[index] = null; return u; });
         setNewProductIconPreviews(prev => { const u = [...prev]; u[index] = null; return u; });
+        setNewProductIconNames(prev => { const u = [...prev]; u[index] = null; return u; });
     };
 
     const handleReplaceNewIcon = (index, e) => {
@@ -311,7 +331,6 @@ function ProductList() {
 
     // ─── Variants — New Product ───
     const handleAddVariant = () => {
-        // ✅ colorName added to initial variant object
         setNewProductVariants(prev => [...prev, { name: '', color: '', colorName: '', grain: '', images: [], previews: [] }]);
     };
 
@@ -320,46 +339,29 @@ function ProductList() {
     };
 
     const handleVariantNameChange = (variantIndex, value) => {
-        setNewProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].name = value;
-            return updated;
-        });
+        setNewProductVariants(prev => { const u = [...prev]; u[variantIndex].name = value; return u; });
     };
 
     const handleVariantColorChange = (variantIndex, value) => {
-        setNewProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].color = value;
-            return updated;
-        });
+        setNewProductVariants(prev => { const u = [...prev]; u[variantIndex].color = value; return u; });
     };
 
-    // ✅ NEW: colorName change handler for new product variants
     const handleVariantColorNameChange = (variantIndex, value) => {
-        setNewProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].colorName = value;
-            return updated;
-        });
+        setNewProductVariants(prev => { const u = [...prev]; u[variantIndex].colorName = value; return u; });
     };
 
     const handleVariantGrainChange = (variantIndex, value) => {
-        setNewProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].grain = value;
-            return updated;
-        });
+        setNewProductVariants(prev => { const u = [...prev]; u[variantIndex].grain = value; return u; });
     };
 
     const handleVariantImagesChange = (variantIndex, e) => {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
         setNewProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].images = [...updated[variantIndex].images, ...files];
-            updated[variantIndex].previews = [...updated[variantIndex].previews, ...files.map(f => URL.createObjectURL(f))];
-            return updated;
+            const u = [...prev];
+            u[variantIndex].images = [...u[variantIndex].images, ...files];
+            u[variantIndex].previews = [...u[variantIndex].previews, ...files.map(f => URL.createObjectURL(f))];
+            return u;
         });
         e.target.value = '';
         setError(null);
@@ -367,10 +369,10 @@ function ProductList() {
 
     const handleRemoveVariantImage = (variantIndex, imageIndex) => {
         setNewProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].images[imageIndex] = null;
-            updated[variantIndex].previews[imageIndex] = null;
-            return updated;
+            const u = [...prev];
+            u[variantIndex].images[imageIndex] = null;
+            u[variantIndex].previews[imageIndex] = null;
+            return u;
         });
     };
 
@@ -378,16 +380,15 @@ function ProductList() {
         const file = e.target.files[0];
         if (file) {
             setNewProductVariants(prev => {
-                const updated = [...prev];
-                updated[variantIndex].images[imageIndex] = file;
-                updated[variantIndex].previews[imageIndex] = URL.createObjectURL(file);
-                return updated;
+                const u = [...prev];
+                u[variantIndex].images[imageIndex] = file;
+                u[variantIndex].previews[imageIndex] = URL.createObjectURL(file);
+                return u;
             });
             e.target.value = '';
         }
     };
 
-    // ✅ FIXED: handleNewProductSubmit — colorName included
     const handleNewProductSubmit = async (e) => {
         e.preventDefault();
 
@@ -427,9 +428,10 @@ function ProductList() {
             formDataToSend.append('category', newProductFormData.category);
             formDataToSend.append('price', newProductFormData.price);
             formDataToSend.append('color', newProductFormData.color);
-            formDataToSend.append('colorName', newProductFormData.colorName); // ✅ NEW
+            formDataToSend.append('colorName', newProductFormData.colorName);
             formDataToSend.append('baseVariantName', baseVariantLabel);
 
+            // Original properties
             if (newProductFormData.Flammable) formDataToSend.append('Flammable', newProductFormData.Flammable);
             if (newProductFormData.resistant) formDataToSend.append('resistant', newProductFormData.resistant);
             if (newProductFormData.QUV) formDataToSend.append('QUV', newProductFormData.QUV);
@@ -438,12 +440,23 @@ function ProductList() {
             if (newProductFormData.AntiMicrobial) formDataToSend.append('AntiMicrobial', newProductFormData.AntiMicrobial);
             if (newProductFormData.PinkStain) formDataToSend.append('PinkStain', newProductFormData.PinkStain);
 
+            // New properties
+            if (newProductFormData.Antiflammable) formDataToSend.append('Antiflammable', newProductFormData.Antiflammable);
+            if (newProductFormData.Cold) formDataToSend.append('Cold', newProductFormData.Cold);
+            if (newProductFormData.QUVResistant) formDataToSend.append('QUVResistant', newProductFormData.QUVResistant);
+            if (newProductFormData.Weath) formDataToSend.append('Weath', newProductFormData.Weath);
+            if (newProductFormData.Wyzenback) formDataToSend.append('Wyzenback', newProductFormData.Wyzenback);
+            if (newProductFormData.SafeAnti) formDataToSend.append('SafeAnti', newProductFormData.SafeAnti);
+            if (newProductFormData.SafePink) formDataToSend.append('SafePink', newProductFormData.SafePink);
+
             validImages.forEach(image => formDataToSend.append('images', image));
             if (newProductVideo) formDataToSend.append('video', newProductVideo);
             if (newProductPdf) formDataToSend.append('pdf', newProductPdf);
 
-            const validIcons = newProductIcons.filter(i => i !== null);
-            validIcons.forEach(icon => formDataToSend.append('icons', icon));
+            // Icons + iconNames
+            const validIcons = newProductIcons.map((icon, idx) => ({ icon, name: newProductIconNames[idx] || '' })).filter(item => item.icon !== null);
+            validIcons.forEach(item => formDataToSend.append('icons', item.icon));
+            formDataToSend.append('iconNames', JSON.stringify(validIcons.map(item => item.name)));
 
             const validSwatches = newProductSwatches.filter(s => s !== null);
             validSwatches.forEach(swatch => formDataToSend.append('swatches', swatch));
@@ -451,7 +464,7 @@ function ProductList() {
             if (newProductVariants.length > 0) {
                 formDataToSend.append('variantNames', JSON.stringify(newProductVariants.map(v => v.name)));
                 formDataToSend.append('variantColors', JSON.stringify(newProductVariants.map(v => v.color || '')));
-                formDataToSend.append('variantColorNames', JSON.stringify(newProductVariants.map(v => v.colorName || ''))); // ✅ NEW
+                formDataToSend.append('variantColorNames', JSON.stringify(newProductVariants.map(v => v.colorName || '')));
                 formDataToSend.append('variantGrain', JSON.stringify(newProductVariants.map(v => v.grain || '')));
 
                 newProductVariants.forEach((variant, index) => {
@@ -475,6 +488,7 @@ function ProductList() {
             setNewProductVideoPreview(null);
             setNewProductIcons([]);
             setNewProductIconPreviews([]);
+            setNewProductIconNames([]);
             setNewProductSwatches([]);
             setNewProductSwatchPreviews([]);
             setNewProductVariants([]);
@@ -503,7 +517,7 @@ function ProductList() {
             category: product.category,
             price: product.price,
             color: product.color || '',
-            colorName: product.colorName || '',  // ✅ NEW
+            colorName: product.colorName || '',
             grain: product.grain || '',
             Flammable: product.Flammable || '',
             resistant: product.resistant || '',
@@ -512,10 +526,18 @@ function ProductList() {
             Abrasion: product.Abrasion || '',
             AntiMicrobial: product.AntiMicrobial || '',
             PinkStain: product.PinkStain || '',
+            Antiflammable: product.Antiflammable || '',
+            Cold: product.Cold || '',
+            QUVResistant: product.QUVResistant || '',
+            Weath: product.Weath || '',
+            Wyzenback: product.Wyzenback || '',
+            SafeAnti: product.SafeAnti || '',
+            SafePink: product.SafePink || '',
         });
         setExistingImages(product.image || []);
         setExistingVideo(product.video || null);
         setExistingIcons(product.icons || []);
+        setExistingIconNames((product.iconNames || []).map(n => n || ''));   // NEW
         setExistingSwatches(product.swatches || []);
 
         setExistingPdf(product.pdf || null);
@@ -525,11 +547,10 @@ function ProductList() {
 
         setEditProductBaseVariantName(product.baseVariantName || product.title);
 
-        // ✅ colorName added to existing variants
         const existingVariants = (product.variants || []).map(v => ({
             name: v.name,
             color: v.color || '',
-            colorName: v.colorName || '',  // ✅ NEW
+            colorName: v.colorName || '',
             grain: v.grain || '',
             existingImages: v.images || [],
             newImages: [],
@@ -543,6 +564,7 @@ function ProductList() {
         setEditProductVideoPreview(null);
         setEditProductIcons([]);
         setEditProductIconPreviews([]);
+        setEditProductIconNames([]);
         setEditProductSwatches([]);
         setEditProductSwatchPreviews([]);
         setRemoveExistingVideo(false);
@@ -589,8 +611,17 @@ function ProductList() {
         }
         setEditProductIcons(prev => [...prev, ...files]);
         setEditProductIconPreviews(prev => [...prev, ...files.map(f => URL.createObjectURL(f))]);
+        setEditProductIconNames(prev => [...prev, ...files.map(() => '')]);  // NEW
         e.target.value = '';
         setError(null);
+    };
+
+    const handleExistingIconNameChange = (index, value) => {
+        setExistingIconNames(prev => { const u = [...prev]; u[index] = value; return u; });
+    };
+
+    const handleEditNewIconNameChange = (index, value) => {
+        setEditProductIconNames(prev => { const u = [...prev]; u[index] = value; return u; });
     };
 
     const handleEditProductSwatchChange = (e) => {
@@ -679,6 +710,7 @@ function ProductList() {
 
     const handleRemoveExistingIcon = (index) => {
         setExistingIcons(prev => { const u = [...prev]; u[index] = null; return u; });
+        setExistingIconNames(prev => { const u = [...prev]; u[index] = null; return u; });
     };
 
     const handleReplaceExistingIconInPlace = (index, e) => {
@@ -688,6 +720,7 @@ function ProductList() {
             setExistingIcons(prev => { const u = [...prev]; u[index] = url; return u; });
             setEditProductIcons(prev => [...prev, file]);
             setEditProductIconPreviews(prev => [...prev, url]);
+            setEditProductIconNames(prev => [...prev, '']);
             e.target.value = '';
         }
     };
@@ -695,6 +728,7 @@ function ProductList() {
     const handleRemoveEditNewIcon = (index) => {
         setEditProductIcons(prev => { const u = [...prev]; u[index] = null; return u; });
         setEditProductIconPreviews(prev => { const u = [...prev]; u[index] = null; return u; });
+        setEditProductIconNames(prev => { const u = [...prev]; u[index] = null; return u; });
     };
 
     const handleReplaceEditNewIcon = (index, e) => {
@@ -737,7 +771,6 @@ function ProductList() {
 
     // ─── Variants — Edit Product ───
     const handleAddEditVariant = () => {
-        // ✅ colorName added
         setEditProductVariants(prev => [...prev, { name: '', color: '', colorName: '', grain: '', existingImages: [], newImages: [], newPreviews: [] }]);
     };
 
@@ -746,46 +779,29 @@ function ProductList() {
     };
 
     const handleEditVariantNameChange = (variantIndex, value) => {
-        setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].name = value;
-            return updated;
-        });
+        setEditProductVariants(prev => { const u = [...prev]; u[variantIndex].name = value; return u; });
     };
 
     const handleEditVariantColorChange = (variantIndex, value) => {
-        setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].color = value;
-            return updated;
-        });
+        setEditProductVariants(prev => { const u = [...prev]; u[variantIndex].color = value; return u; });
     };
 
-    // ✅ NEW: colorName change handler for edit product variants
     const handleEditVariantColorNameChange = (variantIndex, value) => {
-        setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].colorName = value;
-            return updated;
-        });
+        setEditProductVariants(prev => { const u = [...prev]; u[variantIndex].colorName = value; return u; });
     };
 
     const handleEditVariantGrainChange = (variantIndex, value) => {
-        setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].grain = value;
-            return updated;
-        });
+        setEditProductVariants(prev => { const u = [...prev]; u[variantIndex].grain = value; return u; });
     };
 
     const handleEditVariantImagesChange = (variantIndex, e) => {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
         setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].newImages = [...updated[variantIndex].newImages, ...files];
-            updated[variantIndex].newPreviews = [...updated[variantIndex].newPreviews, ...files.map(f => URL.createObjectURL(f))];
-            return updated;
+            const u = [...prev];
+            u[variantIndex].newImages = [...u[variantIndex].newImages, ...files];
+            u[variantIndex].newPreviews = [...u[variantIndex].newPreviews, ...files.map(f => URL.createObjectURL(f))];
+            return u;
         });
         e.target.value = '';
         setError(null);
@@ -796,11 +812,11 @@ function ProductList() {
         if (file) {
             const url = URL.createObjectURL(file);
             setEditProductVariants(prev => {
-                const updated = [...prev];
-                updated[variantIndex].existingImages[imageIndex] = url;
-                updated[variantIndex].newImages = [...updated[variantIndex].newImages, file];
-                updated[variantIndex].newPreviews = [...updated[variantIndex].newPreviews, url];
-                return updated;
+                const u = [...prev];
+                u[variantIndex].existingImages[imageIndex] = url;
+                u[variantIndex].newImages = [...u[variantIndex].newImages, file];
+                u[variantIndex].newPreviews = [...u[variantIndex].newPreviews, url];
+                return u;
             });
             e.target.value = '';
         }
@@ -808,18 +824,18 @@ function ProductList() {
 
     const handleRemoveEditVariantExistingImage = (variantIndex, imageIndex) => {
         setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].existingImages[imageIndex] = null;
-            return updated;
+            const u = [...prev];
+            u[variantIndex].existingImages[imageIndex] = null;
+            return u;
         });
     };
 
     const handleRemoveEditVariantNewImage = (variantIndex, imageIndex) => {
         setEditProductVariants(prev => {
-            const updated = [...prev];
-            updated[variantIndex].newImages[imageIndex] = null;
-            updated[variantIndex].newPreviews[imageIndex] = null;
-            return updated;
+            const u = [...prev];
+            u[variantIndex].newImages[imageIndex] = null;
+            u[variantIndex].newPreviews[imageIndex] = null;
+            return u;
         });
     };
 
@@ -827,16 +843,15 @@ function ProductList() {
         const file = e.target.files[0];
         if (file) {
             setEditProductVariants(prev => {
-                const updated = [...prev];
-                updated[variantIndex].newImages[imageIndex] = file;
-                updated[variantIndex].newPreviews[imageIndex] = URL.createObjectURL(file);
-                return updated;
+                const u = [...prev];
+                u[variantIndex].newImages[imageIndex] = file;
+                u[variantIndex].newPreviews[imageIndex] = URL.createObjectURL(file);
+                return u;
             });
             e.target.value = '';
         }
     };
 
-    // ✅ FIXED: handleEditProductSubmit — colorName included
     const handleEditProductSubmit = async (e) => {
         e.preventDefault();
 
@@ -879,9 +894,10 @@ function ProductList() {
             formDataToSend.append('category', editProductFormData.category);
             formDataToSend.append('price', editProductFormData.price);
             formDataToSend.append('color', editProductFormData.color);
-            formDataToSend.append('colorName', editProductFormData.colorName); // ✅ NEW
+            formDataToSend.append('colorName', editProductFormData.colorName);
             formDataToSend.append('baseVariantName', baseVariantLabel);
 
+            // Original properties
             formDataToSend.append('Flammable', editProductFormData.Flammable);
             formDataToSend.append('resistant', editProductFormData.resistant);
             formDataToSend.append('QUV', editProductFormData.QUV);
@@ -890,20 +906,39 @@ function ProductList() {
             formDataToSend.append('AntiMicrobial', editProductFormData.AntiMicrobial);
             formDataToSend.append('PinkStain', editProductFormData.PinkStain);
 
+            // New properties
+            formDataToSend.append('Antiflammable', editProductFormData.Antiflammable);
+            formDataToSend.append('Cold', editProductFormData.Cold);
+            formDataToSend.append('QUVResistant', editProductFormData.QUVResistant);
+            formDataToSend.append('Weath', editProductFormData.Weath);
+            formDataToSend.append('Wyzenback', editProductFormData.Wyzenback);
+            formDataToSend.append('SafeAnti', editProductFormData.SafeAnti);
+            formDataToSend.append('SafePink', editProductFormData.SafePink);
+
+            // Images order
             const imageOrder = [];
             validExistingImages.forEach(img => imageOrder.push(img));
             validNewImages.forEach((_, index) => imageOrder.push(`NEW_FILE_${index}`));
             formDataToSend.append('imageOrder', JSON.stringify(imageOrder));
             validNewImages.forEach(image => formDataToSend.append('images', image));
 
-            const validExistingIcons = existingIcons.filter(i => i !== null);
-            const validNewIcons = editProductIcons.filter(i => i !== null);
-            const iconOrder = [];
-            validExistingIcons.forEach(icon => iconOrder.push(icon));
-            validNewIcons.forEach((_, index) => iconOrder.push(`NEW_ICON_${index}`));
-            formDataToSend.append('iconOrder', JSON.stringify(iconOrder));
-            validNewIcons.forEach(icon => formDataToSend.append('icons', icon));
+            // Icons + iconNames
+            const validExistingIcons = existingIcons
+                .map((icon, idx) => ({ icon, name: existingIconNames[idx] || '' }))
+                .filter(item => item.icon !== null);
+            const validNewIcons = editProductIcons
+                .map((icon, idx) => ({ icon, name: editProductIconNames[idx] || '' }))
+                .filter(item => item.icon !== null);
 
+            const iconOrder = [];
+            const allIconNames = [];
+            validExistingIcons.forEach(item => { iconOrder.push(item.icon); allIconNames.push(item.name); });
+            validNewIcons.forEach((item, index) => { iconOrder.push(`NEW_ICON_${index}`); allIconNames.push(item.name); });
+            formDataToSend.append('iconOrder', JSON.stringify(iconOrder));
+            formDataToSend.append('iconNames', JSON.stringify(allIconNames));
+            validNewIcons.forEach(item => formDataToSend.append('icons', item.icon));
+
+            // Swatches
             const validExistingSwatches = existingSwatches.filter(s => s !== null);
             const validNewSwatches = editProductSwatches.filter(s => s !== null);
             const swatchOrder = [];
@@ -927,7 +962,7 @@ function ProductList() {
             if (editProductVariants.length > 0) {
                 formDataToSend.append('variantNames', JSON.stringify(editProductVariants.map(v => v.name)));
                 formDataToSend.append('variantColors', JSON.stringify(editProductVariants.map(v => v.color || '')));
-                formDataToSend.append('variantColorNames', JSON.stringify(editProductVariants.map(v => v.colorName || ''))); // ✅ NEW
+                formDataToSend.append('variantColorNames', JSON.stringify(editProductVariants.map(v => v.colorName || '')));
                 formDataToSend.append('variantGrains', JSON.stringify(editProductVariants.map(v => v.grain || '')));
 
                 const variantOrders = editProductVariants.map(variant => {
@@ -989,6 +1024,88 @@ function ProductList() {
     const handleVariantSelect = (productId, variantIndex) => {
         setSelectedVariants(prev => ({ ...prev, [productId]: variantIndex }));
     };
+
+    // ── Shared Properties Form Section (reused in Add + Edit) ──
+    const renderPropertiesSection = (formData, onChange) => (
+        <div className="form-section">
+            <h3>Product Properties (Optional)</h3>
+            <p style={{ fontSize: '12px', color: '#888', marginBottom: '12px' }}>Group 1 — Original</p>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>Flammable</label>
+                    <input type="text" name="Flammable" value={formData.Flammable} onChange={onChange} />
+                </div>
+                <div className="form-group">
+                    <label>Resistant</label>
+                    <input type="text" name="resistant" value={formData.resistant} onChange={onChange} />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>QUV</label>
+                    <input type="text" name="QUV" value={formData.QUV} onChange={onChange} />
+                </div>
+                <div className="form-group">
+                    <label>Weatherometer</label>
+                    <input type="text" name="Weatherometer" value={formData.Weatherometer} onChange={onChange} />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>Abrasion</label>
+                    <input type="text" name="Abrasion" value={formData.Abrasion} onChange={onChange} />
+                </div>
+                <div className="form-group">
+                    <label>Anti-Microbial</label>
+                    <input type="text" name="AntiMicrobial" value={formData.AntiMicrobial} onChange={onChange} />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>Pink Stain</label>
+                    <input type="text" name="PinkStain" value={formData.PinkStain} onChange={onChange} />
+                </div>
+            </div>
+
+            <p style={{ fontSize: '12px', color: '#888', margin: '16px 0 12px' }}>Group 2 — Extended</p>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>Anti-Flammable</label>
+                    <input type="text" name="Antiflammable" value={formData.Antiflammable} onChange={onChange} />
+                </div>
+                <div className="form-group">
+                    <label>Cold</label>
+                    <input type="text" name="Cold" value={formData.Cold} onChange={onChange} />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>QUV Resistant</label>
+                    <input type="text" name="QUVResistant" value={formData.QUVResistant} onChange={onChange} />
+                </div>
+                <div className="form-group">
+                    <label>Weath</label>
+                    <input type="text" name="Weath" value={formData.Weath} onChange={onChange} />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>Wyzenback</label>
+                    <input type="text" name="Wyzenback" value={formData.Wyzenback} onChange={onChange} />
+                </div>
+                <div className="form-group">
+                    <label>Safe Anti</label>
+                    <input type="text" name="SafeAnti" value={formData.SafeAnti} onChange={onChange} />
+                </div>
+            </div>
+            <div className="form-row">
+                <div className="form-group">
+                    <label>Safe Pink</label>
+                    <input type="text" name="SafePink" value={formData.SafePink} onChange={onChange} />
+                </div>
+            </div>
+        </div>
+    );
 
     // ====================== RENDER ======================
 
@@ -1095,10 +1212,7 @@ function ProductList() {
                                                         onClick={(e) => { e.preventDefault(); handleVariantSelect(product._id, null); }}
                                                     >
                                                         {product.color && (
-                                                            <span
-                                                                className="variant-color-dot"
-                                                                style={{ backgroundColor: product.color }}
-                                                            />
+                                                            <span className="variant-color-dot" style={{ backgroundColor: product.color }} />
                                                         )}
                                                         {product.baseVariantName || product.title}
                                                     </button>
@@ -1110,17 +1224,13 @@ function ProductList() {
                                                             title={variant.color ? `Color: ${variant.color}` : variant.name}
                                                         >
                                                             {variant.color && (
-                                                                <span
-                                                                    className="variant-color-dot"
-                                                                    style={{ backgroundColor: variant.color }}
-                                                                />
+                                                                <span className="variant-color-dot" style={{ backgroundColor: variant.color }} />
                                                             )}
                                                             {variant.name}
                                                         </button>
                                                     ))}
                                                 </div>
 
-                                                {/* ✅ Show colorName in variant meta display */}
                                                 {activeVariant && (activeVariant.color || activeVariant.colorName || activeVariant.grain) && (
                                                     <div className="variant-meta-display">
                                                         {activeVariant.color && (
@@ -1129,7 +1239,6 @@ function ProductList() {
                                                                 Variant Color: <strong>{activeVariant.color}</strong>
                                                             </div>
                                                         )}
-                                                        {/* ✅ NEW: Show colorName */}
                                                         {activeVariant.colorName && (
                                                             <div className="variant-colorname-display">
                                                                 <i className="fas fa-tag" style={{ marginRight: '6px' }}></i>
@@ -1151,7 +1260,10 @@ function ProductList() {
                                             <div className="product-icons-section">
                                                 {product.icons.map((icon, index) => (
                                                     <div key={index} className="product-icon-item">
-                                                        <img src={getImageUrl(icon)} alt={`Icon ${index + 1}`} />
+                                                        <img src={getImageUrl(icon)} alt={product.iconNames?.[index] || `Icon ${index + 1}`} />
+                                                        {product.iconNames?.[index] && (
+                                                            <span className="product-icon-name">{product.iconNames[index]}</span>
+                                                        )}
                                                     </div>
                                                 ))}
                                             </div>
@@ -1170,11 +1282,8 @@ function ProductList() {
                                                     <span className="color-label">
                                                         <i className="fas fa-circle" style={{ color: product.color, marginRight: '6px' }}></i>
                                                         Color: <strong>{product.color}</strong>
-                                                        {/* ✅ Show product-level colorName if set */}
                                                         {product.colorName && (
-                                                            <span style={{ marginLeft: '8px', color: '#666' }}>
-                                                                ({product.colorName})
-                                                            </span>
+                                                            <span style={{ marginLeft: '8px', color: '#666' }}>({product.colorName})</span>
                                                         )}
                                                     </span>
                                                 </div>
@@ -1182,12 +1291,7 @@ function ProductList() {
 
                                             {product.pdf && (
                                                 <div className="product-pdf-section">
-                                                    <a
-                                                        href={getPdfUrl(product.pdf)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="pdf-download-btn"
-                                                    >
+                                                    <a href={getPdfUrl(product.pdf)} target="_blank" rel="noopener noreferrer" className="pdf-download-btn">
                                                         <i className="fas fa-file-pdf"></i> View / Download PDF
                                                     </a>
                                                 </div>
@@ -1201,6 +1305,13 @@ function ProductList() {
                                                 {product.Abrasion && <p className="spec-item"><strong>Abrasion:</strong> {product.Abrasion}</p>}
                                                 {product.AntiMicrobial && <p className="spec-item"><strong>Anti-Microbial:</strong> {product.AntiMicrobial}</p>}
                                                 {product.PinkStain && <p className="spec-item"><strong>Pink Stain:</strong> {product.PinkStain}</p>}
+                                                {product.Antiflammable && <p className="spec-item"><strong>Anti-Flammable:</strong> {product.Antiflammable}</p>}
+                                                {product.Cold && <p className="spec-item"><strong>Cold:</strong> {product.Cold}</p>}
+                                                {product.QUVResistant && <p className="spec-item"><strong>QUV Resistant:</strong> {product.QUVResistant}</p>}
+                                                {product.Weath && <p className="spec-item"><strong>Weath:</strong> {product.Weath}</p>}
+                                                {product.Wyzenback && <p className="spec-item"><strong>Wyzenback:</strong> {product.Wyzenback}</p>}
+                                                {product.SafeAnti && <p className="spec-item"><strong>Safe Anti:</strong> {product.SafeAnti}</p>}
+                                                {product.SafePink && <p className="spec-item"><strong>Safe Pink:</strong> {product.SafePink}</p>}
                                             </div>
 
                                             <div className="product-card-actions">
@@ -1258,7 +1369,6 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                {/* ✅ Color + ColorName side by side */}
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label htmlFor="new-product-color">
@@ -1278,45 +1388,7 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                <div className="form-section">
-                                    <h3>Product Properties (Optional)</h3>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Flammable</label>
-                                            <input type="text" name="Flammable" value={newProductFormData.Flammable} onChange={handleNewProductInputChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Resistant</label>
-                                            <input type="text" name="resistant" value={newProductFormData.resistant} onChange={handleNewProductInputChange} />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>QUV</label>
-                                            <input type="text" name="QUV" value={newProductFormData.QUV} onChange={handleNewProductInputChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Weatherometer</label>
-                                            <input type="text" name="Weatherometer" value={newProductFormData.Weatherometer} onChange={handleNewProductInputChange} />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Abrasion</label>
-                                            <input type="text" name="Abrasion" value={newProductFormData.Abrasion} onChange={handleNewProductInputChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Anti-Microbial</label>
-                                            <input type="text" name="AntiMicrobial" value={newProductFormData.AntiMicrobial} onChange={handleNewProductInputChange} />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Pink Stain</label>
-                                            <input type="text" name="PinkStain" value={newProductFormData.PinkStain} onChange={handleNewProductInputChange} />
-                                        </div>
-                                    </div>
-                                </div>
+                                {renderPropertiesSection(newProductFormData, handleNewProductInputChange)}
 
                                 {/* Default Variant Button Name */}
                                 <div className="variant-item" style={{ marginBottom: '16px' }}>
@@ -1336,6 +1408,7 @@ function ProductList() {
                                     </div>
                                 </div>
 
+                                {/* Product Images */}
                                 <div className="form-group image-upload-group">
                                     <label>Product Images * (Max 30)</label>
                                     <div className="image-input-grid">
@@ -1371,9 +1444,9 @@ function ProductList() {
                                     <p className="uploaded-image-count">{newProductImages.filter(img => img !== null).length} image(s) uploaded</p>
                                 </div>
 
-                                {/* Icons */}
+                                {/* Icons with Names */}
                                 <div className="form-group icon-upload-group">
-                                    <label>Product Icons (Optional, Max 5)</label>
+                                    <label>Product Icons (Optional, Max 5) — with display names</label>
                                     <div className="icon-input-grid">
                                         {newProductIconPreviews.map((preview, index) => (
                                             preview !== null ? (
@@ -1387,6 +1460,14 @@ function ProductList() {
                                                     </div>
                                                     <input type="file" id={`replace-new-icon-${index}`} accept="image/*"
                                                         onChange={(e) => handleReplaceNewIcon(index, e)} style={{ display: 'none' }} />
+                                                    {/* Icon name input */}
+                                                    <input
+                                                        type="text"
+                                                        className="icon-name-input"
+                                                        placeholder="Icon name..."
+                                                        value={newProductIconNames[index] || ''}
+                                                        onChange={(e) => handleNewProductIconNameChange(index, e.target.value)}
+                                                    />
                                                 </div>
                                             ) : (
                                                 <label key={index} htmlFor={`add-icon-at-${index}`} className="icon-upload-placeholder empty-slot">
@@ -1454,7 +1535,6 @@ function ProductList() {
                                                     placeholder="e.g., Navy Blue, Size L" required />
                                             </div>
 
-                                            {/* ✅ Color + ColorName + Grain — 3 columns */}
                                             <div className="form-row">
                                                 <div className="form-group">
                                                     <label><i className="fas fa-palette"></i> Variant Color (Optional)</label>
@@ -1469,7 +1549,6 @@ function ProductList() {
                                                     </div>
                                                 </div>
                                                 <div className="form-group">
-                                                    {/* ✅ NEW: colorName input */}
                                                     <label><i className="fas fa-tag"></i> Color Name (Optional)</label>
                                                     <input type="text" value={variant.colorName}
                                                         onChange={(e) => handleVariantColorNameChange(variantIndex, e.target.value)}
@@ -1565,7 +1644,6 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                {/* ✅ Color + ColorName side by side */}
                                 <div className="form-row">
                                     <div className="form-group">
                                         <label htmlFor="edit-product-color">
@@ -1585,45 +1663,7 @@ function ProductList() {
                                     </div>
                                 </div>
 
-                                <div className="form-section">
-                                    <h3>Product Properties (Optional)</h3>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Flammable</label>
-                                            <input type="text" name="Flammable" value={editProductFormData.Flammable} onChange={handleEditProductInputChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Resistant</label>
-                                            <input type="text" name="resistant" value={editProductFormData.resistant} onChange={handleEditProductInputChange} />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>QUV</label>
-                                            <input type="text" name="QUV" value={editProductFormData.QUV} onChange={handleEditProductInputChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Weatherometer</label>
-                                            <input type="text" name="Weatherometer" value={editProductFormData.Weatherometer} onChange={handleEditProductInputChange} />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Abrasion</label>
-                                            <input type="text" name="Abrasion" value={editProductFormData.Abrasion} onChange={handleEditProductInputChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Anti-Microbial</label>
-                                            <input type="text" name="AntiMicrobial" value={editProductFormData.AntiMicrobial} onChange={handleEditProductInputChange} />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>Pink Stain</label>
-                                            <input type="text" name="PinkStain" value={editProductFormData.PinkStain} onChange={handleEditProductInputChange} />
-                                        </div>
-                                    </div>
-                                </div>
+                                {renderPropertiesSection(editProductFormData, handleEditProductInputChange)}
 
                                 {/* Default Variant Button Name */}
                                 <div className="variant-item" style={{ marginBottom: '16px' }}>
@@ -1643,6 +1683,7 @@ function ProductList() {
                                     </div>
                                 </div>
 
+                                {/* Images Edit */}
                                 <div className="form-group image-upload-group">
                                     <label>Product Images * - Remove & Replace at position</label>
                                     <div className="image-input-grid">
@@ -1701,9 +1742,9 @@ function ProductList() {
                                     </p>
                                 </div>
 
-                                {/* Icons Edit */}
+                                {/* Icons Edit — with name inputs */}
                                 <div className="form-group icon-upload-group">
-                                    <label>Product Icons (Optional, Max 5)</label>
+                                    <label>Product Icons (Optional, Max 5) — with display names</label>
                                     <div className="icon-input-grid">
                                         {existingIcons.map((icon, index) => (
                                             icon !== null ? (
@@ -1717,6 +1758,14 @@ function ProductList() {
                                                     </div>
                                                     <input type="file" id={`replace-existing-icon-${index}`} accept="image/*"
                                                         onChange={(e) => handleReplaceExistingIconInPlace(index, e)} style={{ display: 'none' }} />
+                                                    {/* Existing icon name input */}
+                                                    <input
+                                                        type="text"
+                                                        className="icon-name-input"
+                                                        placeholder="Icon name..."
+                                                        value={existingIconNames[index] || ''}
+                                                        onChange={(e) => handleExistingIconNameChange(index, e.target.value)}
+                                                    />
                                                 </div>
                                             ) : (
                                                 <label key={`existing-icon-${index}`} htmlFor={`add-existing-icon-at-${index}`} className="icon-upload-placeholder empty-slot">
@@ -1738,6 +1787,14 @@ function ProductList() {
                                                     </div>
                                                     <input type="file" id={`replace-edit-new-icon-${index}`} accept="image/*"
                                                         onChange={(e) => handleReplaceEditNewIcon(index, e)} style={{ display: 'none' }} />
+                                                    {/* New icon name input */}
+                                                    <input
+                                                        type="text"
+                                                        className="icon-name-input"
+                                                        placeholder="Icon name..."
+                                                        value={editProductIconNames[index] || ''}
+                                                        onChange={(e) => handleEditNewIconNameChange(index, e.target.value)}
+                                                    />
                                                 </div>
                                             ) : (
                                                 <label key={`new-icon-${index}`} htmlFor={`add-edit-new-icon-at-${index}`} className="icon-upload-placeholder empty-slot">
@@ -1822,7 +1879,6 @@ function ProductList() {
                                                     placeholder="e.g., Navy Blue, Size L" required />
                                             </div>
 
-                                            {/* ✅ Color + ColorName + Grain — 3 columns */}
                                             <div className="form-row">
                                                 <div className="form-group variant-color-field">
                                                     <label><i className="fas fa-palette"></i> Variant Color (Optional)</label>
@@ -1837,7 +1893,6 @@ function ProductList() {
                                                     </div>
                                                 </div>
                                                 <div className="form-group">
-                                                    {/* ✅ NEW: colorName input in edit */}
                                                     <label><i className="fas fa-tag"></i> Color Name (Optional)</label>
                                                     <input type="text" value={variant.colorName}
                                                         onChange={(e) => handleEditVariantColorNameChange(variantIndex, e.target.value)}

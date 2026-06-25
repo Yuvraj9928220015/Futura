@@ -436,13 +436,9 @@
         right: 15px;
     }
 
-    .Product-Container {
-        padding: 40px 20px;
-    }
-
     .Product-Container-title {
         font-size: 2.5rem;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
 
     .search-filter-container {

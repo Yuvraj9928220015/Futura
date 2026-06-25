@@ -31,7 +31,9 @@ export default function Collections() {
                 <div className="content-section">
                     <div className="content-container">
                         <h2 className="collections-About-Section-Heading">
-                            "Made to<span>Perform,</span>Designed to<span>Care.</span>"
+                            "Made to <span>Perform,</span>
+                            <br />
+                            Designed to <span>Care."</span>
                         </h2>
                         <p className="content-container-des">
                             At Futura, We specialize in PVC-coated fabrics designed to meet the diverse

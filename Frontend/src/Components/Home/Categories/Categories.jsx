@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';   // ✅ ADD THIS
+import { useNavigate } from 'react-router-dom';   // ADD THIS
 import './Categories.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
@@ -102,7 +102,7 @@ export default function Categories() {
         changeSlide(index, direction);
     };
 
-    // ✅ ADD THIS — same slug logic as Navbar
+    // ADD THIS — same slug logic as Navbar
     const handleReadMore = () => {
         const slug = selectedData.title.toLowerCase().replace(/\s+/g, '-');
         navigate(`/product?category=${slug}`);
@@ -160,7 +160,7 @@ export default function Categories() {
                                 <div className="Categories-Box-title">{selectedData.title}</div>
                                 <div className="Categories-Box-des">{selectedData.description}</div>
                                 <div className="Categories-Box-but">
-                                    {/* ✅ onClick added here */}
+                                    {/* onClick added here */}
                                     <button onClick={handleReadMore}>READ MORE →</button>
                                 </div>
                             </div>

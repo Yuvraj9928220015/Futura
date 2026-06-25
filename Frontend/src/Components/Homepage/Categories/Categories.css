@@ -1,14 +1,10 @@
 /* ─── Fonts ──────────────────────────────────────────────── */
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap");
 
-/* ════════════════════════════════════════════════════════════
-   CAT SECTION
-   ════════════════════════════════════════════════════════════ */
-
 .cat-section {
     width: 100%;
     height: 100%;
-    padding: 150px 40px;
+    padding: 100px 40px;
     background-image: url(/Futura-New-5.png);
     background-repeat: no-repeat;
     background-size: cover;
@@ -24,7 +20,6 @@
     color: #000;
 }
 
-/* ─── Header ─── */
 .cat-header {
     display: flex;
     align-items: flex-end;
@@ -55,7 +50,6 @@
     line-height: 1.15;
 }
 
-/* ─── Nav Buttons ─── */
 .cat-nav-buttons {
     display: flex;
     gap: 8px;
@@ -81,21 +75,18 @@
     transform: scale(1.25);
 }
 
-/* ─── Slider Wrapper ─── */
 .cat-slider-wrapper {
     overflow: hidden;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* ─── Slider Track ─── */
 .cat-slider-track {
     display: flex;
     gap: 18px;
     will-change: transform;
 }
 
-/* ─── Individual Card ─── */
 .cat-card {
     flex-shrink: 0;
     position: relative;
@@ -165,10 +156,9 @@
     text-transform: uppercase;
 }
 
-/* ─── Responsive (Slider) ─── */
 @media (max-width: 1024px) {
     .cat-section {
-        padding: 36px 24px 28px;
+        padding: 33px 24px 28px;
     }
 
     .cat-title {
@@ -178,15 +168,17 @@
 
 @media (max-width: 600px) {
     .cat-section {
-        padding: 28px 14px 22px;
+        padding: 0px 14px 22px;
     }
 
     .cat-title {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .cat-subtitle {
-        font-size: 12px;
+        font-size: 15px;
+        padding-bottom: 6px;
+        letter-spacing: 1px;
     }
 
     .cat-nav-btn {
@@ -197,14 +189,14 @@
         aspect-ratio: 3 / 4.5;
     }
 
+    .cat-card-desc {
+        font-size: 14px;
+    }
+
     .cat-card-name {
         font-size: 18px;
     }
 }
-
-/* ════════════════════════════════════════════════════════════
-   REACH SECTION
-   ════════════════════════════════════════════════════════════ */
 
 .reach-section {
     width: 100%;
@@ -222,9 +214,6 @@
     min-height: 560px;
 }
 
-/* ══════════════════════════════════════
-   LEFT: Scattered Collage — 60% width
-   ══════════════════════════════════════ */
 .reach-images {
     flex: 0 0 50%;
     position: relative;
@@ -239,10 +228,6 @@
     box-shadow: 0px 10px 35px #0000001f;
 }
 
-/*
-  Image 1 — small portrait, top-left, rotated left ~-5deg
-  (hand holding red fabric swatches)
-*/
 .reach-img--1 {
     width: 240px;
     height: 340px;
@@ -251,10 +236,6 @@
     z-index: 4;
 }
 
-/*
-  Image 2 — wide landscape, top-center, rotated right ~+2deg
-  (fabric swatches flatlay on white table)
-*/
 .reach-img--2 {
     width: 420px;
     height: 240px;
@@ -271,10 +252,6 @@
     z-index: 3;
 }
 
-/*
-  Image 4 — medium portrait, bottom-right, slight right tilt ~+3deg
-  (person holding leather swatches near laptop)
-*/
 .reach-img--4 {
     width: 340px;
     height: 210px;
@@ -283,9 +260,6 @@
     z-index: 4;
 }
 
-/* ══════════════════════════════════════
-   RIGHT: Text — 40% width
-   ══════════════════════════════════════ */
 .reach-text {
     flex: 0 0 50%;
     display: flex;
@@ -316,7 +290,7 @@
 .reach-btn-wrap button {
     padding: 13px 36px;
     border: none;
-    background-color: #111;
+    background-color: #e45664;
     color: white;
     border-radius: 50px;
     font-size: 15px;
@@ -334,9 +308,6 @@
     color: white;
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE: Tablet (≤1100px)
-   ══════════════════════════════════════ */
 @media (max-width: 1100px) {
     .reach-images {
         height: 460px;
@@ -385,9 +356,6 @@
     }
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE: Mobile (≤768px)
-   ══════════════════════════════════════ */
 @media (max-width: 768px) {
     .reach-inner {
         flex-direction: column;
@@ -410,11 +378,10 @@
         transform: none !important;
         border-radius: 14px;
         width: 100% !important;
-        height: 155px !important;
-        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+        height: 200px !important;
+        box-shadow: 0px 4px 16px #0000001a;
     }
 
-    /* Big center image spans full width on mobile */
     .reach-img--3 {
         grid-column: span 2;
         height: 210px !important;
@@ -436,21 +403,33 @@
 
     .reach-desc {
         font-size: 14px;
+        letter-spacing: 1px;
+        text-align: justify;
+        padding-left: 0px;
         max-width: 100%;
     }
 
+
     .reach-btn-wrap button {
-        padding: 11px 30px;
+        padding: 7px 20px;
         font-size: 14px;
+    }
+
+    .reach-section {
+        width: 100%;
+        padding: 50px 0px 40px 0px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .cat-section-container {
+        padding: 10px 0px;
     }
 }
 
-/* ══════════════════════════════════════
-   RESPONSIVE: Small Mobile (≤480px)
-   ══════════════════════════════════════ */
 @media (max-width: 480px) {
     .reach-title {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .reach-img {
@@ -459,5 +438,16 @@
 
     .reach-img--3 {
         height: 175px !important;
+    }
+
+    .reach-section {
+        width: 100%;
+        padding: 30px 0px 0px 0px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    .cat-section-container {
+        padding: 10px 0px;
     }
 }

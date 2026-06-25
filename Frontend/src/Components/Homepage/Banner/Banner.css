@@ -1,4 +1,4 @@
-/* ===== Banner.css — Full Responsive ===== */
+/* ===== Banner.css — Zoom Blink Completely Fixed ===== */
 
 .Banner-slider-container {
     position: relative;
@@ -20,11 +20,14 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    /* Longer opacity fade = smoother crossfade, hides any zoom diff */
+    transition: opacity 1.5s ease-in-out;
+    z-index: 1;
 }
 
 .Banner-slide.active {
     opacity: 1;
+    z-index: 2;
 }
 
 .Banner-slide-media {
@@ -32,28 +35,38 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    will-change: transform;
 }
 
-.Banner-slide.active .Banner-slide-media.Banner-slide-image {
-    animation: zoomInImage 6s ease-in-out forwards;
+/*
+  REAL FIX:
+  - Image is ALWAYS animating zoom (infinite, alternate)
+  - Active slide fades in ON TOP of inactive slide
+  - Since both are always mid-zoom, opacity crossfade is perfectly smooth
+  - No reset, no snap, no blink — ever
+*/
+.Banner-slide-media.Banner-slide-image {
+    animation: smoothZoom 8s ease-in-out infinite alternate;
 }
 
-@keyframes zoomInImage {
+@keyframes smoothZoom {
     from {
         transform: scale(1);
     }
 
     to {
-        transform: scale(1.06);
+        transform: scale(1.08);
     }
 }
 
+/* Video */
 .Banner-slide:not(.active) .Banner-slide-video {
     visibility: hidden;
 }
 
 .Banner-slide.active .Banner-slide-video {
     visibility: visible;
+    transform: scale(1);
 }
 
 .Banner-slide-video::-webkit-media-controls,
@@ -63,12 +76,13 @@
     display: none !important;
 }
 
+/* Overlays */
 .Banner-slide-dark-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(to right,
-            rgba(255, 255, 255, 0.92) 0%,
-            rgba(255, 255, 255, 0.6) 30%,
+            #ffffffeb 0%,
+            #ffffffbe 10%,
             transparent 65%);
     pointer-events: none;
     z-index: 2;
@@ -116,13 +130,13 @@
 
 .Banner-text-des {
     font-size: 20px;
-    margin-top: 10px;
-    line-height: 1.5;
+    margin-top: 5px;
+    line-height: 1;
 }
 
 .Banner-text-paragraph {
     font-size: 20px;
-    line-height: 1.6;
+    line-height: 1;
     margin-top: 4px;
 }
 
@@ -132,11 +146,11 @@
 }
 
 .Banner-text-overlay-btn button {
-    border: 1px solid #000;
+    border: none;
     border-radius: 50px;
-    padding: 10px 25px;
+    padding: 10px 20px;
     font-size: 15px;
-    background-color: #000;
+    background-color: #e45664;
     color: #fcfcfc;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -180,7 +194,7 @@
     right: 1.5rem;
 }
 
-/* ===== Dot Indicators ===== */
+/* ===== Dots ===== */
 
 .dots-container {
     position: absolute;
@@ -231,8 +245,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ===== Tablet — ≤ 992px ===== */
-
+/* ===== Tablet ≤ 992px ===== */
 @media screen and (max-width: 992px) {
     .Banner-slider-container {
         height: 70vh;
@@ -263,18 +276,17 @@
     }
 }
 
-/* ===== Mobile — ≤ 768px ===== */
-
+/* ===== Mobile ≤ 768px ===== */
 @media screen and (max-width: 768px) {
     .Banner-slider-container {
-        height: 60vh;
-        min-height: 320px;
+        height: 80vh;
+        min-height: 250px;
     }
 
     .Banner-slide-dark-overlay {
         background: linear-gradient(to bottom,
                 transparent 30%,
-                rgba(255, 255, 255, 0.85) 60%,
+                rgba(255, 255, 255, 0.85) 96%,
                 rgba(255, 255, 255, 0.97) 100%);
     }
 
@@ -297,7 +309,7 @@
 
     .Banner-text-des {
         font-size: 14px;
-        margin-top: 6px;
+        margin-top: 1px;
     }
 
     .Banner-text-paragraph {
@@ -310,7 +322,7 @@
 
     .Banner-text-overlay-btn button {
         font-size: 13px;
-        padding: 8px 20px;
+        padding: 8px 14px;
     }
 
     .nav-arrow {
@@ -333,12 +345,35 @@
     }
 }
 
-/* ===== Small Mobile — ≤ 480px ===== */
+@media screen and (max-width: 576px) {
+    .Banner-text-title {
+        text-align: center;
+    }
 
+    .Banner-text-des {
+        text-align: center;
+        line-height: 16px;
+    }
+
+    .Banner-text-paragraph {
+        text-align: center;
+        font-size: 14px;
+        line-height: 1;
+        margin-top: 1px;
+    }
+
+    .Banner-text-overlay-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* ===== Small Mobile ≤ 480px ===== */
 @media screen and (max-width: 480px) {
     .Banner-slider-container {
-        height: 55vh;
-        min-height: 280px;
+        height: 100vh;
+        /* min-height: 280px; */
     }
 
     .Banner-text-title {
@@ -351,11 +386,12 @@
 
     .Banner-text-paragraph {
         font-size: 13px;
+        margin-top: 4px;
     }
 
     .Banner-text-overlay-btn button {
         font-size: 12px;
-        padding: 7px 16px;
+        padding: 5px 10px;
     }
 
     .nav-arrow {

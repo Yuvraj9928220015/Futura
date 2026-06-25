@@ -9,7 +9,6 @@
     overflow-x: hidden;
 }
 
-/* ==================== Features Section ==================== */
 .Features-Section {
     padding: 0px 30px;
     width: 100%;
@@ -22,7 +21,6 @@
     margin-bottom: 40px;
 }
 
-/* ===== Features Box — Zoom Hover Effect ===== */
 .Features-Section-Box {
     width: 100%;
     display: flex;

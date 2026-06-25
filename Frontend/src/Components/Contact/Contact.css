@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    
+
 }
 
 .contact-page {
@@ -136,7 +136,7 @@ h1.contact-title {
 
 .form-select:not([value=""]) {
     color: #1a1a1ad3;
-    
+
     font-size: 16px;
 }
 
@@ -507,7 +507,7 @@ h1.contact-title {
 /* Responsive Design */
 @media (max-width: 992px) {
     .contact-header {
-        padding: 60px 20px 40px;
+        padding: 110px 20px 40px;
     }
 
     .form-section {
@@ -536,11 +536,15 @@ h1.contact-title {
         grid-template-columns: 1fr;
         gap: 30px;
     }
+
+    .form-container-wrapper {
+        max-width: 90%;
+    }
 }
 
 @media (max-width: 768px) {
     .contact-header {
-        padding: 50px 20px 30px;
+        padding: 100px 20px 30px;
     }
 
     .contact-title {
@@ -595,11 +599,15 @@ h1.contact-title {
         width: 100%;
         max-width: 300px;
     }
+
+    .form-container-wrapper {
+        max-width: 90%;
+    }
 }
 
 @media (max-width: 480px) {
     .contact-header {
-        padding: 40px 15px 25px;
+        padding: 100px 15px 25px;
     }
 
     .contact-intro {

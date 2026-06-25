@@ -7,7 +7,7 @@ import { useCart } from "../../Pages/Cartcontext/Cartcontext";
 
 import "./ProductDetail.css"
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in/api/products';
+const API_URL = import.meta.env.VITE_PRODUCTS_API || 'https://api.futuratextiles.in/api/products';
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in';
 
 const getImageUrl = (imagePath) => {
@@ -28,9 +28,7 @@ const getPdfUrl = (pdfPath) => {
 
 const ITEMS_PER_VIEW = 5;
 
-// ══════════════════════════════════════════════════
-//  LIGHTBOX COMPONENT
-// ══════════════════════════════════════════════════
+
 const Lightbox = ({ images, currentIndex, onClose, onPrev, onNext }) => {
     useEffect(() => {
         const handleKey = (e) => {
@@ -54,19 +52,16 @@ const Lightbox = ({ images, currentIndex, onClose, onPrev, onNext }) => {
             className="lightbox-overlay"
             onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
-            {/* Close Button */}
             <button className="lightbox-close-btn" onClick={onClose} aria-label="Close">
                 <MdClose size={24} />
             </button>
 
-            {/* Counter */}
             {images.length > 1 && (
                 <div className="lightbox-counter">
                     {currentIndex + 1} / {images.length}
                 </div>
             )}
 
-            {/* Prev Arrow */}
             {hasPrev && (
                 <button
                     className="lightbox-nav-btn lightbox-nav-prev"
@@ -77,7 +72,6 @@ const Lightbox = ({ images, currentIndex, onClose, onPrev, onNext }) => {
                 </button>
             )}
 
-            {/* Image */}
             <div className="lightbox-image-wrapper">
                 <img
                     src={images[currentIndex]}
@@ -86,7 +80,6 @@ const Lightbox = ({ images, currentIndex, onClose, onPrev, onNext }) => {
                 />
             </div>
 
-            {/* Next Arrow */}
             {hasNext && (
                 <button
                     className="lightbox-nav-btn lightbox-nav-next"
@@ -97,7 +90,6 @@ const Lightbox = ({ images, currentIndex, onClose, onPrev, onNext }) => {
                 </button>
             )}
 
-            {/* Thumbnail strip (when multiple images) */}
             {images.length > 1 && (
                 <div className="lightbox-thumbnails">
                     {images.map((img, idx) => (
@@ -130,17 +122,18 @@ const ProductDetail = () => {
     const [selectedGrainFilter, setSelectedGrainFilter] = useState('all');
     const [showAllGrains, setShowAllGrains] = useState(false);
 
-    // ── Lightbox state ──
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxImages, setLightboxImages] = useState([]);
     const [lightboxIndex, setLightboxIndex] = useState(0);
 
-    // ── Cart state ──
     const { addToCart } = useCart();
     const [addedToCart, setAddedToCart] = useState(false);
     const addedTimerRef = useRef(null);
 
-    // ── Lightbox helpers ──
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [id]);
+
     const openLightbox = useCallback((imageList, startIndex = 0) => {
         setLightboxImages(imageList);
         setLightboxIndex(startIndex);
@@ -205,11 +198,11 @@ const ProductDetail = () => {
 
     const currentImages = getCurrentImages();
 
-    const galleryImages = currentImages && currentImages.length > 6
-        ? currentImages.slice(2, -4).map((img, index) => ({
-            id: index + 3,
+    const galleryImages = currentImages && currentImages.length > 4
+        ? currentImages.slice(0, -4).map((img, index) => ({
+            id: index + 1,
             type: "product",
-            title: `${product.title} - View ${index + 3}`,
+            title: `${product.title} - View ${index + 1}`,
             image: getImageUrl(img)
         }))
         : currentImages && currentImages.length > 0
@@ -244,21 +237,18 @@ const ProductDetail = () => {
         return [];
     };
 
-    const handleThumbnailClick = (index) => { setSelectedImageIndex(index + 2); };
+    const handleThumbnailClick = (index) => { setSelectedImageIndex(index); };
 
-    // ── Main image click → open lightbox with all currentImages ──
     const handleMainImageClick = () => {
         if (!currentImages || currentImages.length === 0) return;
         const allUrls = currentImages.map(img => getImageUrl(img));
         openLightbox(allUrls, selectedImageIndex);
     };
 
-    // ── Gallery thumbnail click → sirf main image change karo, no lightbox ──
     const handleGalleryImageClick = (index) => {
         handleThumbnailClick(index);
     };
 
-    // ── Bottom sample image click → open lightbox ──
     const handleBottomImageClick = (index) => {
         const bottomUrls = getBottomSampleImages();
         openLightbox(bottomUrls, index);
@@ -302,6 +292,33 @@ const ProductDetail = () => {
 
     const hasVariants = product?.variants && product.variants.length > 0;
     const cataloguePdfUrl = product?.pdf ? getPdfUrl(product.pdf) : null;
+
+    // ── Derived booleans for conditional section rendering ──
+    const hasFlammableSection = !!(
+        product?.Flammable || product?.Antiflammable
+    );
+
+    const hasTurtleLifeSection = !!(
+        product?.resistant ||
+        product?.QUV ||
+        product?.Weatherometer ||
+        product?.Abrasion ||
+        product?.Cold ||
+        product?.QUVResistant ||
+        product?.Weath ||
+        product?.Wyzenback
+    );
+
+    const hasSafeTouchSection = !!(
+        product?.AntiMicrobial ||
+        product?.PinkStain ||
+        product?.SafeAnti ||
+        product?.SafePink
+    );
+
+    // ── Icons for display ──
+    const productIcons = product?.icons || [];
+    const productIconNames = product?.iconNames || [];
 
     if (loading) {
         return (
@@ -370,14 +387,14 @@ const ProductDetail = () => {
 
     // ── VariantCard ──
     const VariantCard = ({ item, isSelected, onClick }) => (
-        <div onClick={onClick} style={{ cursor: 'pointer', flexShrink: 0, textAlign: 'center', width: '100px' }}>
+        <div onClick={onClick} style={{ cursor: 'pointer', flexShrink: 0, textAlign: 'center', width: '90px', minWidth: '70px', maxWidth: '100px' }}>
             <div style={{
                 width: '100px',
                 height: '100px',
                 borderRadius: '50%',
                 overflow: 'hidden',
                 border: isSelected ? '2.5px solid #333' : '2.5px solid transparent',
-                boxShadow: isSelected ? '0 0 0 3px #e0e0e0' : 'none',
+                boxShadow: isSelected ? '0 0 0 2px #fff, 0 0 0 4px #333' : 'none',
                 transition: 'border 0.2s, box-shadow 0.2s',
                 backgroundColor: '#f0f0f0',
             }}>
@@ -491,54 +508,55 @@ const ProductDetail = () => {
         };
 
         return (
-            <>
-                <div className="grain-row-wrapper">
-                    <div className="grain-slider-row">
+            <div className="grain-row-wrapper">
+                <div className="grain-controls-row">
+                    <button
+                        type="button"
+                        onClick={shiftLeft}
+                        disabled={!canGoLeft}
+                        className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
+                        aria-label="Previous variants"
+                    >
+                        <MdChevronLeft />
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={shiftRight}
+                        disabled={!canGoRight}
+                        className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
+                        aria-label="Next variants"
+                    >
+                        <MdChevronRight />
+                    </button>
+
+                    {hasMore && (
                         <button
                             type="button"
-                            onClick={shiftLeft}
-                            disabled={!canGoLeft}
-                            className={`grain-arrow-btn ${!canGoLeft ? 'disabled' : ''}`}
+                            onClick={() => setShowExtra(prev => !prev)}
+                            className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
+                            aria-label={showExtra ? 'Show less' : 'Show all'}
                         >
-                            <MdChevronLeft />
+                            {showExtra
+                                ? <MdOutlineKeyboardArrowUp size={16} />
+                                : <MdOutlineKeyboardArrowDown size={16} />
+                            }
                         </button>
-
-                        <div className="grain-cards-viewport">
-                            <div className="grain-cards-container">
-                                {visibleSlider.map(renderCard)}
-                            </div>
-                        </div>
-
-                        <button
-                            type="button"
-                            onClick={shiftRight}
-                            disabled={!canGoRight}
-                            className={`grain-arrow-btn ${!canGoRight ? 'disabled' : ''}`}
-                        >
-                            <MdChevronRight />
-                        </button>
-
-                        {hasMore && (
-                            <button
-                                type="button"
-                                onClick={() => setShowExtra(prev => !prev)}
-                                className={`grain-see-all-pill ${showExtra ? 'active' : ''}`}
-                            >
-                                {showExtra
-                                    ? <MdOutlineKeyboardArrowUp size={16} />
-                                    : <MdOutlineKeyboardArrowDown size={16} />
-                                }
-                            </button>
-                        )}
-                    </div>
-
-                    {showExtra && extraItems.length > 0 && (
-                        <div className="grain-extra-items">
-                            {extraItems.map(renderCard)}
-                        </div>
                     )}
                 </div>
-            </>
+
+                <div className="grain-cards-viewport">
+                    <div className="grain-cards-container">
+                        {visibleSlider.map(renderCard)}
+                    </div>
+                </div>
+
+                {showExtra && extraItems.length > 0 && (
+                    <div className="grain-extra-items">
+                        {extraItems.map(renderCard)}
+                    </div>
+                )}
+            </div>
         );
     };
 
@@ -655,11 +673,22 @@ const ProductDetail = () => {
 
                             <div className="Applications">Applications</div>
 
-                            <div className="product-detail-features">
-                                {productData.features.map((feature, index) => (
-                                    <span key={index} className="feature-tag">• {feature}</span>
-                                ))}
-                            </div>
+                            {/* ── Product Icons below Applications ── */}
+                            {productIcons.length > 0 && (
+                                <div className="product-detail-icons-row">
+                                    {productIcons.map((icon, index) => (
+                                        icon ? (
+                                            <div key={index} className="product-detail-icon-item">
+                                                {productIconNames[index] && (
+                                                    <span className="product-detail-icon-name">
+                                                        • {productIconNames[index]}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        ) : null
+                                    ))}
+                                </div>
+                            )}
 
                             <div className="product-detail-select-use">
                                 <div className="material-fabric-row">
@@ -748,7 +777,7 @@ const ProductDetail = () => {
                             <div className="specifications-box">
                                 <div className="specifications">
                                     <div className="About-Product-title">About {product.title || productData.name}</div>
-                                    <div className="Specifications">View Specifications</div>
+                                    <div id="view-Specifications" className="Specifications">View Specifications</div>
                                 </div>
                                 <div className="ophelia-des">
                                     {product.description || "Ophelia offers a cost-effective option within our Carnegie Siltech Plus line. Crafted from 100% silicone, its unique resin system allows for a reduced price without compromising on quality. With a luxurious leather look and a soft, supple hand, Ophelia is also graffiti-resistant and meets the stringent standards of IMO Part 8. As part of our value-performance Carnegie Elements brand, it seamlessly combines performance and style."}
@@ -770,7 +799,11 @@ const ProductDetail = () => {
                                     {expanded && (
                                         <div className="Prodduct-extra-text">
 
-                                            {product.Flammable && (
+                                            {/* ══════════════════════════════════
+                                                FLAMMABLE SECTION
+                                                Shows if: Flammable OR Antiflammable exists
+                                            ══════════════════════════════════ */}
+                                            {hasFlammableSection && (
                                                 <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                     <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
                                                         <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
@@ -783,88 +816,131 @@ const ProductDetail = () => {
                                                     </div>
                                                     {flammableOpen && (
                                                         <div className="Anti-Flamesafe-container" style={{ paddingBottom: '12px' }}>
-                                                            <div className="Anti-Flamesafe">
-                                                                <img src="/Untitled-2.png" alt="" /> <b>Anti flammable : </b> CAL 117-2013, FMVSS302, IMO FTP, BIFMA CLASS A, NFPA 260
-                                                            </div>
-                                                            <div className="ophelia-description">{product.Flammable}</div>
+                                                            {/* Original Flammable */}
+                                                            {product.Antiflammable && (
+                                                                <div className="Characteristics-content">
+                                                                    <div id="Anti-Flame" className="Anti-Flamesafe">
+                                                                        <img src="/Untitled-2.png" alt="" />
+                                                                        <div><b>Anti flammable : </b> {product.Antiflammable}</div>
+                                                                    </div>
+                                                                    <div className="ophelia-description">{product.Flammable}</div>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>
                                             )}
 
-                                            <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
-                                                <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
-                                                    <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
-                                                        <img src="/Futura-New-43.png" alt="" style={sectionIconStyle} />
-                                                        <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>TURTLE LIFE</div>
+                                            {hasTurtleLifeSection && (
+                                                <div className="Anti-Flamesafe" style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                    <div style={toggleHeaderStyle} onClick={() => setTurtleLifeOpen(!turtleLifeOpen)}>
+                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                            <img src="/Futura-New-43.png" alt="" style={sectionIconStyle} />
+                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>TURTLE LIFE
+                                                            </div>
+                                                        </div>
+                                                            
+                                                        <div style={toggleIconStyle(turtleLifeOpen)}>
+                                                            {turtleLifeOpen ? <PiMinus /> : <PiPlus />}
+                                                        </div>
                                                     </div>
-                                                    <div style={toggleIconStyle(turtleLifeOpen)}>
-                                                        {turtleLifeOpen ? <PiMinus /> : <PiPlus />}
-                                                    </div>
+                                                    {turtleLifeOpen && (
+                                                        <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
+                                                             <div className="passes">{product.title || productData.name} passes all the requirements and is best suitable for indoor & outdoor upholstery.</div>
+                                                            <div>
+                                                                {/* Original: resistant (Cold crack) */}
+                                                                {product.Cold && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div className="Pink-Stain">
+                                                                            <img src="/5.png" alt="" />
+                                                                            <b>Cold crack resistant : </b> {product.Cold}
+                                                                        </div>
+                                                                        <div className="ophelia-description">{product.resistant}</div>
+                                                                    </div>
+                                                                )}
+                                                                {/* Original: QUV */}
+                                                                {product.QUVResistant && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div id="Pink-Stain-container" className="Pink-Stain">
+                                                                            <img src="/4.png" alt="" />
+                                                                            <div className="Pink-Stain-container-content">
+                                                                                <b>QUV resistant : </b> {product.QUVResistant}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="ophelia-description">{product.QUV}</div>
+                                                                    </div>
+                                                                )}
+                                                                {/* Original: Weatherometer */}
+                                                                {product.Weath && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div className="Pink-Stain">
+                                                                            <img src="/6.png" alt="" />
+                                                                            <b> Weatherometer : </b> {product.Weath}
+                                                                        </div>
+                                                                        <div className="ophelia-description">{product.Weatherometer}</div>
+                                                                    </div>
+                                                                )}
+                                                                {/* Original: Abrasion */}
+                                                                {product.Wyzenback && (
+                                                                    <div className="Characteristics-content">
+                                                                        <div id="Pink-Stain-container" className="Pink-Stain">
+                                                                            <img src="/3.png" alt="" />
+                                                                            <div className="Pink-Stain-container-content">
+                                                                                <b>Abrasion : </b> {product.Wyzenback}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="ophelia-description">{product.Abrasion}</div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                {turtleLifeOpen && (
-                                                    <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                        <div className="ophelia-description">
-                                                            Americana passes the requirements of the cold-crack laboratory and is an excellent outdoor upholstery option.
-                                                        </div>
-                                                        <div>
-                                                            {product.resistant && (
-                                                                <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain"><img src="/5.png" alt="" /> <b>Cold crack resistant : </b> -60 degrees F</div>
-                                                                    <div className="ophelia-description">{product.resistant}</div>
-                                                                </div>
-                                                            )}
-                                                            {product.QUV && (
-                                                                <div className="Characteristics-content">
-                                                                    <div id="Pink-Stain-container" className="Pink-Stain"><img src="/4.png" alt="" /> <div className="Pink-Stain-container-content"><b>QUV resistant : </b> {product.QUV}</div></div>
-                                                                    <div className="ophelia-description">{product.QUV}</div>
-                                                                </div>
-                                                            )}
-                                                            {product.Weatherometer && (
-                                                                <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain"><img src="/6.png" alt="" /> <b>Weatherometer : </b> 1000 Hrs</div>
-                                                                    <div className="ophelia-description">{product.Weatherometer}</div>
-                                                                </div>
-                                                            )}
-                                                            {product.Abrasion && (
-                                                                <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain"><img src="/3.png" alt="" /> <b>Abrasion : </b> Wyzenback 8 Cotton Duck 50,000 cycles</div>
-                                                                    <div className="ophelia-description">{product.Abrasion}</div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            </div>
+                                            )}
 
-                                            <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
-                                                <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
-                                                    <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
-                                                        <img src="/Futura-New-44.png" alt="" style={sectionIconStyle} />
-                                                        <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>SAFE TOUCH</div>
+                                            {/* ══════════════════════════════════
+                                                SAFE TOUCH SECTION
+                                                Shows ONLY if at least one of:
+                                                AntiMicrobial / PinkStain / SafeAnti / SafePink exists
+                                            ══════════════════════════════════ */}
+                                            {hasSafeTouchSection && (
+                                                <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
+                                                    <div style={toggleHeaderStyle} onClick={() => setSafeTouchOpen(!safeTouchOpen)}>
+                                                        <div className="turtle-life-content" style={{ margin: 0, padding: 0 }}>
+                                                            <img src="/Futura-New-44.png" alt="" style={sectionIconStyle} />
+                                                            <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>SAFE TOUCH</div>
+                                                        </div>
+                                                        <div style={toggleIconStyle(safeTouchOpen)}>
+                                                            {safeTouchOpen ? <PiMinus /> : <PiPlus />}
+                                                        </div>
                                                     </div>
-                                                    <div style={toggleIconStyle(safeTouchOpen)}>
-                                                        {safeTouchOpen ? <PiMinus /> : <PiPlus />}
-                                                    </div>
+                                                    {safeTouchOpen && (
+                                                        <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
+                                                            <div className="ophelia-description">A microbial safe product</div>
+                                                            {/* Original: AntiMicrobial */}
+                                                            {product.AntiMicrobial && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain">
+                                                                        <img src="/2.png" alt="" />
+                                                                        <b>Anti microbial : </b> {product.SafeAnti}
+                                                                    </div>
+                                                                    <div className="ophelia-description">{product.AntiMicrobial}</div>
+                                                                </div>
+                                                            )}
+                                                            {/* Original: PinkStain */}
+                                                            {product.PinkStain && (
+                                                                <div className="Characteristics-content">
+                                                                    <div className="Pink-Stain">
+                                                                        <img src="/7.png" alt="" />
+                                                                        <b>Pink Stain : </b> {product.SafePink}
+                                                                    </div>
+                                                                    <div className="ophelia-description">{product.PinkStain}</div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                {safeTouchOpen && (
-                                                    <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                        <div className="ophelia-description">A microbial safe product</div>
-                                                        {product.AntiMicrobial && (
-                                                            <div className="Characteristics-content">
-                                                                <div className="Pink-Stain"><img src="/2.png" alt="" /> <b>Anti microbial : </b> AATCC-147</div>
-                                                                <div className="ophelia-description">{product.AntiMicrobial}</div>
-                                                            </div>
-                                                        )}
-                                                        {product.PinkStain && (
-                                                            <div className="Characteristics-content">
-                                                                <div className="Pink-Stain"><img src="/7.png" alt="" /> <b>Pink Stain : </b> ASTM 1428</div>
-                                                                <div className="ophelia-description">{product.PinkStain}</div>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </div>
+                                            )}
 
                                         </div>
                                     )}
@@ -875,9 +951,6 @@ const ProductDetail = () => {
                 </div>
             </div>
 
-            {/* ══════════════════════════════════════════
-                LIGHTBOX PORTAL
-            ══════════════════════════════════════════ */}
             {lightboxOpen && lightboxImages.length > 0 && (
                 <Lightbox
                     images={lightboxImages}

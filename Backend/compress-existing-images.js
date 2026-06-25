@@ -4,7 +4,7 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-const Product = require('./models/productModels'); // ← apna sahi path check karo
+const Product = require('./models/productModels');
 
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 
@@ -27,12 +27,11 @@ async function compressImage(oldRelPath) {
 
   let absPath;
 
-  // 🧠 Always force server uploads path
   const fileName = path.basename(cleaned);
   absPath = path.join(UPLOAD_DIR, fileName);
 
   if (!fs.existsSync(absPath)) {
-    console.warn(`   ⚠️  File not found: ${absPath}`);
+    console.warn(`File not found: ${absPath}`);
     stats.skipped++;
     return oldRelPath;
   }
@@ -66,7 +65,7 @@ async function compressImage(oldRelPath) {
     const saved = fileSizeKB - newSizeKB;
 
     console.log(
-      `   ✅ ${path.basename(absPath)}  ` +
+      ` ${path.basename(absPath)}  ` +
       `${fileSizeKB.toFixed(0)} KB → ${newSizeKB.toFixed(0)} KB  ` +
       `(saved ${saved.toFixed(0)} KB)`
     );
@@ -106,7 +105,7 @@ async function run() {
 
   console.log('🔌 Connecting to MongoDB...');
   await mongoose.connect(MONGO_URL);
-  console.log('✅ Connected\n');
+  console.log('Connected\n');
 
   const products = await Product.find({});
   console.log(`📦 Found ${products.length} products\n`);
@@ -135,7 +134,7 @@ async function run() {
     }
 
     if (product.swatches && product.swatches.length > 0) {
-      console.log(`  🎨 Swatches (${product.swatches.length})`);
+      console.log(` Swatches (${product.swatches.length})`);
       const updated = await processImageArray(product.swatches);
       if (JSON.stringify(updated) !== JSON.stringify(product.swatches)) {
         product.swatches = updated;
@@ -147,7 +146,7 @@ async function run() {
       for (let i = 0; i < product.variants.length; i++) {
         const variant = product.variants[i];
         if (variant.images && variant.images.length > 0) {
-          console.log(`  📦 Variant "${variant.name}" (${variant.images.length} images)`);
+          console.log(` Variant "${variant.name}" (${variant.images.length} images)`);
           const updated = await processImageArray(variant.images);
           if (JSON.stringify(updated) !== JSON.stringify(variant.images)) {
             product.variants[i].images = updated;
@@ -163,20 +162,20 @@ async function run() {
       product.markModified('swatches');
       product.markModified('variants');
       await product.save();
-      console.log(`  💾 Saved to DB`);
+      console.log(` Saved to DB`);
     } else {
-      console.log(`  ⏩ No changes needed`);
+      console.log(` No changes needed`);
     }
   }
 
   console.log('\n' + '═'.repeat(50));
-  console.log('📊 COMPRESSION COMPLETE — SUMMARY');
+  console.log(' COMPRESSION COMPLETE — SUMMARY');
   console.log('═'.repeat(50));
   console.log(`  Total images scanned : ${stats.totalImages}`);
-  console.log(`  ✅ Compressed        : ${stats.compressed}`);
-  console.log(`  ⏩ Skipped           : ${stats.skipped}`);
-  console.log(`  ❌ Errors            : ${stats.errors}`);
-  console.log(`  💾 Total space saved : ${(stats.savedKB / 1024).toFixed(2)} MB`);
+  console.log(` Compressed        : ${stats.compressed}`);
+  console.log(` Skipped           : ${stats.skipped}`);
+  console.log(` Errors            : ${stats.errors}`);
+  console.log(` Total space saved : ${(stats.savedKB / 1024).toFixed(2)} MB`);
   console.log('═'.repeat(50));
 
   await mongoose.disconnect();

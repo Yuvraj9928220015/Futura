@@ -3,7 +3,6 @@
     margin-top: 40px;
 }
 
-/* Marquee Section — border ke bahar full width */
 .container-Sustainability-mrq {
     width: 100%;
     padding: 12px 0px;
@@ -56,7 +55,6 @@
     overflow: hidden;
 }
 
-/* Video background — fluid div ke andar */
 .bg-slider-wrapper {
     position: absolute;
     top: 0;
@@ -99,7 +97,6 @@
     z-index: 2;
 }
 
-/* Content layer video ke upar */
 .sustainability-content-layer {
     position: relative;
     z-index: 3;

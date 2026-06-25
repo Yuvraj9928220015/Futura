@@ -111,7 +111,7 @@ const Certificate = () => {
     });
   }, [isAnimating]);
 
-  // ─── Autoplay ─────────────────────────────────────────────────
+  // ─── Autoplay ──
   const startAutoplay = useCallback(() => {
     clearInterval(autoplayRef.current);
     autoplayRef.current = setInterval(() => {

@@ -8,7 +8,6 @@ const MARINE_PRODUCTS = [
         description: 'Premium marine upholstery engineered for vessels that demand the highest standards of comfort and resilience.',
     },
     {
-
         title: ' Matrix',
         image: '/Mayur-1.jpg',
         description: 'Next-gen marine fabric with cutting-edge weaving technology and a rich color palette inspired by global oceanic trends.',
@@ -121,7 +120,7 @@ function Marine() {
                         <div className="About-Section-Heading">Product Ranges</div>
                     </div>
                     <div data-aos="fade-up" className="container-fluid">
-                        <div className="row">
+                        <div className="row g-4">
                             {MARINE_PRODUCTS.map(({ title, image, description }) => (
                                 <div key={title} className="col-lg-3 col-md-6 col-sm-12 col-12">
                                     <div className="Overview-Box">

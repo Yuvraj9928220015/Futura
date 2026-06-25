@@ -266,7 +266,7 @@
 
     .testimonial-content {
         padding: 30px 20px;
-        gap: 40px;
+        gap: 20px;
     }
 
     .testimonial-header {
@@ -376,6 +376,28 @@
 .nav-button:focus {
     outline: 2px solid #667eea;
     outline-offset: 2px;
+}
+
+.nav-button {
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    font-size: 20px;
+    border: none;
+    margin-top: 0px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    color: #64748b;
+}
+
+.testimonial-left {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 /* Dark mode */

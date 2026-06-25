@@ -103,8 +103,6 @@ const Navbar = () => {
         setIsMobileProductOpen(false);
     };
 
-    // ── Category click handler ──
-    // Navigate to /product with ?category=<slug> query param
     const handleCategoryClick = (e, item) => {
         e.preventDefault();
         const slug = item.toLowerCase().replace(/\s+/g, '-');
@@ -118,12 +116,10 @@ const Navbar = () => {
         return Array.from({ length: cols }, (_, i) => arr.slice(i * perCol, i * perCol + perCol));
     };
 
-    // Logo should show "hover" variant when: nav is hovered OR any dropdown is open
     const showHoverLogo = isNavHovered || isCollectionsDropdownOpen || isProductDropdownOpen;
 
     return (
         <>
-            {/* Overlay for collections dropdown click-outside on desktop */}
             <div
                 className={`dropdown-overlay ${isCollectionsDropdownOpen ? 'show' : ''}`}
                 onClick={() => setIsCollectionsDropdownOpen(false)}
@@ -141,10 +137,8 @@ const Navbar = () => {
                 <div className="Navbar_container">
                     <div className="Navbar_Section">
 
-                        {/* ── Left Nav Links ── */}
                         <ul className="Navbar_list-left">
 
-                            {/* INDUSTRIAL SEGMENTS — hover dropdown */}
                             <li
                                 className="dropdown collections-dropdown-wrapper"
                                 ref={collectionsRef}
@@ -165,7 +159,6 @@ const Navbar = () => {
                                     }
                                 </a>
 
-                                {/* Collections Mega Dropdown */}
                                 <div
                                     className={`mega-dropdown-menu ${isCollectionsDropdownOpen ? 'open' : ''}`}
                                     onMouseEnter={handleCollectionsMouseEnter}
@@ -356,7 +349,7 @@ const Navbar = () => {
                                     <ul className="mobile-product-sublist">
                                         {tab.collections.map((item) => (
                                             <li key={item}>
-                                                {/* ✅ Mobile: same category-filter navigation */}
+                                                {/* Mobile: same category-filter navigation */}
                                                 <a
                                                     href={`/product?category=${item.toLowerCase().replace(/\s+/g, '-')}`}
                                                     className="nav-link"

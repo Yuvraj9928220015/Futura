@@ -5,13 +5,20 @@ import { FiMinus } from 'react-icons/fi';
 import { Link, useSearchParams } from 'react-router-dom';
 import "./Product.css";
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in/api/products';
+const API_URL = import.meta.env.VITE_PRODUCTS_API || 'https://api.futuratextiles.in/api/products';
 const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in';
 
 const getImageUrl = (imagePath) => {
     if (!imagePath) return "https://via.placeholder.com/400x300?text=No+Image";
+
     const cleaned = imagePath.replace(/\\/g, '/');
-    return cleaned.startsWith('http') ? cleaned : `${BASE_URL}/${cleaned}`;
+
+    if (cleaned.startsWith('http://') || cleaned.startsWith('https://')) {
+        return cleaned;
+    }
+
+    const trimmed = cleaned.replace(/^\/+/, '');
+    return `${BASE_URL}/${trimmed}`;
 };
 
 const CATEGORY_HIERARCHY = {
@@ -318,7 +325,6 @@ const Product = () => {
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
     const [colorMap, setColorMap] = useState(new Map());
 
     // ── Category Priority State ──
@@ -336,10 +342,6 @@ const Product = () => {
                 parentCategory: null,
                 category: [categoryParam]
             }));
-            setTimeout(() => {
-                const grid = document.querySelector('.products-content');
-                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300);
         } else {
             setSelectedFilters(prev => ({ ...prev, parentCategory: null, category: [] }));
         }
@@ -390,10 +392,7 @@ const Product = () => {
         };
 
         products.forEach(product => {
-            // Product-level color
             if (product.color) addColor(product.color);
-
-            // Variant-level colors
             if (Array.isArray(product.variants)) {
                 product.variants.forEach(v => {
                     if (v.color) addColor(v.color);
@@ -409,15 +408,12 @@ const Product = () => {
 
     const productMatchesColor = (product, selectedColors) => {
         if (selectedColors.length === 0) return true;
-
         const normalize = (str) =>
             str ? str.split(',').map(c => colorToSlug(c.trim())).filter(Boolean) : [];
-
         const productColors = normalize(product.color);
         const variantColors = Array.isArray(product.variants)
             ? product.variants.flatMap(v => normalize(v.color))
             : [];
-
         const allColors = [...productColors, ...variantColors];
         return selectedColors.some(sc => allColors.includes(sc));
     };
@@ -469,7 +465,6 @@ const Product = () => {
             mc = selectedFilters.category.includes(pc);
         }
 
-        // ✅ Color filter: match product.color OR any variant.color
         const mc2 = productMatchesColor(p, selectedFilters.color);
 
         const mp = selectedFilters.performance.length === 0 ||
@@ -503,7 +498,6 @@ const Product = () => {
     const activeCategoryLabel = () => {
         if (selectedFilters.category.length === 1) {
             const slug = selectedFilters.category[0];
-            // Try to find label from category filters derived from products
             const allCatSlugs = allProducts.map(p => ({
                 slug: (p.category || '').toLowerCase().replace(/\s+/g, '-'),
                 label: p.category || ''
@@ -518,350 +512,340 @@ const Product = () => {
         (p.category || '').toLowerCase().replace(/\s+/g, '-') === sub.toLowerCase().replace(/\s+/g, '-') || p.category === sub
     ).length;
 
-    // ── Sorted color list for sidebar ──
     const sortedColors = Array.from(colorMap.values());
 
     return (
-        <div className="product-wrapper">
-            <ThreePanelSlider />
-            <div className="Product-Container">
-                <div className="Product-Container-title">
-                    <span>Our Collections</span>
+        <>
+            <div className="product-wrapper">
+                <ThreePanelSlider />
+                <div className="Product-Container">
+                    <div className="Product-Container-title">
+                        <span>Our Collections</span>
 
-                    {activeCategoryLabel() && (
-                        <div style={{
-                            display: 'flex', alignItems: 'center', gap: '8px',
-                            fontSize: '0.9rem', color: '#555', marginTop: '6px'
-                        }}>
-                            <span style={{ color: '#999' }}>Showing:</span>
-                            <span style={{
-                                background: '#1a1a2e', color: '#fff',
-                                padding: '3px 12px', borderRadius: '20px',
-                                fontSize: '0.82rem', fontWeight: 600
-                            }}>
-                                {activeCategoryLabel()}
-                            </span>
-                            <button
-                                onClick={clearAll}
-                                style={{
-                                    background: 'none', border: 'none', cursor: 'pointer',
-                                    color: '#e74c3c', fontSize: '0.8rem', fontWeight: 600,
-                                    padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '3px'
-                                }}
-                            >
-                                <X size={13} /> Clear
-                            </button>
+                        {activeCategoryLabel() && (
+                            <div className='category-Label' >
+                                <span style={{ color: '#999', fontSize: '16px', }}>Showing:</span>
+                                <span style={{
+                                    padding: '3px 12px', borderRadius: '20px',
+                                    fontSize: '15px', fontWeight: 600
+                                }}>
+                                    {activeCategoryLabel()}
+                                </span>
+                                <button
+                                    onClick={clearAll}
+                                    style={{
+                                        background: 'none', border: 'none', cursor: 'pointer',
+                                        color: '#e74c3c', fontSize: '0.8rem', fontWeight: 600,
+                                        padding: '2px 6px', display: 'flex', alignItems: 'center', gap: '3px'
+                                    }}
+                                >
+                                    <X size={13} /> Clear
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {error && (
+                        <div style={{ background: '#fee', color: '#c33', padding: '1rem', borderRadius: '8px', margin: '1rem 0', textAlign: 'center' }}>
+                            ❌ Error: {error}
+                            <button onClick={fetchProducts} style={{ marginLeft: '10px', padding: '5px 10px', background: '#c33', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Retry</button>
                         </div>
                     )}
-                </div>
 
-                {error && (
-                    <div style={{ background: '#fee', color: '#c33', padding: '1rem', borderRadius: '8px', margin: '1rem 0', textAlign: 'center' }}>
-                        ❌ Error: {error}
-                        <button onClick={fetchProducts} style={{ marginLeft: '10px', padding: '5px 10px', background: '#c33', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Retry</button>
-                    </div>
-                )}
+                    {allCategories.length > 0 && (
+                        <button className='category-Label-btn'
+                            onClick={() => setShowPriorityModal(true)}
+                            // style={{
+                            //     display: 'flex', alignItems: 'center', gap: '6px',
+                            //     padding: '8px 16px', border: 'none', borderRadius: '8px',
+                            //     background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+                            //     color: '#fff', fontSize: '0.82rem', fontWeight: 600,
+                            //     cursor: 'pointer', letterSpacing: '0.03em',
+                            //     boxShadow: '0 4px 14px #00000040'
+                            // }}
+                        >
+                            <Settings size={15} />
+                            Set Category Order
+                        </button>
+                    )}
 
-                {allCategories.length > 0 && (
-                    <button
-                        onClick={() => setShowPriorityModal(true)}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: '6px',
-                            padding: '8px 16px', border: 'none', borderRadius: '8px',
-                            background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-                            color: '#fff', fontSize: '0.82rem', fontWeight: 600,
-                            cursor: 'pointer', letterSpacing: '0.03em',
-                            boxShadow: '0 4px 14px #00000040'
-                        }}
-                    >
-                        <Settings size={15} />
-                        Set Category Order
+                    <button className="mobile-filter-toggle" onClick={() => setMobileOpen(!mobileOpen)}>
+                        <Filter size={20} /> Filters {activeCount() > 0 && `(${activeCount()})`}
                     </button>
-                )}
 
-                <button className="mobile-filter-toggle" onClick={() => setMobileOpen(!mobileOpen)}>
-                    <Filter size={20} /> Filters {activeCount() > 0 && `(${activeCount()})`}
-                </button>
-
-                <div className="products-layout">
-                    {/* ── Sidebar ── */}
-                    <div className={`filter-sidebar${mobileOpen ? ' mobile-open' : ''}`}>
-                        <div className="mobile-filter-header">
-                            <h3>Filters</h3>
-                            <button className="close-mobile-filter" onClick={() => setMobileOpen(false)}><X size={20} /></button>
-                        </div>
-
-                        <div className="filter-section">
-                            <h4>Search</h4>
-                            <div className="search-input-wrapper">
-                                <Search className="search-icon" size={20} />
-                                <input type="text" placeholder="Search products..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
+                    <div className="products-layout">
+                        {/* ── Sidebar ── */}
+                        <div className={`filter-sidebar${mobileOpen ? ' mobile-open' : ''}`}>
+                            <div className="mobile-filter-header">
+                                <h3>Filters</h3>
+                                <button className="close-mobile-filter" onClick={() => setMobileOpen(false)}><X size={20} /></button>
                             </div>
-                        </div>
 
-                        {activeCount() > 0 && (
                             <div className="filter-section">
-                                <button className="clear-all-btn" onClick={clearAll}>Clear All Filters ({activeCount()})</button>
+                                <h4>Search</h4>
+                                <div className="search-input-wrapper">
+                                    <Search className="search-icon" size={20} />
+                                    <input type="text" placeholder="Search products..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="search-input" />
+                                </div>
                             </div>
-                        )}
 
-                        {/* ── Industrial Segments ── */}
-                        <div className="filter-section">
-                            <div className="filter-header" onClick={() => toggle('category')}>
-                                <h4>Industrial Segments</h4>
-                                {expanded.category ? <FiMinus size={20} /> : <GoPlus size={20} />}
-                            </div>
-                            <div className={`filter-dropdown${expanded.category ? ' expanded' : ''}`}>
-                                <div className="filter-options">
-                                    {Object.keys(CATEGORY_HIERARCHY).map(par => {
-                                        const subs = CATEGORY_HIERARCHY[par];
-                                        const isA = selectedFilters.parentCategory === par;
-                                        return (
-                                            <div key={par} className="parent-category-wrapper">
-                                                <div className={`parent-category-item${isA ? ' active' : ''}`} onClick={() => handleParent(par)}>
-                                                    <span className="parent-category-label">{par}</span>
-                                                    <ChevronRight size={18} className={`parent-category-arrow${isA ? ' rotated' : ''}`} />
-                                                </div>
-                                                {isA && subs.length > 0 && (
-                                                    <div className="sub-category-options">
-                                                        {subs.map(sub => {
-                                                            const sv = sub.toLowerCase().replace(/\s+/g, '-');
-                                                            return (
-                                                                <label key={sv} className="filter-checkbox subcategory-checkbox">
-                                                                    <input type="checkbox" value={sv} checked={selectedFilters.category.includes(sv)} onChange={() => handleFilter('category', sv)} />
-                                                                    <span className="Product-checkmark" />
-                                                                    <span className="filter-label">{sub} ({subCount(par, sub)})</span>
-                                                                </label>
-                                                            );
-                                                        })}
+                            {activeCount() > 0 && (
+                                <div className="filter-section">
+                                    <button className="clear-all-btn" onClick={clearAll}>Clear All Filters ({activeCount()})</button>
+                                </div>
+                            )}
+
+                            {/* ── Industrial Segments ── */}
+                            <div className="filter-section">
+                                <div className="filter-header" onClick={() => toggle('category')}>
+                                    <h4>Industrial Segments</h4>
+                                    {expanded.category ? <FiMinus size={20} /> : <GoPlus size={20} />}
+                                </div>
+                                <div className={`filter-dropdown${expanded.category ? ' expanded' : ''}`}>
+                                    <div className="filter-options">
+                                        {Object.keys(CATEGORY_HIERARCHY).map(par => {
+                                            const subs = CATEGORY_HIERARCHY[par];
+                                            const isA = selectedFilters.parentCategory === par;
+                                            return (
+                                                <div key={par} className="parent-category-wrapper">
+                                                    <div className={`parent-category-item${isA ? ' active' : ''}`} onClick={() => handleParent(par)}>
+                                                        <span className="parent-category-label">{par}</span>
+                                                        <ChevronRight size={18} className={`parent-category-arrow${isA ? ' rotated' : ''}`} />
                                                     </div>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
+                                                    {isA && subs.length > 0 && (
+                                                        <div className="sub-category-options">
+                                                            {subs.map(sub => {
+                                                                const sv = sub.toLowerCase().replace(/\s+/g, '-');
+                                                                return (
+                                                                    <label key={sv} className="filter-checkbox subcategory-checkbox">
+                                                                        <input type="checkbox" value={sv} checked={selectedFilters.category.includes(sv)} onChange={() => handleFilter('category', sv)} />
+                                                                        <span className="Product-checkmark" />
+                                                                        <span className="filter-label">{sub} ({subCount(par, sub)})</span>
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* ── Color Filter — 100% from backend ── */}
-                        <div className="filter-section">
-                            <div className="filter-header" onClick={() => toggle('color')}>
-                                <h4>Color</h4>
-                                {expanded.color ? <FiMinus size={20} /> : <GoPlus size={20} />}
-                            </div>
-                            <div className={`filter-dropdown${expanded.color ? ' expanded' : ''}`}>
-                                <div className="filter-options">
-                                    {sortedColors.length === 0 && (
-                                        <p style={{ fontSize: '0.8rem', color: '#999', padding: '4px 0' }}>
-                                            {loading ? 'Loading colors…' : 'No colors found'}
-                                        </p>
-                                    )}
-                                    {sortedColors.map(opt => {
-                                        const isChecked = selectedFilters.color.includes(opt.slug);
-                                        return (
-                                            <label
-                                                key={opt.slug}
-                                                className="filter-checkbox color-filter-checkbox"
-                                                style={{ cursor: 'pointer' }}
-                                            >
-                                                <input
-                                                    type="radio"
-                                                    name="color-filter"
-                                                    value={opt.slug}
-                                                    checked={isChecked}
-                                                    onChange={() => handleFilter('color', opt.slug)}
-                                                    onClick={() => { if (isChecked) handleFilter('color', opt.slug); }}
-                                                    style={{ accentColor: opt.cssColor.startsWith('linear') ? '#4f6ef7' : opt.cssColor }}
-                                                />
-                                                <span
-                                                    className="Product-color-swatch"
-                                                    style={{
-                                                        background: opt.cssColor,
-                                                        border: opt.label.toLowerCase() === 'white'
-                                                            ? '1.5px solid #ccc'
-                                                            : '1.5px solid #0000001a',
-                                                        display: 'inline-block',
-                                                        width: '16px',
-                                                        height: '16px',
-                                                        borderRadius: '50%',
-                                                        flexShrink: 0,
-                                                        verticalAlign: 'middle',
-                                                    }}
-                                                />
-                                                <span className="filter-label">
-                                                    {opt.label}
-                                                    <span style={{ color: '#999', marginLeft: '4px', fontSize: '0.78em' }}>
-                                                        ({opt.count})
-                                                    </span>
-                                                </span>
-                                            </label>
-                                        );
-                                    })}
+                            {/* ── Color Filter ── */}
+                            <div className="filter-section">
+                                <div className="filter-header" onClick={() => toggle('color')}>
+                                    <h4>Color</h4>
+                                    {expanded.color ? <FiMinus size={20} /> : <GoPlus size={20} />}
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="filter-section">
-                            <div className="results-count">Showing {sortedFiltered.length} of {allProducts.length} products</div>
-                        </div>
-                    </div>
-
-                    {mobileOpen && <div className="mobile-filter-overlay" onClick={() => setMobileOpen(false)} />}
-
-                    {/* ── Products Grid ── */}
-                    <div className="products-content">
-                        {/* ✅ Active color chip — single selection */}
-                        {selectedFilters.color.length > 0 && (() => {
-                            const slug = selectedFilters.color[0];
-                            const info = colorMap.get(slug);
-                            if (!info) return null;
-                            return (
-                                <div style={{
-                                    display: 'flex', flexWrap: 'wrap', gap: '8px',
-                                    marginBottom: '16px', alignItems: 'center'
-                                }}>
-                                    <span style={{ fontSize: '0.82rem', color: '#666', fontWeight: 600 }}>Color:</span>
-                                    <span style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: '5px',
-                                        background: '#f0f4ff', border: '1.5px solid #c7d2fe',
-                                        borderRadius: '20px', padding: '3px 10px 3px 6px',
-                                        fontSize: '0.8rem', fontWeight: 600, color: '#3730a3'
-                                    }}>
-                                        <span style={{
-                                            width: '12px', height: '12px', borderRadius: '50%',
-                                            background: info.cssColor,
-                                            border: '1px solid #00000026',
-                                            display: 'inline-block', flexShrink: 0
-                                        }} />
-                                        {info.label}
-                                        <button
-                                            onClick={() => setSelectedFilters(prev => ({ ...prev, color: [] }))}
-                                            style={{
-                                                background: 'none', border: 'none', cursor: 'pointer',
-                                                padding: '0', color: '#6366f1', display: 'flex',
-                                                alignItems: 'center', marginLeft: '2px'
-                                            }}
-                                            title="Remove color filter"
-                                        >
-                                            <X size={12} />
-                                        </button>
-                                    </span>
-                                </div>
-                            );
-                        })()}
-
-                        {loading ? (
-                            <div style={{ textAlign: 'center', padding: '3rem', fontSize: '1.2rem', color: '#666' }}>Loading products...</div>
-                        ) : sortedFiltered.length === 0 ? (
-                            <div className="no-projects">
-                                <p>No products found matching your criteria.</p>
-                                <button className="clear-filters-btn" onClick={clearAll}>Clear All Filters</button>
-                            </div>
-                        ) : (
-                            <div className="projects-grid-new">
-                                {sortedFiltered.map(product => {
-                                    // ── Find which variant to display based on active color filter ──
-                                    // Priority: first variant whose color slug matches any selected color
-                                    let activeVariant = null;
-                                    if (selectedFilters.color.length > 0 && Array.isArray(product.variants)) {
-                                        activeVariant = product.variants.find(v =>
-                                            v.color && selectedFilters.color.includes(colorToSlug(v.color))
-                                        ) || null;
-                                    }
-
-                                    // If active variant found → use its images, else fallback to product images
-                                    const displayImages = (activeVariant && activeVariant.images?.length > 0)
-                                        ? activeVariant.images
-                                        : (product.image || []);
-
-                                    const displayImage = displayImages.length > 0
-                                        ? getImageUrl(displayImages[0])
-                                        : "https://via.placeholder.com/400x300?text=No+Image";
-
-                                    // Color info for the active variant badge
-                                    const variantColorInfo = activeVariant?.color
-                                        ? colorMap.get(colorToSlug(activeVariant.color))
-                                        : null;
-
-                                    return (
-                                        <div key={product._id} className="Projects-Box-new">
-                                            <div className="project-image-wrapper" style={{ position: 'relative' }}>
-                                                <Link to={`/ProductDetail/${product._id}`} className="project-image-link">
-                                                    <img
-                                                        src={displayImage}
-                                                        alt={product.title || 'Product'}
-                                                        className="project-image"
-                                                        onError={e => { e.target.src = "https://via.placeholder.com/400x300?text=No+Image"; }}
+                                <div className={`filter-dropdown${expanded.color ? ' expanded' : ''}`}>
+                                    <div className="filter-options">
+                                        {sortedColors.length === 0 && (
+                                            <p style={{ fontSize: '0.8rem', color: '#999', padding: '4px 0' }}>
+                                                {loading ? 'Loading colors…' : 'No colors found'}
+                                            </p>
+                                        )}
+                                        {sortedColors.map(opt => {
+                                            const isChecked = selectedFilters.color.includes(opt.slug);
+                                            return (
+                                                <label
+                                                    key={opt.slug}
+                                                    className="filter-checkbox color-filter-checkbox"
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name="color-filter"
+                                                        value={opt.slug}
+                                                        checked={isChecked}
+                                                        onChange={() => handleFilter('color', opt.slug)}
+                                                        onClick={() => { if (isChecked) handleFilter('color', opt.slug); }}
+                                                        style={{ accentColor: opt.cssColor.startsWith('linear') ? '#4f6ef7' : opt.cssColor }}
                                                     />
-                                                    <div className="project-overlay" />
-                                                </Link>
-
-                                                {/* ── Variant color badge on image ── */}
-                                                {activeVariant && variantColorInfo && (
-                                                    <div style={{
-                                                        position: 'absolute', bottom: '8px', left: '8px',
-                                                        display: 'inline-flex', alignItems: 'center', gap: '5px',
-                                                        background: 'rgba(255,255,255,0.92)',
-                                                        backdropFilter: 'blur(4px)',
-                                                        borderRadius: '20px', padding: '3px 10px 3px 6px',
-                                                        fontSize: '0.75rem', fontWeight: 600, color: '#1e293b',
-                                                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                                                        pointerEvents: 'none',
-                                                        zIndex: 2
-                                                    }}>
-                                                        <span style={{
-                                                            width: '10px', height: '10px', borderRadius: '50%',
-                                                            background: variantColorInfo.cssColor,
-                                                            border: '1px solid rgba(0,0,0,0.2)',
-                                                            display: 'inline-block', flexShrink: 0
-                                                        }} />
-                                                        {variantColorInfo.label}
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="project-content">
-                                                <div className="Projects-Box-main-heading">
-                                                    <Link to={`/ProductDetail/${product._id}`} className="project-title-link">
-                                                        {product.title || 'Untitled Product'}
-                                                    </Link>
-                                                    <div className="Projects-Box-svg">
-                                                        {product.icons?.length > 0 ? (
-                                                            <div className="product-icons-display">
-                                                                {product.icons.map((icon, i) => (
-                                                                    <img key={i} src={getImageUrl(icon)} alt={`Icon ${i + 1}`} className="products-icon-item"
-                                                                        style={{ width: '45px', height: '80px', objectFit: 'contain', marginLeft: '5px' }}
-                                                                        onError={e => { e.target.style.display = 'none'; }} />
-                                                                ))}
-                                                            </div>
-                                                        ) : (
-                                                            <img src="/iconPvc-6.svg" alt="Default icon" />
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <div className="Projects-Box-main-des">
-                                                    <TruncatedText text={product.description || 'No description available'} maxLength={100} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                                                    <span
+                                                        className="Product-color-swatch"
+                                                        style={{
+                                                            background: opt.cssColor,
+                                                            border: opt.label.toLowerCase() === 'white'
+                                                                ? '1.5px solid #ccc'
+                                                                : '1.5px solid #0000001a',
+                                                            display: 'inline-block',
+                                                            width: '16px',
+                                                            height: '16px',
+                                                            borderRadius: '50%',
+                                                            flexShrink: 0,
+                                                            verticalAlign: 'middle',
+                                                        }}
+                                                    />
+                                                    <span className="filter-label">
+                                                        {opt.label}
+                                                        <span style={{ color: '#999', marginLeft: '4px', fontSize: '0.78em' }}>
+                                                            ({opt.count})
+                                                        </span>
+                                                    </span>
+                                                </label>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
                             </div>
-                        )}
+
+                            <div className="filter-section">
+                                <div className="results-count">Showing {sortedFiltered.length} of {allProducts.length} products</div>
+                            </div>
+                        </div>
+
+                        {mobileOpen && <div className="mobile-filter-overlay" onClick={() => setMobileOpen(false)} />}
+
+                        {/* ── Products Grid ── */}
+                        <div className="products-content">
+                            {selectedFilters.color.length > 0 && (() => {
+                                const slug = selectedFilters.color[0];
+                                const info = colorMap.get(slug);
+                                if (!info) return null;
+                                return (
+                                    <div style={{
+                                        display: 'flex', flexWrap: 'wrap', gap: '8px',
+                                        marginBottom: '16px', alignItems: 'center'
+                                    }}>
+                                        <span style={{ fontSize: '0.82rem', color: '#666', fontWeight: 600 }}>Color:</span>
+                                        <span style={{
+                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                            background: '#f0f4ff', border: '1.5px solid #c7d2fe',
+                                            borderRadius: '20px', padding: '3px 10px 3px 6px',
+                                            fontSize: '0.8rem', fontWeight: 600, color: '#3730a3'
+                                        }}>
+                                            <span style={{
+                                                width: '12px', height: '12px', borderRadius: '50%',
+                                                background: info.cssColor,
+                                                border: '1px solid #00000026',
+                                                display: 'inline-block', flexShrink: 0
+                                            }} />
+                                            {info.label}
+                                            <button
+                                                onClick={() => setSelectedFilters(prev => ({ ...prev, color: [] }))}
+                                                style={{
+                                                    background: 'none', border: 'none', cursor: 'pointer',
+                                                    padding: '0', color: '#6366f1', display: 'flex',
+                                                    alignItems: 'center', marginLeft: '2px'
+                                                }}
+                                                title="Remove color filter"
+                                            >
+                                                <X size={12} />
+                                            </button>
+                                        </span>
+                                    </div>
+                                );
+                            })()}
+
+                            {loading ? (
+                                <div style={{ textAlign: 'center', padding: '3rem', fontSize: '1.2rem', color: '#666' }}>Loading products...</div>
+                            ) : sortedFiltered.length === 0 ? (
+                                <div className="no-projects">
+                                    <p>No products found matching your criteria.</p>
+                                    <button className="clear-filters-btn" onClick={clearAll}>Clear All Filters</button>
+                                </div>
+                            ) : (
+                                <div className="projects-grid-new">
+                                    {sortedFiltered.map(product => {
+                                        let activeVariant = null;
+                                        if (selectedFilters.color.length > 0 && Array.isArray(product.variants)) {
+                                            activeVariant = product.variants.find(v =>
+                                                v.color && selectedFilters.color.includes(colorToSlug(v.color))
+                                            ) || null;
+                                        }
+
+                                        const displayImages = (activeVariant && activeVariant.images?.length > 0)
+                                            ? activeVariant.images
+                                            : (product.image || []);
+
+                                        const displayImage = displayImages.length > 0
+                                            ? getImageUrl(displayImages[0])
+                                            : "https://via.placeholder.com/400x300?text=No+Image";
+
+                                        const variantColorInfo = activeVariant?.color
+                                            ? colorMap.get(colorToSlug(activeVariant.color))
+                                            : null;
+
+                                        return (
+                                            <div key={product._id} className="Projects-Box-new">
+                                                <div className="project-image-wrapper" style={{ position: 'relative' }}>
+                                                    <Link to={`/ProductDetail/${product._id}`} className="project-image-link">
+                                                        <img
+                                                            src={displayImage}
+                                                            alt={product.title || 'Product'}
+                                                            className="project-image"
+                                                            onError={e => { e.target.src = "https://via.placeholder.com/400x300?text=No+Image"; }}
+                                                        />
+                                                        <div className="project-overlay" />
+                                                    </Link>
+
+                                                    {activeVariant && variantColorInfo && (
+                                                        <div style={{
+                                                            position: 'absolute', bottom: '8px', left: '8px',
+                                                            display: 'inline-flex', alignItems: 'center', gap: '5px',
+                                                            background: 'rgba(255,255,255,0.92)',
+                                                            backdropFilter: 'blur(4px)',
+                                                            borderRadius: '20px', padding: '3px 10px 3px 6px',
+                                                            fontSize: '0.75rem', fontWeight: 600, color: '#1e293b',
+                                                            boxShadow: '0 2px 8px hsla(0, 0%, 0%, 0.15)',
+                                                            pointerEvents: 'none',
+                                                            zIndex: 2
+                                                        }}>
+                                                            <span style={{
+                                                                width: '10px', height: '10px', borderRadius: '50%',
+                                                                background: variantColorInfo.cssColor,
+                                                                border: '1px solid rgba(0,0,0,0.2)',
+                                                                display: 'inline-block', flexShrink: 0
+                                                            }} />
+                                                            {variantColorInfo.label}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                <div className="project-content">
+                                                    <div className="Projects-Box-main-heading">
+                                                        <Link to={`/ProductDetail/${product._id}`} className="project-title-link">
+                                                            {product.title || 'Untitled Product'}
+                                                        </Link>
+                                                        <div className="Projects-Box-svg">
+                                                            {product.icons?.length > 0 ? (
+                                                                <div className="product-icons-display">
+                                                                    {product.icons.map((icon, i) => (
+                                                                        <img key={i} src={getImageUrl(icon)} alt={`Icon ${i + 1}`} className="products-icon-item"
+                                                                            style={{ width: '37px', height: '60px', objectFit: 'contain', marginLeft: '5px' }}
+                                                                            onError={e => { e.target.style.display = 'none'; }} />
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <img src="/iconPvc-6.svg" alt="Default icon" />
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="Projects-Box-main-des">
+                                                        <TruncatedText text={product.description || 'No description available'} maxLength={100} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* ── Category Priority Modal ── */}
-            {showPriorityModal && (
-                <CategoryPriorityModal
-                    categories={allCategories}
-                    priorityOrder={categoryPriorityOrder}
-                    onSave={(newOrder) => setCategoryPriorityOrder(newOrder)}
-                    onClose={() => setShowPriorityModal(false)}
-                />
-            )}
-        </div>
+                {showPriorityModal && (
+                    <CategoryPriorityModal
+                        categories={allCategories}
+                        priorityOrder={categoryPriorityOrder}
+                        onSave={(newOrder) => setCategoryPriorityOrder(newOrder)}
+                        onClose={() => setShowPriorityModal(false)}
+                    />
+                )}
+            </div>
+        </>
     );
 };
 

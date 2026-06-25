@@ -1,4 +1,3 @@
-/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -10,150 +9,179 @@
     background-color: #fffdf9;
 }
 
-/* About Banner */
-.About-Banner {
-    position: relative;
+/* ── Hero Banner ── */
+.About {
     overflow: hidden;
-    max-height: 800px;
+    line-height: 0;
 }
 
-.About-Banner img {
+.About-Banner {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    min-height: 500px;
+    max-height: 800px;
+    overflow: hidden;
+}
+
+/* ✅ VIDEO fix — position absolute taaki overlay upar rahe */
+.About-Banner-video {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
+.About-Banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(0, 0, 0, 0.4) 60%,
+            rgba(0, 0, 0, 0.1) 70%,
+            transparent 100%);
+}
+
+.Contract-hero-content {
+    text-align: center;
+    color: white;
+    max-width: 1000px;
+    width: 100%;
+    padding: 0 20px 25px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 .About-title {
     font-size: 48px;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 4px #8181814d;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
 }
 
 .About-des {
     font-size: 18px;
     text-align: center;
     font-family: "Quicksand", sans-serif;
-}
-
-/* Automotive Box Styling */
-.Automotive-Box {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-}
-
-.Automotive-Box:hover {
-    transform: translateY(-5px);
-}
-
-.Automotive-Box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-/* Interactive Image Styling */
-.interactive-image {
-    cursor: pointer;
-    position: relative;
-}
-
-
-.overlay-content {
-    text-align: center;
     color: white;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-}
-
-.interactive-image:hover .overlay-content,
-.interactive-image.active .overlay-content {
-    transform: translateY(0);
-}
-
-.overlay-content h3 {
-    font-size: 34px;
-    font-weight: 300;
-    margin-bottom: 8px;
-}
-
-.overlay-content p {
+    margin-bottom: 15px;
+    font-style: italic;
     opacity: 0.9;
 }
 
-/* Touch Indicator */
-.touch-indicator {
+.Contract-hero-content-line {
+    width: 20%;
+    height: 3px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    flex-shrink: 0;
+}
+
+/* ── Segment Overview ── */
+.Product-Ranges-Section {
+    padding: 60px 150px 40px;
+    margin-top: 50px;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    overflow: hidden;
+}
+
+.featured-item {
+    position: relative;
+    min-height: 500px;
+}
+
+.Contract-Box {
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 15px;
-    color: #ff6b6b;
-    font-weight: 500;
-    animation: pulse 2s infinite;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.arrow {
-    font-size: 18px;
-    transition: transform 0.3s ease;
+.image-box {
+    background: #000;
 }
 
-.touch-text {
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    opacity: 0.85;
 }
 
-@keyframes pulse {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
-
-    100% {
-        opacity: 1;
-    }
+.image-box:hover img {
+    transform: scale(1.05);
+    opacity: 1;
 }
 
-.Automotive-main-Box:hover .arrow {
-    transform: translateX(5px);
+.content-box {
+    padding: 0;
+    background: #fff;
 }
 
-.Automotive-main-Box {
+.Contract-main-Box {
+    padding: 60px;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 40px;
-    height: 100%;
 }
 
-.Automotive-main-Box-title {
-    font-size: 32px;
-    font-weight: bold;
-    color: #333;
+.Contract-title {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #2c3e50;
     margin-bottom: 20px;
+    font-family: 'Georgia', serif;
 }
 
-.Automotive-main-Box-des {
-    font-size: 16px;
+.Contract-des {
+    font-size: 1rem;
     line-height: 1.7;
-    color: #666;
-    letter-spacing: 0.5px;
+    color: #444;
+    margin-bottom: 20px;
+    letter-spacing: 0.4px;
+}
+
+.feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.feature-item {
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+/* ── Product Ranges ── */
+.Overview {
+    padding: 20px 150px 50px;
 }
 
 .Section-Header {
     text-align: center;
-    padding: 60px 0px;
+    padding: 0px 0 30px;
 }
 
 .About-Section-Heading {
@@ -161,176 +189,28 @@
     font-size: 37px;
     margin-bottom: 10px;
     text-align: center;
-}
-
-.Automotive-subtitle {
-    font-size: 15px;
-    color: #ff6b6b;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-
-.Automotive-title {
-    font-size: 34px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
-    color: #2e2d2d;
-    margin-bottom: 20px;
-}
-
-.Automotive-des {
-    font-size: 16px;
-    line-height: 1.7;
-    letter-spacing: 1px;
-    color: #555;
-    margin-bottom: 15px;
-}
-
-.Automotive-subdes {
-    font-size: 15px;
-    color: #888;
-    font-style: italic;
-    letter-spacing: 1px;
-}
-
-.Product-Ranges-Section {
-    padding: 0px 150px;
-    padding-bottom: 40px;
-}
-
-/* Premium Section Styles */
-.Premium-Section {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 80px 150px;
-    position: relative;
-    overflow: hidden;
-}
-
-.Premium-Section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 30% 20%, #ff6b6b1a 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, #4caf501a 0%, transparent 50%);
-    pointer-events: none;
-}
-
-.premium-subtitle {
-    font-size: 18px;
-    color: #666;
-    font-weight: 300;
-    margin-top: 10px;
-}
-
-.premium-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-}
-
-.premium-card {
-    background: white;
-    padding: 40px 30px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 10px 30px #0000001a;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.premium-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, #ffffff4d, transparent);
-    transition: left 0.6s ease;
-}
-
-.premium-card:hover::before {
-    left: 100%;
-}
-
-.premium-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px #00000026;
-}
-
-.premium-icon {
-    margin-bottom: 20px;
-}
-
-.icon-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    transition: all 0.3s ease;
-}
-
-.premium-card:hover .icon-circle {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.premium-card h3 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 15px;
-    font-family: 'Roboto', sans-serif;
-}
-
-.premium-card p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #666;
-    letter-spacing: 0.5px;
-}
-
-/* Product Ranges specific styling */
-.Product-Ranges-Section .Automotive-Box {
-    background-color: #fffffff2;
-    backdrop-filter: blur(10px);
-}
-
-.Product-Ranges-Section .Automotive-title {
-    color: #333;
-}
-
-/* Overview Section */
-.Overview {
-    padding-top: 50px;
-    padding: 0px 150px;
+    color: #2c3e50;
 }
 
 .Overview-Box {
     width: 100%;
     background-color: #ffffff;
     border-radius: 4px;
-    transition: all 0.3s ease;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
 }
 
 .Overview-Box:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .Overview-Box-image {
     width: 100%;
     height: 300px;
     overflow: hidden;
-    border-radius: 4px 4px 0px 0px;
 }
 
 .Overview-Box-image img {
@@ -344,28 +224,29 @@
     transform: scale(1.05);
 }
 
-.Overview-Box-contant-title {
-    font-size: 25px;
-    font-weight: 300;
-    font-family: 'Roboto', sans-serif;
-    color: #333;
-}
-
-.Overview-Box-contant-des {
-    font-size: 15px;
-    padding: 8px 0px;
-    letter-spacing: 1px;
-    color: #666;
-    line-height: 1.5;
-}
-
 .Overview-Box-contant {
     padding: 20px;
 }
 
+.Overview-Box-contant-title {
+    font-size: 22px;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.Overview-Box-contant-des {
+    font-size: 14px;
+    padding: 6px 0 12px;
+    letter-spacing: 0.5px;
+    color: #666;
+    line-height: 1.5;
+}
+
 .Overview-Box-contant button {
     font-size: 13px;
-    padding: 7px 0px;
+    padding: 7px 20px;
     border: 2px solid #ff6b6b;
     background: transparent;
     color: #ff6b6b;
@@ -384,11 +265,10 @@
     box-shadow: 0 5px 15px #ff6b6b4d;
 }
 
-/* Responsive Design */
+/* ── Responsive ── */
 @media (max-width: 1200px) {
 
     .Product-Ranges-Section,
-    .Premium-Section,
     .Overview {
         padding-left: 80px;
         padding-right: 80px;
@@ -398,15 +278,17 @@
 @media (max-width: 992px) {
 
     .Product-Ranges-Section,
-    .Premium-Section,
     .Overview {
         padding-left: 40px;
         padding-right: 40px;
     }
 
-    .premium-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .featured-item {
+        min-height: 400px;
     }
 
     .About-Section-Heading {
@@ -417,117 +299,95 @@
 @media (max-width: 768px) {
 
     .Product-Ranges-Section,
-    .Premium-Section,
     .Overview {
         padding-left: 20px;
         padding-right: 20px;
     }
 
-    .Automotive-Box {
-        height: 280px;
-        margin-bottom: 20px;
+    .Product-Ranges-Section {
+        padding: 60px 150px 40px;
+        margin-top: 50px;
     }
 
-    .Automotive-main-Box {
-        padding: 25px;
-    }
-
-    .Automotive-main-Box-title {
-        font-size: 24px;
+    .About-Banner {
+        height: 70vh;
     }
 
     .About-title {
         font-size: 32px;
     }
 
-    .About-Section-Heading {
-        font-size: 32px;
+    .About-des {
+        font-size: 15px;
     }
 
-    .Automotive-title {
-        font-size: 22px;
-    }
-
-    .premium-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .premium-card {
+    .Contract-main-Box {
         padding: 30px 20px;
     }
 
-    .Premium-Section {
-        padding: 60px 20px;
+    .Contract-title {
+        font-size: 1.4rem;
+    }
+
+    .featured-item {
+        min-height: 350px;
+    }
+
+    .Overview-Box-contant-title {
+        font-size: 15px;
+    }
+
+    .feature-item {
+        font-size: 13px;
     }
 }
 
 @media (max-width: 480px) {
-
-    .Product-Ranges-Section,
-    .Premium-Section,
-    .Overview {
-        padding: 40px 15px;
-    }
-
-    .overlay-content p {
-        font-size: 1rem;
-    }
-
     .About-Banner {
-        height: 250px;
-    }
-
-    .Automotive-Box {
-        height: 220px;
-    }
-
-    .Automotive-main-Box {
-        padding: 20px;
+        height: 55vh;
+        min-height: 300px;
     }
 
     .About-title {
-        font-size: 28px;
+        font-size: 26px;
+    }
+
+    .About-des {
+        font-size: 13px;
+    }
+
+    .Contract-hero-content-line {
+        width: 30%;
+    }
+
+    .Overview-Box-contant-title {
+        font-size: 20px;
+    }
+
+    .Product-Ranges-Section,
+    .Overview {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .Contract-main-Box {
+        padding: 20px 15px;
+    }
+
+    .Contract-title {
+        font-size: 1rem;
     }
 
     .About-Section-Heading {
+        margin-bottom: 0px;
         font-size: 28px;
     }
 
-    .Automotive-title {
-        font-size: 20px;
+    .Section-Header {
+        padding: 10px 0px;
     }
 
-    .premium-card {
-        padding: 25px 15px;
-    }
-
-    .premium-card h3 {
-        font-size: 20px;
-    }
-
-    .touch-indicator {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-
-    .overlay-content h3 {
-        font-size: 25px;
-    }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .interactive-image .image-overlay {
-        opacity: 0.8;
-    }
-
-    .touch-indicator {
-        animation: none;
-    }
-
-    .touch-text {
-        font-size: 12px;
+    .featured-item {
+        min-height: 280px;
     }
 }

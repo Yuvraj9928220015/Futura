@@ -7,6 +7,7 @@ const Testimonial = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [animClass, setAnimClass] = useState("slide-in-next");
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   const isAnimating = useRef(false);
   const videoRef = useRef(null);
@@ -77,6 +78,18 @@ const Testimonial = () => {
 
     return () => clearInterval(interval);
   }, [currentTestimonial]);
+
+  // Mobile/Desktop detect karne ke liye
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkScreenSize(); // initial check
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
 
   const nextTestimonial = () => {
     const nextIndex = (currentTestimonial + 1) % testimonials.length;
@@ -204,7 +217,7 @@ const Testimonial = () => {
         <div className="certificate-video">
           <video
             ref={videoRef}
-            src="New-video-5.mp4"
+            src={isMobile ? "New-Mobile-2.mp4" : "New-video-5.mp4"}
             autoPlay
             muted
             loop

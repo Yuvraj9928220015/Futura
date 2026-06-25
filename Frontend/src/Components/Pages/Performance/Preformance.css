@@ -272,13 +272,25 @@
     align-items: center;
 }
 
+/* COMBINED HOVER - longevity-box-content par hover karo, dono ek saath zoom honge */
 .longevity-box-content {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: clamp(15px, 2vw, 20px);
     flex-wrap: wrap;
+    cursor: pointer;
 }
+
+.longevity-box-content:hover .longevity-box-logo img {
+    transform: scale(1.12);
+}
+
+.longevity-box-content:hover .longevity-box-des {
+    transform: scale(1.04);
+}
+
+/* END COMBINED HOVER */
 
 .longevity-box-logo {
     width: clamp(70px, 12vw, 120px);
@@ -293,19 +305,11 @@
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.longevity-box-logo:hover img {
-    transform: scale(1.12);
-}
-
 .longevity-box-des {
     flex: 1;
     min-width: 200px;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.4s ease;
     cursor: pointer;
-}
-
-.longevity-box-des:hover {
-    transform: scale(1.04);
 }
 
 .longevity-box-title {
@@ -349,14 +353,14 @@
 }
 
 .resistance-container-box-icon-title {
-    font-size: clamp(18px, 2.5vw, 25px);
+    font-size: clamp(18px, 2.5vw, 22px);
     letter-spacing: 1px;
     font-weight: 500;
     color: #333;
 }
 
 .resistance-container-box-icon-des {
-    font-size: clamp(14px, 1.8vw, 16px);
+    font-size: clamp(14px, 1.8vw, 14px);
     letter-spacing: 0.5px;
     line-height: 1.6;
     font-weight: 500;
@@ -393,9 +397,6 @@
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.flamesafe-box:hover {
-    transform: scale(1.02);
-}
 
 .flamesafe-box-container {
     height: 100%;
@@ -745,7 +746,6 @@
 }
 
 .content-box {
-    padding: clamp(30px, 4vw, 40px);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -759,7 +759,7 @@
 }
 
 .content-box p {
-    font-size: clamp(14px, 1.8vw, 18px);
+    font-size: clamp(16px, 1.8vw, 18px);
     line-height: 1.5;
     color: #444;
     margin-bottom: clamp(12px, 2vw, 15px);
@@ -769,10 +769,35 @@
 
 /* ==================== RESPONSIVE BREAKPOINTS ==================== */
 
+@media (max-width: 1400px) {
+    .resistance-container-box-icon-title {
+        font-size: clamp(18px, 2.5vw, 20px);
+    }
+    .resistance-container-box-icon-des {
+    font-size: clamp(14px, 1.8vw, 13px);
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: #555;
+    font-family: "Quicksand", sans-serif;
+}
+}
+
 @media (max-width: 991px) {
     .performance-container {
         height: 60vh;
         min-height: 400px;
+    }
+
+    .performance-container {
+        width: 100%;
+        height: 80vh;
+    }
+
+    .flamesafe-box {
+        width: 100%;
+        padding: 0px;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .longevity-container {
@@ -811,6 +836,15 @@
     .description-with-spacing {
         margin-left: 0;
     }
+
+    .performance-Banner-container-line {
+        position: absolute;
+        background-color: #fffffffb;
+        width: 100%;
+        height: 5px;
+        z-index: 2;
+        top: 0px;
+    }
 }
 
 @media (max-width: 550px) {
@@ -826,6 +860,12 @@
         display: flex;
         flex-direction: column;
     }
+
+    .performance-container {
+        width: 100%;
+        height: 100vh;
+    }
+
 
     .longevity-box-logo {
         width: clamp(65px, 10vw, 90px);
@@ -855,7 +895,6 @@
 
     .resistance-container-box-icon-title {
         font-size: clamp(17px, 3vw, 20px);
-        width: 100%;
     }
 
     .resistance-container-box-icon img {
@@ -864,12 +903,36 @@
     }
 
     .resistance-container-box-icon-des {
-        font-size: clamp(13px, 2vw, 15px);
+        font-size: clamp(14px, 2vw, 15px);
         line-height: 1.5;
+        text-align: justify;
+    }
+
+    .protective-main-box-1 {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .safe-touch {
+        width: 100%;
+        padding: clamp(20px, 8vw, 80px) 15px;
+    }
+
+    .protective-main-box-des {
+        text-align: justify;
+    }
+
+    .protective-box-2-title {
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    .protective-box-2-des p {
+        text-align: justify;
     }
 
     .longevity-container hr {
-        margin: clamp(18px, 2.5vw, 22px) 0;
+        margin: 0px;
     }
 }
 
@@ -877,6 +940,12 @@
     .performance-container {
         height: 55vh;
         min-height: 600px;
+    }
+
+    .flamesafe-box {
+        width: 100%;
+        padding: 0px;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .main-title {
@@ -893,12 +962,26 @@
         width: 100%;
         max-width: 600px;
     }
+
+    .performance-Banner-container-line {
+        position: absolute;
+        background-color: #fffffffb;
+        width: 100%;
+        height: 5px;
+        z-index: 2;
+        top: 0px;
+    }
+
+    .flamesafe {
+        padding: clamp(30px, 8vw, 80px) 15px;
+        width: 100%;
+    }
 }
 
 @media (max-width: 575px) {
     .performance-container {
         height: 50vh;
-        min-height: 320px;
+        /* min-height: 320px; */
     }
 
     .longevity-container {
@@ -909,12 +992,37 @@
         display: flex;
         flex-direction: column;
     }
+
+    .performance-Banner-container-line {
+        position: absolute;
+        background-color: #fffffffb;
+        width: 100%;
+        height: 5px;
+        z-index: 2;
+        top: 0px;
+    }
+
+    #Flamesafe-Box-des {
+        text-align: justify;
+        font-size: 14px;
+    }
+
+    .flamesafe-box {
+        width: 100%;
+        padding: 0px;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
 }
 
 @media (max-width: 479px) {
     .performance-container {
         height: 45vh;
         min-height: 500px;
+    }
+
+    .custom-gap-row {
+        --bs-gutter-x: 7rem;
+        --bs-gutter-y: 1rem;
     }
 
     .nav-arrow-left,
@@ -930,12 +1038,27 @@
     .nav-arrow-right {
         right: 12px;
     }
+
+    .performance-Banner-container-line {
+        position: absolute;
+        background-color: #fffffffb;
+        width: 100%;
+        height: 5px;
+        z-index: 2;
+        top: 0px;
+    }
+
+    .flamesafe-box {
+        width: 100%;
+        padding: 0px;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
 }
 
 @media (max-width: 359px) {
     .performance-container {
         height: 40vh;
-        min-height: 280px;
+        min-height: 500px;
     }
 
     .longevity-container {
@@ -961,7 +1084,6 @@
     position: absolute;
     inset: 0;
     width: 100%;
-    height: 100%;
     object-fit: cover;
     z-index: 0;
 }
@@ -983,6 +1105,7 @@
 
     .turtle-box-image img,
     .longevity-box-logo img,
+    .longevity-box-des,
     .resistance-container-box,
     .resistance-container-box-icon img,
     .flamesafe-box,

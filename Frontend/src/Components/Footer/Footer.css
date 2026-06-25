@@ -1,14 +1,7 @@
-/* ============================================
-   Footer Main Container
-   FIX: !important lagaya taaki production me
-   Bootstrap ya koi bhi CSS override na kar sake
-   ============================================ */
 .Footer {
     background-color: #7a6b64 !important;
-    /* ✅ FIXED: !important added */
     color: white !important;
     width: 100%;
-    padding: 30px 60px;
     position: relative;
     overflow: hidden;
     font-family: 'Roboto', sans-serif;
@@ -123,7 +116,7 @@
 
 .google-maps-btn {
     background-color: #d9d9d8;
-    color: rgb(255, 255, 255);
+    color: #ffffff;
     border: 1px solid #666;
     padding: 10px 25px;
     font-size: 14px;
@@ -133,7 +126,7 @@
 }
 
 .google-maps-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: #ffffff1a;
     border-color: #888;
 }
 
@@ -171,7 +164,7 @@
     display: flex;
     flex-direction: column;
     gap: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 .social-mida-icons {
@@ -183,7 +176,7 @@
 }
 
 .social-mida-icons a {
-    width: 7%;
+    width: 8%;
 }
 
 .social-mida-icons img {
@@ -295,7 +288,7 @@
 }
 
 .Copyright-text a:hover {
-    color: rgb(36, 36, 36);
+    color: hwb(0 14% 86%);
 }
 
 /* ========================
@@ -306,6 +299,14 @@
         width: 40%;
         top: 35%;
     }
+
+    .Footer {
+        padding: 40px 20px;
+    }
+
+    .social-mida-icons a {
+        width: 13%;
+    }
 }
 
 @media (max-width: 992px) {
@@ -313,9 +314,25 @@
         padding: 60px 40px;
     }
 
+    .social-mida-icons {
+        width: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 0px;
+    }
+
+    .social-mida-icons a {
+        width: 10%;
+    }
+
+    .newsletter-section {
+        margin-top: 10px;
+    }
+
     .Footer-Box-2 {
         align-items: flex-start;
-        margin-top: 50px;
+        margin-top: 40px;
     }
 
     .social-text,
@@ -362,12 +379,29 @@
     .newsletter-title {
         font-size: 20px;
     }
+
+    .contact-section {
+        margin-bottom: 20px;
+    }
 }
 
 @media (max-width: 576px) {
     .Footer {
         padding: 30px 15px;
     }
+
+    .newsletter-section {
+        margin-top: 0px;
+    }
+
+    .contact-section {
+        margin-bottom: 20px;
+    }
+
+    .address-section {
+        margin-top: 25px;
+    }
+
 
     .input-row {
         flex-direction: column;
@@ -382,6 +416,10 @@
         width: 100%;
     }
 
+    .social-mida-icons a {
+        width: 13%;
+    }
+
     .social-icon {
         font-size: 28px;
     }
@@ -391,11 +429,15 @@
     }
 
     .newsletter-title {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .Map img {
-        width: 100%;
+        width: 50%;
+    }
+
+    .contact-section {
+        margin-bottom: 0px;
     }
 }
 
@@ -404,13 +446,31 @@
         font-size: 12px;
     }
 
+    .contact-section {
+        margin-bottom: 20px;
+    }
+
+    .Footer {
+        padding: 20px 0px;
+    }
+
     .social-icons {
         gap: 15px;
+    }
+
+    .social-mida-icons a {
+        width: 16%;
     }
 
     .form-input,
     .signup-btn {
         padding: 10px 12px;
         font-size: 13px;
+    }
+}
+
+@media (max-width: 200px) {
+    .Footer {
+        padding: 20px 0px;
     }
 }

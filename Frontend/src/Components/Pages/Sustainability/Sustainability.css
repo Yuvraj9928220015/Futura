@@ -1,7 +1,3 @@
-/* ============================================================
-   SUSTAINABILITY — FULL RESPONSIVE CSS
-   ============================================================ */
-
 * {
     box-sizing: border-box;
 }
@@ -12,10 +8,6 @@
     padding: 0;
     overflow-x: hidden;
 }
-
-/* ============================================================
-   BANNER / BELIEVE SECTION
-   ============================================================ */
 
 .sustainability-banner {
     background-image: url(/public/sustainability-Banner-1.png);
@@ -254,6 +246,7 @@
         border-color 0.35s ease;
     font-family: inherit;
     white-space: nowrap;
+    max-width: 100%;
 }
 
 .download-btn-text {
@@ -338,9 +331,7 @@
 .Corporate {
     position: relative;
     z-index: 2;
-    /* background-image: url(/public/sustainability-Banner-3.png); */
     background-color: transparent;
-    /* background-color: #000000; */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -349,6 +340,7 @@
     min-height: 100vh;
     scroll-margin-top: 80px;
 }
+
 .Corporate-bg {
     width: 100%;
     background-image: url(/public/sustainability-Banner-3.png);
@@ -479,7 +471,7 @@
 }
 
 .corp-card:hover .corp-card-img {
-    height: 46%;
+    height: 66%;
     opacity: 1;
 }
 
@@ -518,7 +510,6 @@
 }
 
 .corp-card:hover .corp-card-number {
-    font-size: 24px;
     color: #4b6205;
     opacity: 0.65;
 }
@@ -1006,6 +997,16 @@
     pointer-events: all;
 }
 
+/* Tap-to-open behaviour for touch / mobile devices, controlled via JS class */
+.design-section.ds-popup-open .ds-hover-hint {
+    opacity: 0;
+}
+
+.design-section.ds-popup-open .ds-popup-overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
 .ds-box {
     flex: 1;
     height: 100%;
@@ -1033,12 +1034,12 @@
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
-    /* flex-direction: column; */
     align-items: center;
     justify-content: center;
     padding: 70px 0 50px;
     position: relative;
     z-index: 2;
+    overflow: hidden;
 }
 
 .Sustainability-Box-Container::before {
@@ -1063,7 +1064,6 @@
 
 .sbs-title-line {
     position: absolute;
-    /* top: 10px; */
     bottom: 37%;
     left: 21%;
     z-index: 1;
@@ -1076,20 +1076,17 @@
 }
 
 /* ============================================================
-   DECORATIVE LINE — below "Sustainability Product" title
-   ============================================================ */
-
-
-/* ============================================================
    OUTER + CAROUSEL
    ============================================================ */
 
 .sbs-outer {
     width: 100%;
+    max-width: 100%;
     margin: 0 auto;
     position: relative;
     z-index: 1;
     padding: 10px;
+    overflow: hidden;
 }
 
 .sbs-carousel-wrap {
@@ -1449,7 +1446,6 @@
 }
 
 .sbs-nav-row {
-    border: 1px solid;
     display: flex;
     align-items: center;
     gap: 22px;
@@ -1684,7 +1680,6 @@
         height: 420px;
     }
 
-    /* always-open responsive */
     .corp-card--always-open {
         width: 255px;
         height: 400px;
@@ -1773,17 +1768,9 @@
         height: auto;
     }
 
-    .Believe-main-Section-1 {
-        height: 280px;
-    }
-
     .Believe-main-Section-3 {
         height: auto;
         min-height: 280px;
-    }
-
-    .Believe-main-Section-2 {
-        height: 120px;
     }
 
     .Believe-main-Section-4 {
@@ -1815,10 +1802,6 @@
         font-size: 65px;
     }
 }
-
-/* ============================================================
-   RESPONSIVE — MOBILE (max-width: 768px)
-   ============================================================ */
 
 @media (max-width: 768px) {
 
@@ -1875,7 +1858,7 @@
 
     .Believe-main-Section-title {
         font-size: 20px;
-        padding: 60px 16px 12px;
+        padding: 0px 16px 2px;
         line-height: 28px;
     }
 
@@ -1887,7 +1870,12 @@
     }
 
     .Believe-main-Section-btn {
-        padding: 16px;
+        padding: 14px;
+    }
+
+    .download-btn {
+        width: 100%;
+        justify-content: center;
     }
 
     .download-btn-text {
@@ -1944,12 +1932,16 @@
     }
 
     .Believe-main-Section-2 {
-        height: 100px;
-        padding: 10px;
+        height: 200px;
+        padding: 14px;
+    }
+
+    .Believe-main-Section-3 {
+        padding-bottom: 0px;
     }
 
     .Corporate {
-        padding: 40px 0 60px;
+        padding: 20px 0 60px;
         min-height: unset;
     }
 
@@ -1973,6 +1965,8 @@
 
     .Corporate-Box-des {
         font-size: 13px;
+        text-align: justify;
+        max-width: 100%;
     }
 
     .Corp-cards-row {
@@ -1991,13 +1985,12 @@
     .corp-card:hover,
     .corp-card--featured:hover {
         width: calc(50% - 5px) !important;
-        height: 280px !important;
+        height: 480px !important;
     }
 
-    /* always-open mobile */
     .corp-card--always-open {
         width: calc(50% - 5px) !important;
-        height: 280px !important;
+        height: 480px !important;
         border-radius: 16px;
         flex-shrink: 1;
     }
@@ -2007,12 +2000,17 @@
         height: 280px !important;
     }
 
+    .corp-card--always-open .corp-card-img {
+        height: 58%;
+        opacity: 1;
+    }
+
     .corp-card-number {
         font-size: 30px;
     }
 
     .corp-card:hover .corp-card-number {
-        font-size: 18px;
+        font-size: 30px;
     }
 
     .Corporate-right {
@@ -2036,12 +2034,12 @@
 
     .Floating-info-card .corp-card--always-open {
         width: 100% !important;
-        height: 280px !important;
+        height: 580px !important;
     }
 
     .Floating-info-card .corp-card--always-open:hover {
         width: 100% !important;
-        height: 280px !important;
+        height: 580px !important;
     }
 
     .Photo-collage {
@@ -2117,8 +2115,14 @@
         gap: 12px;
     }
 
+    .ds-hover-hint {
+        display: flex;
+    }
+
     .Sustainability-Box-Container {
         padding: 40px 0 30px;
+        display: flex;
+        flex-flow: column;
     }
 
     .Sustainability-Product-title {
@@ -2250,23 +2254,42 @@
     }
 }
 
-/* ============================================================
-   RESPONSIVE — SMALL MOBILE (max-width: 480px)
-   ============================================================ */
-
 @media (max-width: 480px) {
 
     .Believe-Section {
         margin: 8px;
     }
 
+    .Believe-main-Section-2 {
+        height: 157px;
+        padding: 20px;
+    }
+
+    .Believe-main-Section-4  {
+        padding: 13px;
+    }
+
+    .Believe-main-Section-list ul {
+       padding: 14px 12px;
+    }
+
+    .Believe-main-Section-1 {
+        height: 248px;
+        min-height: unset;
+    }
+
+    .Corporate {
+        padding: 20px 0 60px;
+        min-height: unset;
+    }
+
     .Believe {
-        padding: 10px 8px;
+        padding: 30px 8px;
     }
 
     .Believe-main-Section-title {
-        font-size: 18px;
-        padding: 50px 12px 10px;
+        font-size: 15px;
+        padding: 0px 12px 0px;
         line-height: 26px;
     }
 
@@ -2276,7 +2299,7 @@
     }
 
     .Compact-title {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .Compact-subtitle {
@@ -2303,24 +2326,24 @@
     .corp-card:hover,
     .corp-card--featured:hover {
         width: 100% !important;
-        height: 280px !important;
+        height: 480px !important;
     }
 
-    /* always-open small mobile */
     .corp-card--always-open {
         width: 100% !important;
-        height: 260px !important;
+        height: 460px !important;
+        padding-bottom: 30px;
         border-radius: 16px;
         flex-shrink: 1;
     }
 
     .corp-card--always-open:hover {
         width: 100% !important;
-        height: 260px !important;
+        height: 460px !important;
     }
 
     .Floating-info-card .corp-card--always-open {
-        height: 260px !important;
+        height: 460px !important;
         border-radius: 16px;
     }
 
@@ -2329,7 +2352,7 @@
     }
 
     .Corporate-Box-title {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .Corporate-Box-Subtitle {
@@ -2345,7 +2368,7 @@
     }
 
     .Sustainability-Product-title {
-        font-size: 30px;
+        font-size: 25px;
     }
 
     .sbs-title-line {

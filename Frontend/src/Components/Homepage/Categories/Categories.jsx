@@ -43,7 +43,7 @@ function activeDot(idx) {
 
 export default function Categories() {
     const navigate = useNavigate();
-
+ 
     const wrapperRef = useRef(null);
     const autoplayRef = useRef(null);
     const isJumping = useRef(false);

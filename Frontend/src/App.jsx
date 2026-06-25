@@ -17,7 +17,9 @@ import Homepage from "./Components/Homepage/Home";
 import HeaderNew from "./Components/HeaderNew/Header";
 import NavbarNew from "./Components/NavbarNew/Navbar";
 import PopupForm from "./Components/Pages/PopupForm/PopupForm";
-import { CartProvider } from "./Components/Pages/Cartcontext/Cartcontext"; // ← add this
+import { CartProvider } from "./Components/Pages/Cartcontext/Cartcontext";
+
+import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 
 function App() {
   AOS.init({
@@ -28,10 +30,13 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <CartProvider>  {/* ← wrap everything inside BrowserRouter */}
+        <CartProvider>
           <HeaderNew />
           <NavbarNew />
           <PopupForm />
+
+          <ScrollToTop />
+
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/about" element={<About />} />
@@ -48,8 +53,9 @@ function App() {
             <Route path="/sustainability" element={<Sustainability />} />
             <Route path="/global-Presence" element={<GlobalPresence />} />
           </Routes>
+
           <Footer />
-        </CartProvider>  {/* ← close here */}
+        </CartProvider>
       </BrowserRouter>
     </>
   );

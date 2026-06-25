@@ -108,6 +108,7 @@ exports.addProduct = async (req, res) => {
             color,
             colorName,
             baseVariantName,
+            iconNames,
             Flammable,
             resistant,
             QUV,
@@ -115,10 +116,17 @@ exports.addProduct = async (req, res) => {
             Abrasion,
             AntiMicrobial,
             PinkStain,
+            Antiflammable,
+            Cold,
+            QUVResistant,
+            Weath,
+            Wyzenback,
+            SafeAnti,
+            SafePink,
             variantNames,
             variantColors,
             variantColorNames,
-            variantGrain
+            variantGrain,
         } = req.body;
 
         const images = req.files?.images || [];
@@ -156,6 +164,15 @@ exports.addProduct = async (req, res) => {
         const swatchPaths = swatches.map(f => f.path);
         const pdfPath = pdfFile ? pdfFile.path : null;
 
+        // ── Parse iconNames ──
+        let parsedIconNames = [];
+        if (iconNames) {
+            try { parsedIconNames = JSON.parse(iconNames); }
+            catch { parsedIconNames = []; }
+        }
+        // Ensure same length as iconPaths, fill empty strings if needed
+        while (parsedIconNames.length < iconPaths.length) parsedIconNames.push('');
+
         // ── Variants ──
         let variants = [];
         if (variantNames) {
@@ -176,7 +193,6 @@ exports.addProduct = async (req, res) => {
                 catch { parsedVariantColors = []; }
             }
 
-            // Parse variantColorNames
             if (variantColorNames) {
                 try { parsedVariantColorNames = JSON.parse(variantColorNames); }
                 catch { parsedVariantColorNames = []; }
@@ -229,6 +245,7 @@ exports.addProduct = async (req, res) => {
             video: videoPath,
             pdf: pdfPath,
             icons: iconPaths,
+            iconNames: parsedIconNames,
             swatches: swatchPaths,
             variants: variants,
             Flammable: Flammable || '',
@@ -238,6 +255,13 @@ exports.addProduct = async (req, res) => {
             Abrasion: Abrasion || '',
             AntiMicrobial: AntiMicrobial || '',
             PinkStain: PinkStain || '',
+            Antiflammable: Antiflammable || '',
+            Cold: Cold || '',
+            QUVResistant: QUVResistant || '',
+            Weath: Weath || '',
+            Wyzenback: Wyzenback || '',
+            SafeAnti: SafeAnti || '',
+            SafePink: SafePink || '',
         });
 
         const savedProduct = await newProduct.save();
@@ -276,10 +300,11 @@ exports.updateProduct = async (req, res) => {
             category,
             description,
             color,
-            colorName, 
+            colorName,
             baseVariantName,
             imageOrder,
             iconOrder,
+            iconNames,
             swatchOrder,
             variantNames,
             variantColors,
@@ -292,7 +317,14 @@ exports.updateProduct = async (req, res) => {
             Weatherometer,
             Abrasion,
             AntiMicrobial,
-            PinkStain
+            PinkStain,
+            Antiflammable,
+            Cold,
+            QUVResistant,
+            Weath,
+            Wyzenback,
+            SafeAnti,
+            SafePink,
         } = req.body;
 
         const newImageFiles = req.files?.images || [];
@@ -334,7 +366,6 @@ exports.updateProduct = async (req, res) => {
                 catch { parsedVariantColors = []; }
             }
 
-            // Parse variantColorNames
             if (variantColorNames) {
                 try { parsedVariantColorNames = JSON.parse(variantColorNames); }
                 catch { parsedVariantColorNames = []; }
@@ -375,7 +406,6 @@ exports.updateProduct = async (req, res) => {
                     });
                 }
 
-                // ── Resolve color ──
                 let resolvedVariantColor = '';
                 if (parsedVariantColors[i] !== undefined && parsedVariantColors[i] !== null) {
                     resolvedVariantColor = parsedVariantColors[i].trim();
@@ -383,7 +413,6 @@ exports.updateProduct = async (req, res) => {
                     resolvedVariantColor = product.variants[i].color || '';
                 }
 
-                // Resolve colorName
                 let resolvedVariantColorName = '';
                 if (parsedVariantColorNames[i] !== undefined && parsedVariantColorNames[i] !== null) {
                     resolvedVariantColorName = parsedVariantColorNames[i].trim();
@@ -391,7 +420,6 @@ exports.updateProduct = async (req, res) => {
                     resolvedVariantColorName = product.variants[i].colorName || '';
                 }
 
-                // ── Resolve grain ──
                 let resolvedVariantGrain = '';
                 if (parsedVariantGrains[i] !== undefined && parsedVariantGrains[i] !== null) {
                     resolvedVariantGrain = parsedVariantGrains[i].trim();
@@ -454,7 +482,7 @@ exports.updateProduct = async (req, res) => {
             .forEach(p => deleteFile(p));
 
         // ──────────────────────────────────────
-        // Handle ICONS
+        // Handle ICONS + iconNames
         // ──────────────────────────────────────
         let parsedIconOrder = [];
         if (iconOrder) {
@@ -462,22 +490,38 @@ exports.updateProduct = async (req, res) => {
             catch (e) { console.error('Error parsing iconOrder:', e); }
         }
 
+        // Parse iconNames sent from frontend (parallel to final icon order)
+        let parsedIconNames = [];
+        if (iconNames) {
+            try { parsedIconNames = JSON.parse(iconNames); }
+            catch { parsedIconNames = []; }
+        }
+
         let finalIconPaths = [];
+        let finalIconNames = [];
         let newIconFileIndex = 0;
 
         if (parsedIconOrder.length > 0) {
-            parsedIconOrder.forEach(item => {
+            parsedIconOrder.forEach((item, idx) => {
                 if (item.startsWith('NEW_ICON_')) {
                     const newFile = newIconFiles[newIconFileIndex++];
-                    if (newFile) finalIconPaths.push(newFile.path);
+                    if (newFile) {
+                        finalIconPaths.push(newFile.path);
+                        finalIconNames.push(parsedIconNames[idx] || '');
+                    }
                 } else {
                     finalIconPaths.push(item);
+                    finalIconNames.push(parsedIconNames[idx] || '');
                 }
             });
         } else if (newIconFiles.length > 0) {
             finalIconPaths = newIconFiles.map(f => f.path);
+            finalIconNames = newIconFiles.map((_, idx) => parsedIconNames[idx] || '');
         } else {
             finalIconPaths = product.icons || [];
+            finalIconNames = product.iconNames || [];
+            // Sync lengths
+            while (finalIconNames.length < finalIconPaths.length) finalIconNames.push('');
         }
 
         (product.icons || [])
@@ -568,6 +612,7 @@ exports.updateProduct = async (req, res) => {
         product.video = finalVideoPath;
         product.pdf = finalPdfPath;
         product.icons = finalIconPaths;
+        product.iconNames = finalIconNames;
         product.swatches = finalSwatchPaths;
 
         product.variants = finalVariants.length > 0 ? finalVariants : product.variants;
@@ -575,8 +620,10 @@ exports.updateProduct = async (req, res) => {
         product.markModified('variants');
         product.markModified('image');
         product.markModified('icons');
+        product.markModified('iconNames');
         product.markModified('swatches');
 
+        // Original properties
         product.Flammable = Flammable ?? product.Flammable;
         product.resistant = resistant ?? product.resistant;
         product.QUV = QUV ?? product.QUV;
@@ -584,6 +631,15 @@ exports.updateProduct = async (req, res) => {
         product.Abrasion = Abrasion ?? product.Abrasion;
         product.AntiMicrobial = AntiMicrobial ?? product.AntiMicrobial;
         product.PinkStain = PinkStain ?? product.PinkStain;
+
+        // New properties
+        product.Antiflammable = Antiflammable ?? product.Antiflammable;
+        product.Cold = Cold ?? product.Cold;
+        product.QUVResistant = QUVResistant ?? product.QUVResistant;
+        product.Weath = Weath ?? product.Weath;
+        product.Wyzenback = Wyzenback ?? product.Wyzenback;
+        product.SafeAnti = SafeAnti ?? product.SafeAnti;
+        product.SafePink = SafePink ?? product.SafePink;
 
         const updatedProduct = await product.save();
         console.log('Product updated:', updatedProduct._id);

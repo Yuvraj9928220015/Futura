@@ -3,6 +3,14 @@ import "./Preformance.css";
 
 export default function Performance() {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    // Resize listener
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const advantages = [
         { name: 'Animal Friendly', ultrafabrics: true, leather: false, pvc: true, silicone: true },
@@ -26,7 +34,8 @@ export default function Performance() {
             subtitle: "Advanced Coating Technology",
             description: "Performance Coated Fabrics",
             details: "Cutting-edge fabric technology designed for maximum durability and performance with superior quality standards.",
-            bgVideo: "Performance-Video.mp4"
+            bgVideo: "Performance-Video.mp4",
+            bgVideoMobile: "New-Data-9.mp4"
         }
     ];
 
@@ -34,21 +43,12 @@ export default function Performance() {
         const interval = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % slides.length);
         }, 5000);
-
         return () => clearInterval(interval);
     }, [slides.length]);
 
-    const goToSlide = (index) => {
-        setCurrentSlide(index);
-    };
-
-    const goToPrevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    };
-
-    const goToNextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % slides.length);
-    };
+    const goToSlide = (index) => setCurrentSlide(index);
+    const goToPrevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    const goToNextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
 
     return (
         <>
@@ -58,38 +58,45 @@ export default function Performance() {
                     <div className="performance-Banner-container-line"></div>
                     <div className="performance-container">
                         <div className="slider-wrapper">
-                            {slides.map((slide, index) => (
-                                <div
-                                    key={index}
-                                    className={`performance-slide ${index === currentSlide ? "active" : ""}`}
-                                >
-                                    {/* Background Video */}
-                                    <video
-                                        className="slide-video"
-                                        src={slide.bgVideo}
-                                        autoPlay
-                                        muted
-                                        loop
-                                        playsInline
-                                    />
+                            {slides.map((slide, index) => {
+                                const videoSrc = isMobile
+                                    ? (slide.bgVideoMobile || slide.bgVideo)
+                                    : slide.bgVideo;
 
-                                    {/* Content */}
-                                    <div className="slide-content">
-                                        <div className="content-wrapper">
-                                            <h1 className="main-title">{slide.title}</h1>
-                                            <div className="subtitle-section-line"></div>
-                                            <div className="subtitle-section">
-                                                <div className="subtitle-with-dot">
-                                                    <div className="subtitle">
-                                                        <li>{slide.subtitle}</li>
+                                return (
+                                    <div
+                                        key={index}
+                                        className={`performance-slide ${index === currentSlide ? "active" : ""}`}
+                                    >
+                                        {/* Background Video — key se re-mount hoga jab src change ho */}
+                                        <video
+                                            key={videoSrc}
+                                            className="slide-video"
+                                            src={videoSrc}
+                                            autoPlay
+                                            muted
+                                            loop
+                                            playsInline
+                                        />
+
+                                        {/* Content */}
+                                        <div className="slide-content">
+                                            <div className="content-wrapper">
+                                                <h1 className="main-title">{slide.title}</h1>
+                                                <div className="subtitle-section-line"></div>
+                                                <div className="subtitle-section">
+                                                    <div className="subtitle-with-dot">
+                                                        <div className="subtitle">
+                                                            <li>{slide.subtitle}</li>
+                                                        </div>
+                                                        <p className="details">{slide.details}</p>
                                                     </div>
-                                                    <p className="details">{slide.details}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -279,7 +286,7 @@ export default function Performance() {
                                     <div className="resistance-container-box">
                                         <div className="resistance-container-box-icon">
                                             <div className="resistance-container-box-icon-title">Pink Stain</div>
-                                            <div> <img src="/7.png" alt="" /></div>
+                                            <div><img src="/7.png" alt="" /></div>
                                         </div>
                                         <div className="resistance-container-box-icon-des">
                                             We provides with pink stain free vinyl. A common test method used to assess materials against pink staining,
@@ -309,14 +316,14 @@ export default function Performance() {
                                         </div>
                                         <div className="protective-main-box-2">
                                             <div className="protective-main-box-content">
-                                                <div className="protective-main-box-title"><span>01</span> Compact PVC Layer </div>
+                                                <div className="protective-main-box-title"><span>01</span> Compact PVC Layer</div>
                                                 <div className="protective-main-box-des">
                                                     A smooth, protective PVC surface engineered to resist stains, scuffs, and everyday environmental impact while maintaining a premium finish.
                                                 </div>
                                                 <hr />
                                             </div>
                                             <div className="protective-main-box-content">
-                                                <div className="protective-main-box-title"><span>02</span> Foam Layer </div>
+                                                <div className="protective-main-box-title"><span>02</span> Foam Layer</div>
                                                 <div className="protective-main-box-des">
                                                     A flexible, cushioned layer that adds softness, enhances comfort, and improves the overall feel of the material during use.
                                                 </div>
@@ -342,17 +349,16 @@ export default function Performance() {
                             </div>
                             <div className="col-lg-5 col-md-12">
                                 <div className="protective-box-2">
-                                    <div className="protective-box-2-title"> How Do We Do It? </div>
+                                    <div className="protective-box-2-title">How Do We Do It?</div>
                                     <div className="protective-box-2-des">
                                         <p>
                                             Our production method combines advanced technology with responsible manufacturing to create coated fabrics that perform consistently
-                                            across applications. Each layer is purpose-built to deliver specific benefits, from surface protection to comfort and structural
-                                            strength.
+                                            across applications. Each layer is purpose-built to deliver specific benefits, from surface protection to comfort and structural strength.
                                         </p>
                                         <p>
                                             With rigorous testing and strict quality checks, we ensure every batch meets the highest standards. Our commitment to continuous
                                             improvement drives innovation in both processes and product performance. As an alternative to traditional leather, our materials
-                                            are animal-friendly and manufactured without harmful chemicals
+                                            are animal-friendly and manufactured without harmful chemicals.
                                         </p>
                                         <p>
                                             Compared to conventional PVC and silicone options, they offer improved crack resistance and enhanced production efficiency.

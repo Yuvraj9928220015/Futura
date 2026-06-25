@@ -44,6 +44,7 @@ export default function Sustainability() {
     const [current, setCurrent] = useState(0);
     const [panelOpen, setPanelOpen] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [designPopupOpen, setDesignPopupOpen] = useState(false);
     const isHovering = useRef(false);
 
     const corporateRef = useRef(null);
@@ -301,7 +302,7 @@ export default function Sustainability() {
                                         <img src="/0003.png" alt="Collage Main" />
                                     </div>
                                     <div className="Photo-collage-2">
-                                        <img src="/New-image-9.png" alt="" />
+                                        <img src="/00001.png" alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -332,89 +333,105 @@ export default function Sustainability() {
                                             pos === -1 ? 'left' : 'hidden';
 
                                 return (
-                                    <>
-                                        <div className="sbs-item-container" key={s.id}>
+                                    <div className="sbs-item-container" key={s.id}>
+                                        <div
+                                            className={`sbs-item sbs-item--${posKey}`}
+                                            onClick={() => {
+                                                if (!isActive) {
+                                                    goTo(i);
+                                                } else if (isMobile) {
+                                                    setPanelOpen(p => !p);
+                                                }
+                                            }}
+                                            onMouseEnter={() => {
+                                                if (isActive && !isMobile) {
+                                                    isHovering.current = true;
+                                                    setPanelOpen(true);
+                                                }
+                                            }}
+                                            onMouseLeave={() => {
+                                                if (isActive && !isMobile) {
+                                                    isHovering.current = false;
+                                                    setPanelOpen(false);
+                                                }
+                                            }}
+                                        >
+                                            {/* Background image */}
                                             <div
-                                                className={`sbs-item sbs-item--${posKey}`}
-                                                onClick={() => {
-                                                    if (!isActive) {
-                                                        goTo(i);
-                                                    } else if (isMobile) {
-                                                        setPanelOpen(p => !p);
-                                                    }
-                                                }}
-                                                onMouseEnter={() => {
-                                                    if (isActive && !isMobile) {
-                                                        isHovering.current = true;
-                                                        setPanelOpen(true);
-                                                    }
-                                                }}
-                                                onMouseLeave={() => {
-                                                    if (isActive && !isMobile) {
-                                                        isHovering.current = false;
-                                                        setPanelOpen(false);
-                                                    }
-                                                }}
-                                            >
-                                                {/* Background image */}
-                                                <div
-                                                    className="sbs-bg"
-                                                    style={{ backgroundImage: `url(${s.image})` }}
-                                                ></div>
-                                                <div className="sbs-bg-dark"></div>
+                                                className="sbs-bg"
+                                                style={{ backgroundImage: `url(${s.image})` }}
+                                            ></div>
+                                            <div className="sbs-bg-dark"></div>
 
-                                                {/* Peek arrow hint */}
-                                                {!isActive && (
-                                                    <div className={`sbs-peek-arrow sbs-peek-arrow--${posKey}`}>
-                                                        <span>{posKey === 'right' ? '›' : '‹'}</span>
+                                            {/* Peek arrow hint */}
+                                            {!isActive && (
+                                                <div className={`sbs-peek-arrow sbs-peek-arrow--${posKey}`}>
+                                                    <span>{posKey === 'right' ? '›' : '‹'}</span>
+                                                </div>
+                                            )}
+
+                                            {/* Left Content */}
+                                            <div className={`sbs-left${isActive && panelOpen ? ' sbs-left-shrink' : ''}`}>
+                                                <h2 className="sbs-brand">{s.brand}</h2>
+                                                <p className="sbs-material">{s.material}</p>
+                                                {isActive && isMobile && (
+                                                    <div className="sbs-tap-hint">
+                                                        <span className="sbs-hint-dot"></span>
+                                                        <span>{panelOpen ? 'Tap to close' : 'Tap to explore'}</span>
                                                     </div>
                                                 )}
+                                            </div>
 
-                                                {/* Left Content */}
-                                                <div className={`sbs-left${isActive && panelOpen ? ' sbs-left-shrink' : ''}`}>
-                                                    <h2 className="sbs-brand">{s.brand}</h2>
-                                                    <p className="sbs-material">{s.material}</p>
-                                                    {isActive && isMobile && (
-                                                        <div className="sbs-tap-hint">
-                                                            <span className="sbs-hint-dot"></span>
-                                                            <span>{panelOpen ? 'Tap to close' : 'Tap to explore'}</span>
-                                                        </div>
-                                                    )}
-                                                </div>
+                                            {/* Right Detail Panel */}
+                                            <div className={`sbs-panel${isActive && panelOpen ? ' sbs-panel-open' : ''}`}>
+                                                <div className="sbs-panel-scroll">
+                                                    <div className="sbs-panel-brand">{s.brand}</div>
+                                                    <div className="sbs-panel-mat">{s.material}</div>
+                                                    <div className="sbs-panel-line"></div>
+                                                    <p className="sbs-panel-sub">{s.subtitle}</p>
 
-                                                {/* Right Detail Panel */}
-                                                <div className={`sbs-panel${isActive && panelOpen ? ' sbs-panel-open' : ''}`}>
-                                                    <div className="sbs-panel-scroll">
-                                                        <div className="sbs-panel-brand">{s.brand}</div>
-                                                        <div className="sbs-panel-mat">{s.material}</div>
-                                                        <div className="sbs-panel-line"></div>
-                                                        <p className="sbs-panel-sub">{s.subtitle}</p>
-
-                                                        <div className="sbs-kh-row">
-                                                            <span className="sbs-kh-dash"></span>
-                                                            <span className="sbs-kh-text">Key Highlights</span>
-                                                            <span className="sbs-kh-dash"></span>
-                                                        </div>
-
-                                                        <ul className="sbs-list">
-                                                            {s.highlights.map((pt, hi) => (
-                                                                <li
-                                                                    key={hi}
-                                                                    className={isActive && panelOpen ? 'sbs-list-item-in' : ''}
-                                                                    style={{ animationDelay: `${0.06 * hi + 0.2}s` }}
-                                                                >
-                                                                    <span className="sbs-dot-bullet"></span>
-                                                                    <span>{pt}</span>
-                                                                </li>
-                                                            ))}
-                                                        </ul>
+                                                    <div className="sbs-kh-row">
+                                                        <span className="sbs-kh-dash"></span>
+                                                        <span className="sbs-kh-text">Key Highlights</span>
+                                                        <span className="sbs-kh-dash"></span>
                                                     </div>
+
+                                                    <ul className="sbs-list">
+                                                        {s.highlights.map((pt, hi) => (
+                                                            <li
+                                                                key={hi}
+                                                                className={isActive && panelOpen ? 'sbs-list-item-in' : ''}
+                                                                style={{ animationDelay: `${0.06 * hi + 0.2}s` }}
+                                                            >
+                                                                <span className="sbs-dot-bullet"></span>
+                                                                <span>{pt}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
-                                    </>
+                                    </div>
                                 );
                             })}
+                        </div>
+
+                        {/* ---- Dots navigation (also doubles as carousel position indicator) ---- */}
+                        <div className="sbs-nav-row">
+                            <div className="sbs-dots">
+                                {slides.map((s, i) => (
+                                    <span
+                                        key={s.id}
+                                        className={`sbs-dot${i === current ? ' sbs-dot-on' : ''}`}
+                                        onClick={() => goTo(i)}
+                                    ></span>
+                                ))}
+                            </div>
+                            <div className="sbs-count">
+                                <span className="sbs-cur">{String(current + 1).padStart(2, '0')}</span>
+                                <span className="sbs-sep"> / </span>
+                                <span className="sbs-tot">{String(slides.length).padStart(2, '0')}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -422,7 +439,13 @@ export default function Sustainability() {
 
 
                 {/* ===== DESIGN SECTION ===== */}
-                <div className="design-section" ref={designSectionRef}>
+                <div
+                    className={`design-section${designPopupOpen ? ' ds-popup-open' : ''}`}
+                    ref={designSectionRef}
+                    onClick={() => {
+                        if (isMobile) setDesignPopupOpen((p) => !p);
+                    }}
+                >
                     <div className="ds-bg"></div>
                     <div className="ds-bg-img"></div>
                     <div className="ds-overlay"></div>
@@ -444,6 +467,13 @@ export default function Sustainability() {
                             elevate your experience.
                         </p>
                     </div>
+
+                    {isMobile && (
+                        <div className="ds-hover-hint">
+                            <span className="ds-hover-dot"></span>
+                            <span>{designPopupOpen ? 'Tap to close' : 'Tap to view details'}</span>
+                        </div>
+                    )}
                 </div>
                 {/* ===== END DESIGN SECTION ===== */}
 

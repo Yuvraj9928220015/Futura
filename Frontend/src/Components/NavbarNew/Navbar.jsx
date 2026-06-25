@@ -235,7 +235,7 @@ const Navbar = () => {
 
                     {/* ── LOGO ── */}
                     <a href="/" className="nb__logo" aria-label="Futura Home">
-                        <img src="/Futura-logo.png" alt="Futura" />
+                        <img src="/Futura-Logo-Final.png" alt="Futura" />
                     </a>
 
                     {/* ── DESKTOP NAV ── */}
@@ -244,7 +244,6 @@ const Navbar = () => {
                             <a href="/about" className="nb__link">About Us</a>
                         </li>
 
-                        {/* ── INDUSTRIAL SEGMENTS ── */}
                         <li
                             className="nb__dropdown-wrap"
                             onMouseEnter={openSegments}

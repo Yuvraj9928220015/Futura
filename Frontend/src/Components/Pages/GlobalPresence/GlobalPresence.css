@@ -5,23 +5,6 @@
     background-color: #F5F3EE;
 }
 
-
-.About-Banner-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* background: linear-gradient(to bottom, #0000004d, #00000080); */
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    /* align-items: center; */
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
-
 .About-title {
     font-size: 3.5rem;
     letter-spacing: 1px;
@@ -424,7 +407,7 @@
 
 @media (max-width: 992px) {
     .About-Banner {
-        height: 35vh;
+        height: 60vh;
         min-height: 300px;
     }
 
@@ -474,7 +457,7 @@
     }
 
     .About-Banner {
-        height: 30vh;
+        height: 3vh;
         min-height: 400px;
     }
 
@@ -568,16 +551,16 @@
 
 @media (max-width: 576px) {
     .About-Banner {
-        height: 28vh;
+        height: 1vh;
         min-height: 340px;
     }
 
     .About-title {
-        font-size: 2rem;
+        font-size: 27px;
     }
 
     .About-des {
-        font-size: 1rem;
+        font-size: 15px;
     }
 
     .GlobalPresence-title {
@@ -665,8 +648,6 @@
         position: absolute;
     }
 }
-
-
 
 
 /* Collection Section */

@@ -20,10 +20,10 @@ router.post('/submit', submitPopup);
 // ADMIN
 // ─────────────────────────────────────────────
 
-// GET  /api/popup/all         →  Sabhi entries
+// GET  /api/popup/all 
 router.get('/all', getAllPopups);
 
-// GET  /api/popup/:id         →  Single entry
+// GET  /api/popup/
 router.get('/:id', getPopupById);
 
 // PATCH /api/popup/:id/status →  Status update

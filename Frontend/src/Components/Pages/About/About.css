@@ -109,7 +109,8 @@
     font-size: 24px;
     border-radius: 50px;
     width: 20%;
-    padding: 5px 10px;
+    margin: 33px 0px;
+    padding: 30px 26px;
 }
 
 .Futura-Textiles-image img {
@@ -126,7 +127,7 @@
 
 .Futura-Textiles-container {
     border: 1px solid #ebebebc5;
-    padding: 64px 57px;
+    padding: 98px 57px;
     border-radius: 30px 0px 0px 30px;
 }
 
@@ -142,6 +143,7 @@
     padding-top: 37px;
     font-size: 18px;
     letter-spacing: 1px;
+    line-height: 30px;
     text-align: justify;
     width: 45%;
     font-weight: 300;
@@ -167,7 +169,7 @@
     background: transparent;
     color: #333;
     border: 2px solid #ddd;
-    padding: 8px 20px;
+    padding: 20px 20px;
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
@@ -228,12 +230,14 @@
 
 .Zero-Market-content-des {
     font-size: 38px;
+    padding-top: 46px;
     color: #494949;
 }
 
 .Zero-Market-content-des span {
     color: #050505;
     font-weight: 600;
+
 }
 
 .Futura-Line-main-container {
@@ -696,7 +700,7 @@
     }
 
     .fmq-track {
-        gap: 20px;
+        gap: 23px;
     }
 
     .fmq-text {
@@ -712,7 +716,7 @@
         padding: 44px 12px 14px;
     }
 
-    /* ✅ Certification: Upar-Niche (column) */
+    /* Certification: Upar-Niche (column) */
     .About-Certification-container {
         flex-direction: column;
         min-height: auto;
@@ -776,7 +780,9 @@
     .Golbal-Leaders-des {
         font-size: 18px;
         width: 50%;
-        margin: 10px auto;
+        margin: 30px auto;
+        padding: 25px 0px;
+        text-align: center;
     }
 
     .Futura-Textiles-container {
@@ -818,7 +824,7 @@
     }
 
     .fmq-track {
-        gap: 16px;
+        gap: 25px;
     }
 
     .fmq-text {
@@ -838,7 +844,7 @@
         font-size: 42px;
     }
 
-    /* ✅ Certification: Upar-Niche (column) */
+    /* Certification: Upar-Niche (column) */
     .About-Certification-container {
         flex-direction: column;
         min-height: auto;
@@ -877,12 +883,30 @@
     .Certification-content-description {
         font-size: 15px;
     }
+
+    .journey-label-fixed {
+        flex-shrink: 0;
+        display: flex;
+        align-items: flex-start;
+        height: 70%;
+        background-color: #b9b9b99f;
+        padding-top: 12px;
+    }
 }
 
 /* ── Phone ≤ 599px ── */
 @media (max-width: 599px) {
     .About-Us-Box {
         min-height: auto;
+    }
+
+    .journey-label-fixed {
+        flex-shrink: 0;
+        display: flex;
+        align-items: flex-start;
+        height: 70%;
+        background-color: #b9b9b99f;
+        padding-top: 6px;
     }
 
     .About-Us-image img {
@@ -907,14 +931,21 @@
     }
 
     .Golbal-Leaders-des {
-        font-size: 16px;
+        font-size: 19px;
         width: 90%;
-        margin: 10px auto;
+        margin: 28px auto;
         text-align: center;
+        padding: 27px 0px;
     }
 
     .Futura-Textiles-image {
         padding: 0 15px;
+    }
+
+    .Manufacturer {
+        width: 100%;
+        padding-bottom: 10px;
+        font-family: Arial, sans-serif;
     }
 
     .Futura-Textiles-image img {
@@ -962,6 +993,7 @@
 
     .Zero-Market-content-des {
         font-size: 18px;
+        padding-top: 25px;
     }
 
     .Futura-Line-main-container {
@@ -979,11 +1011,11 @@
     }
 
     .frame-marquee-section {
-        padding: 30px 0 50px;
+        padding: 0px;
     }
 
     .fmq-track {
-        gap: 12px;
+        gap: 30px;
         padding: 12px 0 20px;
     }
 
@@ -1001,9 +1033,14 @@
     }
 
     .Manfacturer-Box-1 {
-        min-height: 250px;
-        padding-bottom: 15px;
-        padding-right: 20px;
+        min-height: 200px;
+        padding-bottom: 0px;
+        padding-right: 60px;
+    }
+
+    .Manfacturer-Box-1-line-1 {
+        width: 14px;
+        height: 80px;
     }
 
     .Manfacturer-Box-1-title {
@@ -1015,7 +1052,7 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding: 20px 15px;
+        padding: 10px 15px;
     }
 
     .Manfacturer-Box-1-line-2 {
@@ -1025,6 +1062,7 @@
     .Manfacturer-Box-1-des {
         font-size: 14px;
         max-width: 100%;
+        text-align: justify;
         padding: 0;
     }
 
@@ -1040,16 +1078,15 @@
 
     .tab-button {
         width: 100%;
-        padding: 15px 20px;
+        padding: 20px 20px;
         font-size: 16px;
         text-align: center;
     }
 
-    /* ✅ Certification: Upar-Niche (column) */
     .About-Certification-container {
         flex-direction: column;
         min-height: auto;
-        padding: 40px 0;
+        padding: 10px 0;
         background-size: cover;
         background-position: top center;
     }
@@ -1057,7 +1094,7 @@
     .About-Certification-content {
         width: 100%;
         min-height: auto;
-        padding: 35px 20px;
+        padding: 5px 20px;
     }
 
     .About-Certification-logo {
@@ -1067,20 +1104,21 @@
     }
 
     .Certification-content-title {
-        font-size: 32px;
-        flex-direction: column;
+        font-size: 25px;
         gap: 4px;
+        margin-bottom: 7px;
     }
 
     .Certification-content-description {
         font-size: 14px;
+        text-align: justify;
         line-height: 1.7;
     }
 
     .Certification-logos-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-        max-width: 320px;
+        max-width: 440px;
     }
 
     .Certification-logo-item {
@@ -1108,6 +1146,12 @@
         font-size: 22px;
     }
 
+    .Manfacturer-Box-1 {
+        min-height: 200px;
+        padding-bottom: 0px;
+        padding-right: 30px;
+    }
+
     .Journey-text-inline {
         font-size: 16px;
         padding: 14px 10px;
@@ -1124,7 +1168,7 @@
     }
 
     .About-Certification-content {
-        padding: 25px 15px;
+        padding: 5px 15px;
     }
 
     .About-Certification-logo {

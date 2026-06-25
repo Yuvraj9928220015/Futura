@@ -51,10 +51,6 @@
     transition: background 0.2s;
 }
 
-.country-select:hover {
-    background: rgba(0, 0, 0, 0.07);
-}
-
 .country-flag-img {
     width: 18px;
     height: 13px;
@@ -105,7 +101,15 @@
 }
 
 .Header-container-Box span a:hover {
-    color: #1e40af;
+    color: #103fd6;
+}
+
+.Header-container-title a:hover {
+    color: #103fd6;
+}
+
+.country-select:hover {
+    color: #103fd6;
 }
 
 .Header-container-Box span svg {

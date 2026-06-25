@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { TiSocialLinkedin } from "react-icons/ti";
 import "./PopupForm.css";
 
-// ─────────────────────────────────────────────
-// SVG Icons
-// ─────────────────────────────────────────────
 const MapPinIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
@@ -63,30 +60,24 @@ const ChatIcon = () => (
 );
 
 // ─────────────────────────────────────────────
-// API Base URL — .env se aata hai
-// .env mein add karo:  VITE_API_URL=http://localhost:8000
-// ─────────────────────────────────────────────
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.futuratextiles.in';
 
-// ─────────────────────────────────────────────
-// PopupForm Component
-// ─────────────────────────────────────────────
 const PopupForm = () => {
 
     const handleDownload = () => {
         const link = document.createElement("a");
-        link.href = "/Futura-New-45.png";
+        link.href = "/Contact Futura.png";
         link.download = "Contact Futura";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     };
 
-    const [isOpen, setIsOpen]         = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
-    const [isLoading, setIsLoading]   = useState(false);  // ✅ loading state
-    const [errorMsg, setErrorMsg]     = useState('');     // ✅ error state
-    const [submitted, setSubmitted]   = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+    const [submitted, setSubmitted] = useState(false);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -110,6 +101,29 @@ const PopupForm = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (isOpen) {
+            const scrollY = window.scrollY;
+
+            document.body.style.overflow = "hidden";
+            document.body.style.position = "fixed";
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.left = "0";
+            document.body.style.right = "0";
+            document.body.style.width = "100%";
+
+            return () => {
+                document.body.style.overflow = "";
+                document.body.style.position = "";
+                document.body.style.top = "";
+                document.body.style.left = "";
+                document.body.style.right = "";
+                document.body.style.width = "";
+                window.scrollTo(0, scrollY);
+            };
+        }
+    }, [isOpen]);
+
     const handleClose = () => {
         setIsOpen(false);
         setIsMinimized(true);
@@ -128,7 +142,7 @@ const PopupForm = () => {
         setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    // ✅ API call with proper error handling
+    // API call with proper error handling
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -152,7 +166,7 @@ const PopupForm = () => {
                 return;
             }
 
-            // ✅ Success
+            // Success
             setSubmitted(true);
             setTimeout(() => {
                 setIsOpen(false);
@@ -202,9 +216,6 @@ const PopupForm = () => {
                                         <p className="pf-info-sub">
                                             <span className="pf-label">Phone:</span> (877) 426-8177
                                         </p>
-                                        <p className="pf-info-sub">
-                                            <span className="pf-label">FAX:</span> (662) 932-8934
-                                        </p>
                                     </div>
                                 </div>
 
@@ -231,9 +242,7 @@ const PopupForm = () => {
                                 <div className="pf-socials-icon">
                                     <a href="#" className="pf-social-icon" aria-label="Facebook"><FacebookIcon /></a>
                                     <a href="#" className="pf-social-icon" aria-label="Instagram"><InstagramIcon /></a>
-                                    <a href="#" className="pf-social-icon" aria-label="Twitter"><TwitterIcon /></a>
-                                    <a href="#" className="pf-social-icon" aria-label="YouTube"><YoutubeIcon /></a>
-                                    <a href="#" className="pf-social-icon-2" aria-label="Linkedin"><TiSocialLinkedin /></a>
+                                    <a href="https://www.linkedin.com/company/futura-textiles/" className="pf-social-icon" aria-label="Linkedin"><TiSocialLinkedin /></a>
                                 </div>
                                 <div className="pf-socials-btn" onClick={handleDownload} style={{ cursor: "pointer" }}>
                                     <svg
@@ -263,7 +272,7 @@ const PopupForm = () => {
                             </p>
 
                             {submitted ? (
-                                // ✅ Success State
+                                //Success State
                                 <div className="pf-success">
                                     <div className="pf-success-icon">✓</div>
                                     <p>Thank you! We'll be in touch soon.</p>
@@ -335,12 +344,12 @@ const PopupForm = () => {
                                         />
                                     </div>
 
-                                    {/* ✅ Error Message */}
+                                    {/* Error Message */}
                                     {errorMsg && (
                                         <p className="pf-error">{errorMsg}</p>
                                     )}
 
-                                    {/* ✅ Submit Button with loading state */}
+                                    {/* Submit Button with loading state */}
                                     <button
                                         type="submit"
                                         className="pf-submit"

@@ -7,8 +7,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,   // aapki gmail
-        pass: process.env.EMAIL_PASS,   // Gmail App Password
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS,
     },
 });
 
@@ -88,10 +88,6 @@ const sendContactEmail = async ({ firstName, lastName, phone, emailAddress, mess
     await transporter.sendMail(mailOptions);
 };
 
-// ─────────────────────────────────────────────
-// @desc    Submit popup contact form (Public)
-// @route   POST /api/popup/submit
-// ─────────────────────────────────────────────
 const submitPopup = async (req, res) => {
     try {
         const { name, lastName, phone, emailAddress, message } = req.body;

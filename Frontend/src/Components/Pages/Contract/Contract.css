@@ -10,6 +10,13 @@
     overflow-x: hidden;
 }
 
+.About {
+    overflow: hidden;
+    line-height: 0;
+}
+
+
+
 /* Hero Banner */
 .About-Banner {
     position: relative;
@@ -39,26 +46,31 @@
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: end;
+    align-items: flex-end;
+    overflow: hidden;
+    justify-content: center;
     background: linear-gradient(to top,
             rgba(0, 0, 0, 0.85) 0%,
             rgba(0, 0, 0, 0.4) 60%,
             rgba(0, 0, 0, 0.1) 70%,
             transparent 100%);
+
 }
 
 .Contract-hero-content {
     text-align: center;
     color: white;
     max-width: 1000px;
-    padding: 100px 20px;
+    padding: 0 20px 25px 20px;
+    width: 100%;
     animation: fadeInUp 1s ease-out;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-bottom: 0;
 }
+
 
 .About-title {
     font-family: 'Gotu', sans-serif;
@@ -115,7 +127,7 @@
 
 
 .About-Section-Heading {
-   font-family: 'Gotu', sans-serif;
+    font-family: 'Gotu', sans-serif;
     margin-bottom: 25px;
     position: relative;
 }
@@ -263,7 +275,7 @@
 
 /* Product Ranges - EQUAL HEIGHT BOXES */
 .Overview {
-    padding: 80px 40px;
+    padding: 0px 40px;
 }
 
 .products-grid {
@@ -511,6 +523,7 @@
     .stats-section {
         padding-left: 20px;
         padding-right: 20px;
+        padding: 0;
     }
 
     .About-Banner {
@@ -519,7 +532,7 @@
     }
 
     .Contract-main-Box {
-        padding: 30px;
+        padding: 10px;
     }
 
     .Contract-title {
@@ -536,7 +549,7 @@
     }
 
     .Overview-Box-image {
-        height: 250px;
+        height: 280px;
     }
 
     .Overview-Box-content {
@@ -554,8 +567,21 @@
         gap: 20px;
     }
 
+    .section-subtitle {
+        margin-top: 0px;
+    }
+
     .Overview-Box-image {
-        height: 280px;
+        height: 320px;
+    }
+
+    .content-box {
+        padding: 0;
+    }
+    .About-Section-Heading {
+        font-size: 26px;
+        padding-top: 20px;
+        margin: 0px;
     }
 }
 
@@ -564,7 +590,9 @@
     .Product-Ranges-Section,
     .Overview,
     .stats-section {
-        padding: 60px 15px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding: 0;
     }
 
     .About-Banner {
@@ -573,11 +601,12 @@
     }
 
     .Contract-main-Box {
-        padding: 25px;
+        padding: 10px 5px;
     }
 
     .Contract-title {
-        font-size: 1.5rem;
+        font-size: 22px;
+        margin-bottom: 8px;
     }
 
     .featured-item {
@@ -590,7 +619,7 @@
     }
 
     .Overview-Box-image {
-        height: 250px;
+        height: 350px;
     }
 
     .stats-grid {
@@ -610,5 +639,9 @@
     .view-btn {
         padding: 10px 20px;
         font-size: 0.85rem;
+    }
+
+    .content-box {
+        padding: 0;
     }
 }
