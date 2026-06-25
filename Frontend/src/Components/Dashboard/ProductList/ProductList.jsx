@@ -80,6 +80,7 @@ function ProductList() {
         Wyzenback: '',
         SafeAnti: '',
         SafePink: '',
+        TurtleLife: '',
     };
 
     // ─── New Product State ───
@@ -439,6 +440,7 @@ function ProductList() {
             if (newProductFormData.Abrasion) formDataToSend.append('Abrasion', newProductFormData.Abrasion);
             if (newProductFormData.AntiMicrobial) formDataToSend.append('AntiMicrobial', newProductFormData.AntiMicrobial);
             if (newProductFormData.PinkStain) formDataToSend.append('PinkStain', newProductFormData.PinkStain);
+            if (newProductFormData.TurtleLife) formDataToSend.append('TurtleLife', newProductFormData.TurtleLife);
 
             // New properties
             if (newProductFormData.Antiflammable) formDataToSend.append('Antiflammable', newProductFormData.Antiflammable);
@@ -533,6 +535,7 @@ function ProductList() {
             Wyzenback: product.Wyzenback || '',
             SafeAnti: product.SafeAnti || '',
             SafePink: product.SafePink || '',
+            TurtleLife: product.TurtleLife || '',
         });
         setExistingImages(product.image || []);
         setExistingVideo(product.video || null);
@@ -914,6 +917,7 @@ function ProductList() {
             formDataToSend.append('Wyzenback', editProductFormData.Wyzenback);
             formDataToSend.append('SafeAnti', editProductFormData.SafeAnti);
             formDataToSend.append('SafePink', editProductFormData.SafePink);
+            formDataToSend.append('TurtleLife', editProductFormData.TurtleLife);
 
             // Images order
             const imageOrder = [];
@@ -1093,15 +1097,19 @@ function ProductList() {
                     <label>Wyzenback</label>
                     <input type="text" name="Wyzenback" value={formData.Wyzenback} onChange={onChange} />
                 </div>
-                <div className="form-group">
-                    <label>Safe Anti</label>
-                    <input type="text" name="SafeAnti" value={formData.SafeAnti} onChange={onChange} />
+                 <div className="form-group">
+                    <label>Turtle Life</label>
+                    <input type="text" name="TurtleLife" value={formData.TurtleLife} onChange={onChange} />
                 </div>
             </div>
             <div className="form-row">
                 <div className="form-group">
                     <label>Safe Pink</label>
                     <input type="text" name="SafePink" value={formData.SafePink} onChange={onChange} />
+                </div>
+                 <div className="form-group">
+                    <label>Safe Anti</label>
+                    <input type="text" name="SafeAnti" value={formData.SafeAnti} onChange={onChange} />
                 </div>
             </div>
         </div>
@@ -1295,7 +1303,7 @@ function ProductList() {
                                                         <i className="fas fa-file-pdf"></i> View / Download PDF
                                                     </a>
                                                 </div>
-                                            )}
+                                            )}TurtleLife
 
                                             <div className="product-specifications">
                                                 {product.Flammable && <p className="spec-item"><strong>Flammable:</strong> {product.Flammable}</p>}
@@ -1312,6 +1320,7 @@ function ProductList() {
                                                 {product.Wyzenback && <p className="spec-item"><strong>Wyzenback:</strong> {product.Wyzenback}</p>}
                                                 {product.SafeAnti && <p className="spec-item"><strong>Safe Anti:</strong> {product.SafeAnti}</p>}
                                                 {product.SafePink && <p className="spec-item"><strong>Safe Pink:</strong> {product.SafePink}</p>}
+                                                {product.TurtleLife && <p className="spec-item"><strong>Turtle Life:</strong> {product.TurtleLife}</p>}
                                             </div>
 
                                             <div className="product-card-actions">

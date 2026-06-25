@@ -313,7 +313,8 @@ const ProductDetail = () => {
         product?.AntiMicrobial ||
         product?.PinkStain ||
         product?.SafeAnti ||
-        product?.SafePink
+        product?.SafePink ||
+        product?.TurtleLife 
     );
 
     // ── Icons for display ──
@@ -846,7 +847,7 @@ const ProductDetail = () => {
                                                     </div>
                                                     {turtleLifeOpen && (
                                                         <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                             <div className="passes">{product.title || productData.name} passes all the requirements and is best suitable for indoor & outdoor upholstery.</div>
+                                                             <div className="passes">{product.TurtleLife}</div>
                                                             <div>
                                                                 {/* Original: resistant (Cold crack) */}
                                                                 {product.Cold && (
@@ -855,8 +856,7 @@ const ProductDetail = () => {
                                                                             <img src="/5.png" alt="" />
                                                                             <b>Cold crack resistant : </b> {product.Cold}
                                                                         </div>
-                                                                        <div className="ophelia-description">{product.resistant}</div>
-                                                                    </div>
+                                                                        <div className="ophelia-description">{product.resistant}</div>                                                                  </div>
                                                                 )}
                                                                 {/* Original: QUV */}
                                                                 {product.QUVResistant && (

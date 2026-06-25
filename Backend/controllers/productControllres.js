@@ -127,6 +127,7 @@ exports.addProduct = async (req, res) => {
             variantColors,
             variantColorNames,
             variantGrain,
+            TurtleLife,
         } = req.body;
 
         const images = req.files?.images || [];
@@ -262,6 +263,7 @@ exports.addProduct = async (req, res) => {
             Wyzenback: Wyzenback || '',
             SafeAnti: SafeAnti || '',
             SafePink: SafePink || '',
+            TurtleLife: TurtleLife || '',
         });
 
         const savedProduct = await newProduct.save();
@@ -325,6 +327,7 @@ exports.updateProduct = async (req, res) => {
             Wyzenback,
             SafeAnti,
             SafePink,
+            TurtleLife,
         } = req.body;
 
         const newImageFiles = req.files?.images || [];
@@ -640,6 +643,7 @@ exports.updateProduct = async (req, res) => {
         product.Wyzenback = Wyzenback ?? product.Wyzenback;
         product.SafeAnti = SafeAnti ?? product.SafeAnti;
         product.SafePink = SafePink ?? product.SafePink;
+        product.TurtleLife = TurtleLife ?? product.TurtleLife;
 
         const updatedProduct = await product.save();
         console.log('Product updated:', updatedProduct._id);
