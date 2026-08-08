@@ -397,7 +397,6 @@
     transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-
 .flamesafe-box-container {
     height: 100%;
     display: flex;
@@ -503,7 +502,7 @@
 /* ==================== SAFE TOUCH SECTION ==================== */
 .safe-touch {
     width: 100%;
-    padding: clamp(50px, 8vw, 80px) 15px;
+    padding: clamp(50px, 8vw, 40px) 15px;
 }
 
 .safe-touch-box-1 {
@@ -519,7 +518,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: clamp(30px, 4vw, 54px);
+    gap: clamp(30px, 4vw, 50px);
 }
 
 .safe-touch-image {
@@ -529,7 +528,7 @@
 
 .safe-touch-image img {
     width: 100%;
-    height: 61vh;
+    height: 54vh;
     object-fit: cover;
     display: block;
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -564,7 +563,7 @@
 
 .protective-box-1 {
     width: 100%;
-    padding-bottom: clamp(15px, 2vw, 20px);
+    padding: 50px;
 }
 
 .protective-box-2 {
@@ -573,15 +572,27 @@
 
 .protective-main-box {
     display: flex;
-    align-items: flex-start;
+    width: 100%;
+    align-items: center;
     justify-content: center;
     gap: clamp(20px, 3vw, 30px);
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
 }
 
 .protective-main-box-1 {
-    flex: 0 0 auto;
-    width: min(100%, 400px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 80%;
+}
+
+.protective-main-Section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .protective-main-box-image {
@@ -596,10 +607,6 @@
     object-fit: cover;
     display: block;
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.protective-main-box-image:hover img {
-    transform: scale(1.06);
 }
 
 .protective-main-box-2 {
@@ -629,7 +636,7 @@
 }
 
 .protective-main-box-des {
-    font-size: clamp(14px, 1.8vw, 18px);
+    font-size: clamp(14px, 1.8vw, 16px);
     letter-spacing: 0.5px;
     line-height: 1.6;
     font-weight: 500;
@@ -644,7 +651,7 @@
 }
 
 .protective-box-2-title {
-    font-size: clamp(26px, 3.5vw, 35px);
+    font-size: clamp(26px, 3.5vw, 25px);
     padding-bottom: clamp(15px, 2vw, 20px);
     color: #000;
     font-family: 'Merriweather', serif;
@@ -653,7 +660,7 @@
 
 .protective-box-2-des p {
     letter-spacing: 0.5px;
-    font-size: clamp(14px, 1.8vw, 18px);
+    font-size: clamp(14px, 1.8vw, 15px);
     line-height: 1.7;
     margin-bottom: clamp(12px, 2vw, 15px);
     font-weight: 500;
@@ -773,14 +780,15 @@
     .resistance-container-box-icon-title {
         font-size: clamp(18px, 2.5vw, 20px);
     }
+
     .resistance-container-box-icon-des {
-    font-size: clamp(14px, 1.8vw, 13px);
-    letter-spacing: 0.5px;
-    line-height: 1.6;
-    font-weight: 500;
-    color: #555;
-    font-family: "Quicksand", sans-serif;
-}
+        font-size: clamp(14px, 1.8vw, 13px);
+        letter-spacing: 0.5px;
+        line-height: 1.6;
+        font-weight: 500;
+        color: #555;
+        font-family: "Quicksand", sans-serif;
+    }
 }
 
 @media (max-width: 991px) {
@@ -866,6 +874,9 @@
         height: 100vh;
     }
 
+    .protective-box-1 {
+        padding: 0;
+    }
 
     .longevity-box-logo {
         width: clamp(65px, 10vw, 90px);
@@ -993,6 +1004,10 @@
         flex-direction: column;
     }
 
+    .protective-box-1 {
+        padding: 0;
+    }
+
     .performance-Banner-container-line {
         position: absolute;
         background-color: #fffffffb;
@@ -1012,12 +1027,28 @@
         padding: 0px;
         transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
+
+    .longevity-container {
+        padding: 10px 0px;
+    }
 }
 
 @media (max-width: 479px) {
     .performance-container {
         height: 45vh;
         min-height: 500px;
+    }
+
+    .protective-box-1 {
+        padding: 0;
+    }
+
+    .protective-main-box-2 {
+        padding: 10px 0px;
+    }
+
+    .resistance-container {
+        padding: 10px 0px;
     }
 
     .custom-gap-row {
@@ -1063,6 +1094,10 @@
 
     .longevity-container {
         margin-top: clamp(-30px, -5vw, -35px);
+    }
+
+    .protective-box-1 {
+        padding: 0;
     }
 }
 

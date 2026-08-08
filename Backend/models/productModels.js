@@ -167,6 +167,10 @@ const productSchema = new mongoose.Schema({
     TurtleLife: {
         type: String,
         default: ""
+    },
+    SafeTouch: {
+        type: String,
+        default: ""
     }
 }, {
     timestamps: true

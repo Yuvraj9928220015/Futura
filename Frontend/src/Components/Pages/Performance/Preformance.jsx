@@ -150,7 +150,7 @@ export default function Performance() {
                                                     <div><img src="/5.png" alt="Cold crack icon" /></div>
                                                 </div>
                                                 <div className="resistance-container-box-icon-des">
-                                                    Our material passes the requirement of the cold-crack resistance and is an excellent material with no cracks.
+                                                    Engineered to remain flexible and durable even in low-temperature environments. Helps prevent cracking, splitting, or material failure under cold weather conditions.
                                                 </div>
                                             </div>
                                             <div className="resistance-container-box">
@@ -159,7 +159,7 @@ export default function Performance() {
                                                     <div><img src="/4.png" alt="UV resistant icon" /></div>
                                                 </div>
                                                 <div className="resistance-container-box-icon-des">
-                                                    UV light, or sunlight, will not cause materials and surfaces to fade or discolor as it passes ASTM G154 (500 HOURS)
+                                                    Formulated to resist the harmful effects of prolonged ultraviolet (UV) exposure. Helps prevent fading, discoloration, and material degradation over time.
                                                 </div>
                                             </div>
                                         </div>
@@ -171,7 +171,7 @@ export default function Performance() {
                                                     <div><img src="/3.png" alt="Abrasion icon" /></div>
                                                 </div>
                                                 <div className="resistance-container-box-icon-des">
-                                                    Tests &amp; Martindale Depicts resistance power against damage due to abrasion. ASTM D4157 10,000 rubs
+                                                    Designed to withstand repeated wear, friction, and surface contact without significant damage. Maintains appearance and performance even under demanding use.
                                                 </div>
                                             </div>
                                             <div className="resistance-container-box">
@@ -180,7 +180,7 @@ export default function Performance() {
                                                     <div><img src="/6.png" alt="Weather icon" /></div>
                                                 </div>
                                                 <div className="resistance-container-box-icon-des">
-                                                    Weatherometers simulate the weathering process of indoor and outdoor sun exposure on materials. (1000 Hrs)
+                                                    Tested under accelerated weathering conditions to simulate long-term outdoor exposure. Ensures reliable performance against sunlight, moisture, and changing environmental conditions.
                                                 </div>
                                             </div>
                                         </div>
@@ -203,9 +203,7 @@ export default function Performance() {
                                             <img src="/Untitled-2.png" alt="Fire icon" />
                                         </div>
                                         <div id="Flamesafe-Box-des">
-                                            The flammability tests which are of utmost importance, Determines the burn resistance capabilities of materials used
-                                            in marine, contract furninshing and healthcare. Passes fire-test-response standard, designed for the assessment of the resistance
-                                            of our applications when it comes to combustion after exposure to smoldering cigarettes.
+                                            Designed to reduce flame spread and improve fire safety performance. Helps meet industry flammability standards for enhanced protection.
                                         </div>
                                     </div>
                                 </div>
@@ -278,9 +276,8 @@ export default function Performance() {
                                             <div><img src="/2.png" alt="" /></div>
                                         </div>
                                         <div className="resistance-container-box-icon-des">
-                                            The test of antibacterial, bactericidal, bacteriostatic activity and has been proven effective.
-                                            This relatively quick and easily executed qualitative method determines the antibacterial activity. We provides with pink stain free vinyl. A common test method used to assess materials against pink staining,
-                                            using the Streptoverticillium reticulum pink staining test organism, is the ASTM E1428.
+                                            Formulated to inhibit the growth of bacteria, mold, and mildew on the material's surface. <br /> Helps
+                                            maintain a cleaner, more hygienic environment over time.
                                         </div>
                                     </div>
                                     <div className="resistance-container-box">
@@ -289,8 +286,8 @@ export default function Performance() {
                                             <div><img src="/7.png" alt="" /></div>
                                         </div>
                                         <div className="resistance-container-box-icon-des">
-                                            We provides with pink stain free vinyl. A common test method used to assess materials against pink staining,
-                                            using the Streptoverticillium reticulum pink staining test organism, is the ASTM E1428.
+                                            Engineered to resist pink staining caused by airborne bacteria and environmental contaminants. <br /> Helps
+                                            preserve the material's appearance and surface cleanliness for longer periods.
                                         </div>
                                     </div>
                                     <div className="resistance-image">
@@ -305,15 +302,21 @@ export default function Performance() {
                 {/* Protective Section */}
                 <div data-aos="fade-right" className="protective">
                     <div className="container-fluid">
+                           <div className="protective-box-2">
+                                <div className="protective-box-2-title">How Do We Do It?</div>
+                                <div className="protective-box-2-des">
+                                    <p>
+                                        Our production method combines advanced technology with responsible manufacturing to create coated fabrics that perform consistently
+                                        across applications. Each layer is purpose-built to deliver specific benefits, from surface protection to comfort and structural strength. With rigorous testing and strict quality checks, we ensure every batch meets the highest standards. Our commitment to continuous
+                                        improvement drives innovation in both processes and product performance. As an alternative to traditional leather, our materials
+                                        are animal-friendly and manufactured without harmful chemicals. Compared to conventional PVC and silicone options, they offer improved crack resistance and enhanced production efficiency.
+                                    </p>
+                                </div>
+                            </div>
                         <div className="row">
-                            <div className="col-lg-7 col-md-12">
+                            <div className="col-lg-6 col-md-12">
                                 <div className="protective-box-1">
                                     <div className="protective-main-box">
-                                        <div className="protective-main-box-1">
-                                            <div className="protective-main-box-image">
-                                                <img src="/Leather-Image.jpeg" alt="Leather layers" />
-                                            </div>
-                                        </div>
                                         <div className="protective-main-box-2">
                                             <div className="protective-main-box-content">
                                                 <div className="protective-main-box-title"><span>01</span> Compact PVC Layer</div>
@@ -347,25 +350,16 @@ export default function Performance() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-lg-5 col-md-12">
-                                <div className="protective-box-2">
-                                    <div className="protective-box-2-title">How Do We Do It?</div>
-                                    <div className="protective-box-2-des">
-                                        <p>
-                                            Our production method combines advanced technology with responsible manufacturing to create coated fabrics that perform consistently
-                                            across applications. Each layer is purpose-built to deliver specific benefits, from surface protection to comfort and structural strength.
-                                        </p>
-                                        <p>
-                                            With rigorous testing and strict quality checks, we ensure every batch meets the highest standards. Our commitment to continuous
-                                            improvement drives innovation in both processes and product performance. As an alternative to traditional leather, our materials
-                                            are animal-friendly and manufactured without harmful chemicals.
-                                        </p>
-                                        <p>
-                                            Compared to conventional PVC and silicone options, they offer improved crack resistance and enhanced production efficiency.
-                                        </p>
+                            <div className="col-lg-6 col-md-12">
+                                <div className="protective-main-Section">
+                                    <div className="protective-main-box-1">
+                                        <div className="protective-main-box-image">
+                                            <img src="/Casa.png" alt="Leather layers" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

@@ -513,7 +513,7 @@
     padding: 10px 0px;
     align-items: center;
     color: #303030;
-    margin-top: 75px;
+    margin-top: 45px;
 }
 
 #view-Specifications {
@@ -545,7 +545,7 @@
 }
 
 .readmore-container {
-    padding-top: 70px;
+    padding-top: 50px;
 }
 
 .readmore {
@@ -595,6 +595,22 @@
     color: #7F7770;
 }
 
+#product-collection {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: border 0.2s, box-shadow 0.2s;
+    background-color: #f0f0f0;
+    border: 2.5px solid transparent;
+    box-shadow: none;
+}
+
+#product-collection.selected {
+    border: 2.5px solid #333;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
+}
+
 .Anti-Flamesafe b {
     font-size: 16px;
 }
@@ -631,6 +647,7 @@
 .Pink-Stain-container-content {
     font-size: 15px;
     padding-top: 0px;
+    color: #8b847d;
 }
 
 #Anti-Flame {
@@ -917,12 +934,14 @@
 
 .product-detail-icons-row {
     padding-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
 .product-detail-icon-name {
-    background-color: rgb(240, 240, 240);
+    background-color: #f0f0f0;
     font-size: 12px;
-    color: rgb(102, 102, 102);
+    color: #666666;
     /* margin-right: 10px; */
     padding: 5px 10px;
     border-radius: 15px;
@@ -1172,6 +1191,20 @@
     .readmore-container {
         padding-top: 16px;
     }
+
+    .grain-row-wrapper {
+        padding: 0;
+        margin: 0;
+    }
+
+    .brand-name {
+        font-size: 1.3rem;
+    }
+
+    .Applications {
+        font-size: 20px;
+        padding-bottom: 14px;
+    }
 }
 
 /* ============================================================
@@ -1228,7 +1261,7 @@
         text-align: justify;
         font-size: 15px;
         color: #2b2a2a;
-        padding-left: 34px;
+        padding-left: 50px;
         padding-bottom: 10px;
     }
 
@@ -1267,6 +1300,7 @@
     }
 
     .material-fabric-row {
+        font-size: 15px;
         gap: 8px;
     }
 
@@ -1336,16 +1370,99 @@
         font-size: 0.72rem;
         top: 14px;
     }
+
+    #product-collection {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: border 0.2s, box-shadow 0.2s;
+        background-color: #f0f0f0;
+        border: 2.5px solid transparent;
+        box-shadow: none;
+    }
+
+    #product-collection.selected {
+        border: 2.5px solid #333;
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
+    }
+
+    .grain-extra-items {
+        display: flex;
+        align-items: flex-start;
+        gap: 3px;
+        width: 100%;
+        flex-wrap: wrap;
+        padding-top: 14px;
+        animation: fadeInUp 0.25s ease;
+    }
+
+    .grain-row-wrapper {
+        padding: 0;
+        margin: 0;
+    }
+
+    .brand-name {
+        font-size: 1.2rem;
+    }
+
+    .Applications {
+        font-size: 20px;
+        padding-bottom: 14px;
+    }
+
 }
 
 @media (max-width: 480px) {
     .brand-name {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    .variant-slider-section {
+        margin-bottom: 18px;
     }
 
     .Anti-Flamesafe b {
         font-size: 14px;
     }
+
+    .Applications {
+        font-size: 18px;
+        padding-bottom: 14px;
+    }
+
+    .grain-row-wrapper {
+        padding: 0;
+        margin: 0;
+    }
+
+    #product-collection {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: border 0.2s, box-shadow 0.2s;
+        background-color: #f0f0f0;
+        border: 2.5px solid transparent;
+        box-shadow: none;
+    }
+
+    .grain-extra-items {
+        display: flex;
+        align-items: flex-start;
+        gap: 4px;
+        width: 100%;
+        flex-wrap: wrap;
+        padding-top: 14px;
+        animation: fadeInUp 0.25s ease;
+    }
+
+    #product-collection.selected {
+        border: 2.5px solid #333;
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
+    }
+
+
 
     .product-detail-thumbnail {
         width: 100%;
@@ -1368,7 +1485,7 @@
     }
 
     .Pink-Stain-container-content {
-        padding: 0px 0px 0px 10px;
+        padding: 0px 0px 0px 23px;
     }
 
     .Product-Cart {

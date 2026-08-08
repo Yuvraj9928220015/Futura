@@ -20,7 +20,7 @@
 .lcs-root {
     position: relative;
     width: 100%;
-    height: 75vh;
+    height: 60vh;
     min-height: 420px;
     margin-top: 90px;
     overflow: hidden;
@@ -79,7 +79,7 @@
 }
 
 .lcs-left {
-    width: 19%;
+    width: 24%;
     height: 78%;
     left: calc(50% - 29% - 19% - 14px);
     transform: scale(0.97);
@@ -92,7 +92,7 @@
 }
 
 .lcs-right {
-    width: 19%;
+    width: 24%;
     height: 78%;
     left: calc(50% + 29% + 14px);
     transform: scale(0.97);
@@ -106,7 +106,7 @@
 
 .lcs-hidden {
     width: 14%;
-    height: 60%;
+    height: 50%;
     left: -20%;
     opacity: 0;
     pointer-events: none;
@@ -149,7 +149,7 @@
 
 .lcs-title {
     display: block;
-    font-size: clamp(2.2rem, 3.8vw, 3.6rem);
+    font-size: clamp(2.2rem, 3.8vw, 3.2rem);
     font-weight: 300;
     color: #fff;
     text-decoration: none;
@@ -365,8 +365,7 @@
     font-weight: 300;
     font-family: 'Gotu', sans-serif;
     color: #2c2c2c;
-    padding: 70px 0px;
-    margin-bottom: 60px;
+    padding-top: 70px;
     letter-spacing: 0.02em;
     position: relative;
 }
@@ -804,7 +803,7 @@
 .project-image-wrapper {
     position: relative;
     overflow: hidden;
-    height: 260px;
+    height: 310px;
     width: 100%;
 }
 

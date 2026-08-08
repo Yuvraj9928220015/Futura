@@ -79,6 +79,7 @@ function ProductList() {
         Weath: '',
         Wyzenback: '',
         SafeAnti: '',
+        SafeTouch: '',
         SafePink: '',
         TurtleLife: '',
     };
@@ -449,6 +450,7 @@ function ProductList() {
             if (newProductFormData.Weath) formDataToSend.append('Weath', newProductFormData.Weath);
             if (newProductFormData.Wyzenback) formDataToSend.append('Wyzenback', newProductFormData.Wyzenback);
             if (newProductFormData.SafeAnti) formDataToSend.append('SafeAnti', newProductFormData.SafeAnti);
+            if (newProductFormData.SafeTouch) formDataToSend.append('SafeTouch', newProductFormData.SafeTouch);
             if (newProductFormData.SafePink) formDataToSend.append('SafePink', newProductFormData.SafePink);
 
             validImages.forEach(image => formDataToSend.append('images', image));
@@ -534,6 +536,7 @@ function ProductList() {
             Weath: product.Weath || '',
             Wyzenback: product.Wyzenback || '',
             SafeAnti: product.SafeAnti || '',
+            SafeTouch: product.SafeTouch || '',
             SafePink: product.SafePink || '',
             TurtleLife: product.TurtleLife || '',
         });
@@ -916,6 +919,7 @@ function ProductList() {
             formDataToSend.append('Weath', editProductFormData.Weath);
             formDataToSend.append('Wyzenback', editProductFormData.Wyzenback);
             formDataToSend.append('SafeAnti', editProductFormData.SafeAnti);
+            formDataToSend.append('SafeTouch', editProductFormData.SafeTouch);
             formDataToSend.append('SafePink', editProductFormData.SafePink);
             formDataToSend.append('TurtleLife', editProductFormData.TurtleLife);
 
@@ -1110,6 +1114,12 @@ function ProductList() {
                  <div className="form-group">
                     <label>Safe Anti</label>
                     <input type="text" name="SafeAnti" value={formData.SafeAnti} onChange={onChange} />
+                </div>
+            </div>
+              <div className="form-row">
+                 <div className="form-group">
+                    <label>Safe Touch</label>
+                    <input type="text" name="SafeTouch" value={formData.SafeTouch} onChange={onChange} />
                 </div>
             </div>
         </div>
@@ -1319,6 +1329,7 @@ function ProductList() {
                                                 {product.Weath && <p className="spec-item"><strong>Weath:</strong> {product.Weath}</p>}
                                                 {product.Wyzenback && <p className="spec-item"><strong>Wyzenback:</strong> {product.Wyzenback}</p>}
                                                 {product.SafeAnti && <p className="spec-item"><strong>Safe Anti:</strong> {product.SafeAnti}</p>}
+                                                {product.SafeTouch && <p className="spec-item"><strong>Safe Touch:</strong> {product.SafeTouch}</p>}
                                                 {product.SafePink && <p className="spec-item"><strong>Safe Pink:</strong> {product.SafePink}</p>}
                                                 {product.TurtleLife && <p className="spec-item"><strong>Turtle Life:</strong> {product.TurtleLife}</p>}
                                             </div>

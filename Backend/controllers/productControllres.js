@@ -128,6 +128,7 @@ exports.addProduct = async (req, res) => {
             variantColorNames,
             variantGrain,
             TurtleLife,
+            SafeTouch,
         } = req.body;
 
         const images = req.files?.images || [];
@@ -264,6 +265,7 @@ exports.addProduct = async (req, res) => {
             SafeAnti: SafeAnti || '',
             SafePink: SafePink || '',
             TurtleLife: TurtleLife || '',
+            SafeTouch: SafeTouch || '',
         });
 
         const savedProduct = await newProduct.save();
@@ -328,6 +330,7 @@ exports.updateProduct = async (req, res) => {
             SafeAnti,
             SafePink,
             TurtleLife,
+            SafeTouch
         } = req.body;
 
         const newImageFiles = req.files?.images || [];
@@ -644,6 +647,7 @@ exports.updateProduct = async (req, res) => {
         product.SafeAnti = SafeAnti ?? product.SafeAnti;
         product.SafePink = SafePink ?? product.SafePink;
         product.TurtleLife = TurtleLife ?? product.TurtleLife;
+        product.SafeTouch = SafeTouch ?? product.SafeTouch;
 
         const updatedProduct = await product.save();
         console.log('Product updated:', updatedProduct._id);

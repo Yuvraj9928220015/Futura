@@ -517,7 +517,7 @@ const Product = () => {
     return (
         <>
             <div className="product-wrapper">
-                <ThreePanelSlider />
+
                 <div className="Product-Container">
                     <div className="Product-Container-title">
                         <span>Our Collections</span>
@@ -555,14 +555,14 @@ const Product = () => {
                     {allCategories.length > 0 && (
                         <button className='category-Label-btn'
                             onClick={() => setShowPriorityModal(true)}
-                            // style={{
-                            //     display: 'flex', alignItems: 'center', gap: '6px',
-                            //     padding: '8px 16px', border: 'none', borderRadius: '8px',
-                            //     background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-                            //     color: '#fff', fontSize: '0.82rem', fontWeight: 600,
-                            //     cursor: 'pointer', letterSpacing: '0.03em',
-                            //     boxShadow: '0 4px 14px #00000040'
-                            // }}
+                        // style={{
+                        //     display: 'flex', alignItems: 'center', gap: '6px',
+                        //     padding: '8px 16px', border: 'none', borderRadius: '8px',
+                        //     background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
+                        //     color: '#fff', fontSize: '0.82rem', fontWeight: 600,
+                        //     cursor: 'pointer', letterSpacing: '0.03em',
+                        //     boxShadow: '0 4px 14px #00000040'
+                        // }}
                         >
                             <Settings size={15} />
                             Set Category Order
@@ -835,7 +835,7 @@ const Product = () => {
                         </div>
                     </div>
                 </div>
-
+                <ThreePanelSlider />
                 {showPriorityModal && (
                     <CategoryPriorityModal
                         categories={allCategories}

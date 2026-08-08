@@ -14,17 +14,12 @@ body {
     width: 100%;
 }
 
-/* NO overflow hidden — slide travels freely from screen edge */
 .slider-outer-clip {
     width: 100%;
     border-top: 1px solid #ebecec38;
     border-bottom: 1px solid #d4d4d41a;
 }
 
-/* =============================================
-   BACKGROUND IMAGE — FIXED PARALLAX (DESKTOP)
-   iOS & mobile: scroll fallback via @supports
-   ============================================= */
 .New-Main-slider-container {
     background-image: url('/Futura-New-22.jpeg');
     background-attachment: fixed;
@@ -35,12 +30,32 @@ body {
     position: relative;
 }
 
-/* iOS Safari does not support background-attachment: fixed properly */
 @supports (-webkit-touch-callout: none) {
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
+    }
+}
+
+@media (max-width: 768px) {
+    .New-Main-slider-container {
+        background-image: url('/New-Certificate-image.jpeg');
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* iOS Mobile */
+    @supports (-webkit-touch-callout: none) {
+        .New-Main-slider-container {
+            background-image: url('/New-Certificate-image.jpeg');
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
     }
 }
 
@@ -63,9 +78,6 @@ body {
     padding: 0 clamp(0.5rem, 2vw, 2rem);
 }
 
-/* =============================================
-   LEFT SIDE — no transition, instant update
-   ============================================= */
 .static-left-wrapper {
     flex: 1;
     max-width: 50%;
@@ -101,12 +113,6 @@ p.subtitle {
     line-height: 1.1;
 }
 
-/* =============================================
-   RIGHT SIDE
-   NO overflow:hidden — JS sets translateX
-   from window.innerWidth so slide enters
-   from actual screen edge
-   ============================================= */
 .animated-right-content {
     flex: 1;
     width: 50%;
@@ -120,7 +126,6 @@ p.subtitle {
     padding: clamp(0.5rem, 2vw, 2rem);
 }
 
-/* cert-slide: transform is set inline via JS */
 .cert-slide {
     position: absolute;
     top: 0;
@@ -311,7 +316,7 @@ p.subtitle {
     position: absolute;
     bottom: clamp(1rem, 3vw, 2rem);
     right: clamp(1rem, 3vw, 2rem);
-    background: rgba(0, 0, 0, 0.7);
+    background: #000000b3;
     border: none;
     border-radius: 50%;
     width: clamp(2.5rem, 5vw, 3.5rem);
@@ -336,20 +341,14 @@ p.subtitle {
     color: var(--white);
 }
 
-/* ===============================================
-   RESPONSIVE BREAKPOINTS
-   =============================================== */
-
-/* ── Mobile: 480px aur neeche ── */
 @media (max-width: 480px) {
     .Main-slider-container {
         padding-left: 0;
         margin-left: 0;
     }
 
-    /* Mobile pe fixed background scroll pe set karo — image poori dikhti hai */
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
     }
@@ -455,9 +454,8 @@ p.subtitle {
         margin-left: 0;
     }
 
-    /* Tablet/mobile pe scroll fallback — image full dikhegi */
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
     }
@@ -544,9 +542,8 @@ p.subtitle {
         margin-left: 0;
     }
 
-    /* Tablet pe scroll better lagta hai */
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
     }
@@ -784,7 +781,7 @@ p.subtitle {
 /* ── Portrait orientation (tablet/mobile) ── */
 @media (orientation: portrait) and (max-width: 991px) {
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
     }
@@ -852,7 +849,7 @@ p.subtitle {
 /* ── Landscape with short height ── */
 @media (orientation: landscape) and (max-height: 600px) {
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
     }
@@ -918,7 +915,7 @@ p.subtitle {
 /* ── Touch devices ── */
 @media (hover: none) and (pointer: coarse) {
     .New-Main-slider-container {
-        background-attachment: scroll;
+        background-attachment: fixed;
         background-position: center center;
         background-size: cover;
     }

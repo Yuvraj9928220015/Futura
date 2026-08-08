@@ -140,10 +140,8 @@ export default function Categories() {
        <>
         <section className="cat-section">
 
-            {/* ── Slider Section ── */}
             <div className="cat-section-container">
 
-                {/* Header */}
                 <div className="cat-header">
                     <div className="cat-header-left">
                         <p className="cat-subtitle">Our Product Categories</p>
@@ -191,7 +189,6 @@ export default function Categories() {
             <div className="reach-section">
                 <div className="reach-inner">
 
-                    {/* Left: Scattered Image Collage */}
                     <div className="reach-images">
                         <img src="/Futura-New-14.jpeg" alt="Fabric 1" className="reach-img reach-img--1" />
                         <img src="/Futura-New-13.jpeg" alt="Fabric 2" className="reach-img reach-img--2" />
@@ -199,7 +196,6 @@ export default function Categories() {
                         <img src="/Futura-New-15.jpeg" alt="Fabric 4" className="reach-img reach-img--4" />
                     </div>
 
-                    {/* Right: Text */}
                     <div className="reach-text">
                         <div className="reach-title">Reach Out Today And Let's Chat</div>
                         <div className="reach-desc">

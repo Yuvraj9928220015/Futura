@@ -94,7 +94,7 @@ const Certificate = () => {
     animFrameRef.current = requestAnimationFrame(step);
   };
 
-  // ─── Core slide changer ───────────────────────────────────────
+  // ─── Core slide changer ───
   const changeSlide = useCallback((newIndex, direction) => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -111,7 +111,7 @@ const Certificate = () => {
     });
   }, [isAnimating]);
 
-  // ─── Autoplay ─────────────────────────────────────────────────
+  // ─── Autoplay ───
   const startAutoplay = useCallback(() => {
     clearInterval(autoplayRef.current);
     autoplayRef.current = setInterval(() => {
@@ -140,7 +140,7 @@ const Certificate = () => {
     };
   }, [startAutoplay]);
 
-  // ─── Hover: pause only on certificate card ────────────────────
+  // ─── Hover: pause only on certificate card ───
   const handleCertMouseEnter = () => {
     isPausedRef.current = true;
   };
@@ -149,7 +149,7 @@ const Certificate = () => {
     isPausedRef.current = false;
   };
 
-  // ─── Navigation ───────────────────────────────────────────────
+  // ─── Navigation ───
   const nextSlide = () => {
     changeSlide((currentSlide + 1) % certifications.length, 'next');
     startAutoplay();
@@ -166,7 +166,7 @@ const Certificate = () => {
     startAutoplay();
   };
 
-  // ─── Video toggle ─────────────────────────────────────────────
+  // ─── Video toggle ───
   const toggleVideoPlayback = () => {
     if (videoRef.current) {
       isVideoPlaying ? videoRef.current.pause() : videoRef.current.play();

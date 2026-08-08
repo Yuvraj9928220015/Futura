@@ -26,7 +26,7 @@ const sendEnquiryEmail = async (data) => {
         from: `"Futura Textiles Website" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_TO,
         subject: `📩 New Enquiry: ${subject} — ${firstName} ${lastName}`,
-        html: `
+        html: ` 
             <div style="font-family: Arial, sans-serif; max-width: 640px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
 
                 <!-- Header -->

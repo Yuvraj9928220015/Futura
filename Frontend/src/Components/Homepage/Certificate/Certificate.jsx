@@ -72,7 +72,7 @@ const Certificate = () => {
     }
   ];
 
-  // ─── Animation ────────────────────────────────────────────────
+  // ─── Animation ───
   const animateTo = (startX, onDone) => {
     const duration = 650;
     const startTime = performance.now();
@@ -94,7 +94,7 @@ const Certificate = () => {
     animFrameRef.current = requestAnimationFrame(step);
   };
 
-  // ─── Core slide changer ───────────────────────────────────────
+  // ─── Core slide changer ───
   const changeSlide = useCallback((newIndex, direction) => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -140,7 +140,7 @@ const Certificate = () => {
     };
   }, [startAutoplay]);
 
-  // ─── Hover: pause only on certificate card ────────────────────
+  // ─── Hover: pause only on certificate card ───
   const handleCertMouseEnter = () => {
     isPausedRef.current = true;
   };
@@ -149,7 +149,7 @@ const Certificate = () => {
     isPausedRef.current = false;
   };
 
-  // ─── Navigation ───────────────────────────────────────────────
+  // ─── Navigation ───
   const nextSlide = () => {
     changeSlide((currentSlide + 1) % certifications.length, 'next');
     startAutoplay();
@@ -166,7 +166,7 @@ const Certificate = () => {
     startAutoplay();
   };
 
-  // ─── Video toggle ─────────────────────────────────────────────
+  // ─── Video toggle ───
   const toggleVideoPlayback = () => {
     if (videoRef.current) {
       isVideoPlaying ? videoRef.current.pause() : videoRef.current.play();
@@ -184,7 +184,6 @@ const Certificate = () => {
             <div className="slider-container">
               <div className="slider-content">
 
-                {/* LEFT: static, no animation, NO hover pause */}
                 <div className="static-left-wrapper">
                   <div className="static-left-content">
                     <h1 className="certification-Product-Box-title">{cert.maintitle}</h1>
@@ -195,7 +194,6 @@ const Certificate = () => {
                   </div>
                 </div>
 
-                {/* RIGHT: certificate card — hover HERE pauses autoplay */}
                 <div
                   className="animated-right-content"
                   onMouseEnter={handleCertMouseEnter}

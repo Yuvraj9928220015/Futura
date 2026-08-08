@@ -294,6 +294,10 @@ const ProductDetail = () => {
     const cataloguePdfUrl = product?.pdf ? getPdfUrl(product.pdf) : null;
 
     // ── Derived booleans for conditional section rendering ──
+    // Har section apne HI fields ke basis par show/hide hoga.
+    // (Pehle SAFE TOUCH me galti se `TurtleLife` field bhi check ho rahi thi,
+    //  isliye jab sirf TurtleLife data hota tha tab bhi SAFE TOUCH show ho jaata tha.
+    //  Ab har category apne relevant fields hi check karegi.)
     const hasFlammableSection = !!(
         product?.Flammable || product?.Antiflammable
     );
@@ -306,15 +310,16 @@ const ProductDetail = () => {
         product?.Cold ||
         product?.QUVResistant ||
         product?.Weath ||
-        product?.Wyzenback
+        product?.Wyzenback ||
+        product?.TurtleLife
     );
 
     const hasSafeTouchSection = !!(
         product?.AntiMicrobial ||
         product?.PinkStain ||
         product?.SafeAnti ||
-        product?.SafePink ||
-        product?.TurtleLife 
+        product?.SafeTouch ||
+        product?.SafePink
     );
 
     // ── Icons for display ──
@@ -389,16 +394,7 @@ const ProductDetail = () => {
     // ── VariantCard ──
     const VariantCard = ({ item, isSelected, onClick }) => (
         <div onClick={onClick} style={{ cursor: 'pointer', flexShrink: 0, textAlign: 'center', width: '90px', minWidth: '70px', maxWidth: '100px' }}>
-            <div style={{
-                width: '100px',
-                height: '100px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                border: isSelected ? '2.5px solid #333' : '2.5px solid transparent',
-                boxShadow: isSelected ? '0 0 0 2px #fff, 0 0 0 4px #333' : 'none',
-                transition: 'border 0.2s, box-shadow 0.2s',
-                backgroundColor: '#f0f0f0',
-            }}>
+            <div id="product-collection">
                 {item.images && item.images.length > 1 ? (
                     <img
                         src={getImageUrl(item.images[1])}
@@ -800,10 +796,6 @@ const ProductDetail = () => {
                                     {expanded && (
                                         <div className="Prodduct-extra-text">
 
-                                            {/* ══════════════════════════════════
-                                                FLAMMABLE SECTION
-                                                Shows if: Flammable OR Antiflammable exists
-                                            ══════════════════════════════════ */}
                                             {hasFlammableSection && (
                                                 <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
                                                     <div style={toggleHeaderStyle} onClick={() => setFlammableOpen(!flammableOpen)}>
@@ -840,23 +832,27 @@ const ProductDetail = () => {
                                                             <div className="ophelia-title" style={{ margin: 0, padding: 0 }}>TURTLE LIFE
                                                             </div>
                                                         </div>
-                                                            
+
                                                         <div style={toggleIconStyle(turtleLifeOpen)}>
                                                             {turtleLifeOpen ? <PiMinus /> : <PiPlus />}
                                                         </div>
                                                     </div>
                                                     {turtleLifeOpen && (
                                                         <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                             <div className="passes">{product.TurtleLife}</div>
+                                                            <div className="passes">{product.TurtleLife}</div>
                                                             <div>
                                                                 {/* Original: resistant (Cold crack) */}
                                                                 {product.Cold && (
-                                                                    <div className="Characteristics-content">
-                                                                        <div className="Pink-Stain">
+                                                                    <div className="Characteristics-content">                                                                                                                           
+                                                                         <div className="Characteristics-content">
+                                                                        <div id="Pink-Stain-container" className="Pink-Stain">
                                                                             <img src="/5.png" alt="" />
-                                                                            <b>Cold crack resistant : </b> {product.Cold}
+                                                                            <div className="Pink-Stain-container-content">
+                                                                                <b>Cold crack resistant : </b> {product.Cold}
+                                                                            </div>
                                                                         </div>
-                                                                        <div className="ophelia-description">{product.resistant}</div>                                                                  </div>
+                                                                        <div className="ophelia-description">{product.resistant}</div>
+                                                                    </div>                                                                </div>
                                                                 )}
                                                                 {/* Original: QUV */}
                                                                 {product.QUVResistant && (
@@ -872,10 +868,13 @@ const ProductDetail = () => {
                                                                 )}
                                                                 {/* Original: Weatherometer */}
                                                                 {product.Weath && (
+
                                                                     <div className="Characteristics-content">
-                                                                        <div className="Pink-Stain">
+                                                                        <div id="Pink-Stain-container" className="Pink-Stain">
                                                                             <img src="/6.png" alt="" />
-                                                                            <b> Weatherometer : </b> {product.Weath}
+                                                                            <div className="Pink-Stain-container-content">
+                                                                                <b>Weatherometer : </b> {product.Weath}
+                                                                            </div>
                                                                         </div>
                                                                         <div className="ophelia-description">{product.Weatherometer}</div>
                                                                     </div>
@@ -900,8 +899,6 @@ const ProductDetail = () => {
 
                                             {/* ══════════════════════════════════
                                                 SAFE TOUCH SECTION
-                                                Shows ONLY if at least one of:
-                                                AntiMicrobial / PinkStain / SafeAnti / SafePink exists
                                             ══════════════════════════════════ */}
                                             {hasSafeTouchSection && (
                                                 <div style={{ borderBottom: '1px solid #eee', marginBottom: '8px' }}>
@@ -916,23 +913,28 @@ const ProductDetail = () => {
                                                     </div>
                                                     {safeTouchOpen && (
                                                         <div className="Turtle-Life-container" style={{ paddingBottom: '12px' }}>
-                                                            <div className="ophelia-description">A microbial safe product</div>
+                                                            <div className="ophelia-description">{product.SafeTouch}</div>
                                                             {/* Original: AntiMicrobial */}
                                                             {product.AntiMicrobial && (
+
                                                                 <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain">
+                                                                    <div id="Pink-Stain-container" className="Pink-Stain">
                                                                         <img src="/2.png" alt="" />
-                                                                        <b>Anti microbial : </b> {product.SafeAnti}
+                                                                        <div className="Pink-Stain-container-content">
+                                                                            <b>Anti microbial : </b> {product.SafeAnti}
+                                                                        </div>
                                                                     </div>
-                                                                    <div className="ophelia-description">{product.AntiMicrobial}</div>
+                                                                    <div className="ophelia-description">{product.Abrasion}</div>
                                                                 </div>
                                                             )}
                                                             {/* Original: PinkStain */}
                                                             {product.PinkStain && (
                                                                 <div className="Characteristics-content">
-                                                                    <div className="Pink-Stain">
+                                                                    <div id="Pink-Stain-container" className="Pink-Stain">
                                                                         <img src="/7.png" alt="" />
-                                                                        <b>Pink Stain : </b> {product.SafePink}
+                                                                        <div className="Pink-Stain-container-content">
+                                                                            <b>Pink Stain : </b> {product.SafePink}
+                                                                        </div>
                                                                     </div>
                                                                     <div className="ophelia-description">{product.PinkStain}</div>
                                                                 </div>
@@ -941,7 +943,6 @@ const ProductDetail = () => {
                                                     )}
                                                 </div>
                                             )}
-
                                         </div>
                                     )}
                                 </div>

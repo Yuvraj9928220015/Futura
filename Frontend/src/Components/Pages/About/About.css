@@ -255,17 +255,32 @@
 }
 
 .Manfacturer-Box-1 {
+    position: relative;
+    overflow: hidden;
     padding-right: 169px;
     width: 100%;
-    min-height: 85vh;
-    background-image: linear-gradient(to top, #000000cc, #00000000), url('/Futura-New-29.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    min-height: 90vh;
+    background: url('/Futura-New-29.png') center/cover no-repeat;
     display: flex;
     justify-content: end;
     align-items: flex-end;
     gap: 21px;
+}
+
+.Manfacturer-Box-1::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 65%;
+    background: linear-gradient(to top, #000000cc, transparent);
+    pointer-events: none;
+}
+
+.Manfacturer-Box-1 > * {
+    position: relative;
+    z-index: 1;
 }
 
 .Manfacturer-Box-1-line-1 {

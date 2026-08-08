@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../Pages/Cartcontext/Cartcontext';
 import './Navbar.css';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'https://api.futuratextiles.in';
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:8000';
 
 const getImageUrl = (imagePath) => {
     if (!imagePath) return '/no-image.png';

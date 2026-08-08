@@ -9,7 +9,6 @@ export default function Banner() {
     const timerRef = useRef(null);
     const navigate = useNavigate();
 
-    // Resize listener
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
         window.addEventListener('resize', handleResize);
@@ -85,7 +84,6 @@ export default function Banner() {
         },
     ];
 
-    // Active media resolve karta hai — mobile ya desktop
     const getActiveMedia = (slide) => {
         if (isMobile) {
             return {
@@ -139,99 +137,101 @@ export default function Banner() {
     const goToSlide = (index) => changeSlide(index);
 
     return (
-        <div data-aos="fade-down" className="Banner-slider-container">
-            <div className="Banner-slider-wrapper">
-                {slides.map((slide, index) => {
-                    const { video, image, isVideo } = getActiveMedia(slide);
-                    return (
-                        <div
-                            key={index}
-                            className={`Banner-slide ${index === currentSlide ? 'active' : ''}`}
-                        >
-                            {isVideo ? (
-                                <video
-                                    key={video} // src change hone par re-mount ho
-                                    ref={(el) => { videoRefs.current[index] = el; }}
-                                    className="Banner-slide-media Banner-slide-video"
-                                    muted
-                                    loop
-                                    playsInline
-                                    preload="metadata"
-                                    onError={(e) => {
-                                        e.target.style.display = 'none';
-                                        const fb = e.target.parentElement.querySelector('.Banner-slide-fallback');
-                                        if (fb) fb.style.display = 'flex';
-                                    }}
-                                >
-                                    <source src={video} type="video/mp4" />
-                                </video>
-                            ) : (
-                                <img
-                                    src={image}
-                                    alt={slide.title}
-                                    className="Banner-slide-media Banner-slide-image"
-                                    onError={(e) => {
-                                        e.target.style.display = 'none';
-                                        const fb = e.target.parentElement.querySelector('.Banner-slide-fallback');
-                                        if (fb) fb.style.display = 'flex';
-                                    }}
-                                />
-                            )}
-
-                            <div className="Banner-slide-dark-overlay" />
-                            <div className="Banner-slide-fallback">
-                                {isVideo ? `Video ${index + 1} failed to load.` : `Image ${index + 1} failed to load.`}
-                            </div>
-
-                            <div className="Banner-slide-overlay">
-                                {index === currentSlide && (
-                                    <div className="Banner-text-overlay">
-                                        <h2 className="Banner-text-title">{slide.title}</h2>
-                                        {slide.Prag && <h2 className="Banner-text-title">{slide.Prag}</h2>}
-                                        <p className="Banner-text-des">{slide.des}</p>
-                                        <p className="Banner-text-paragraph">{slide.paragraph}</p>
-                                        <div className="Banner-text-overlay-btn">
-                                            <button onClick={() => navigate(slide.link)}>
-                                                See Your Product
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-
-            {slides.length > 1 && (
-                <>
-                    <button onClick={prevSlide} className="nav-arrow nav-arrow-left" aria-label="Previous slide">
-                        <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style={{ fontSize: '24px' }}>
-                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                        </svg>
-                    </button>
-                    <button onClick={nextSlide} className="nav-arrow nav-arrow-right" aria-label="Next slide">
-                        <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style={{ fontSize: '24px' }}>
-                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                        </svg>
-                    </button>
-
-                    <div className="dots-container">
-                        {slides.map((_, index) => (
-                            <button
+        <>
+            <div data-aos="fade-down" className="Banner-slider-container">
+                <div className="Banner-slider-wrapper">
+                    {slides.map((slide, index) => {
+                        const { video, image, isVideo } = getActiveMedia(slide);
+                        return (
+                            <div
                                 key={index}
-                                className={`dot ${index === currentSlide ? 'dot-active' : ''}`}
-                                onClick={() => goToSlide(index)}
-                                aria-label={`Go to slide ${index + 1}`}
-                            />
-                        ))}
-                    </div>
+                                className={`Banner-slide ${index === currentSlide ? 'active' : ''}`}
+                            >
+                                {isVideo ? (
+                                    <video
+                                        key={video}
+                                        ref={(el) => { videoRefs.current[index] = el; }}
+                                        className="Banner-slide-media Banner-slide-video"
+                                        muted
+                                        loop
+                                        playsInline
+                                        preload="metadata"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            const fb = e.target.parentElement.querySelector('.Banner-slide-fallback');
+                                            if (fb) fb.style.display = 'flex';
+                                        }}
+                                    >
+                                        <source src={video} type="video/mp4" />
+                                    </video>
+                                ) : (
+                                    <img
+                                        src={image}
+                                        alt={slide.title}
+                                        className="Banner-slide-media Banner-slide-image"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            const fb = e.target.parentElement.querySelector('.Banner-slide-fallback');
+                                            if (fb) fb.style.display = 'flex';
+                                        }}
+                                    />
+                                )}
 
-                    <div className="Banner-slide-counter">
-                        {currentSlide + 1} / {slides.length}
-                    </div>
-                </>
-            )}
-        </div>
+                                <div className="Banner-slide-dark-overlay" />
+                                <div className="Banner-slide-fallback">
+                                    {isVideo ? `Video ${index + 1} failed to load.` : `Image ${index + 1} failed to load.`}
+                                </div>
+
+                                <div className="Banner-slide-overlay">
+                                    {index === currentSlide && (
+                                        <div className="Banner-text-overlay">
+                                            <h2 className="Banner-text-title">{slide.title}</h2>
+                                            {slide.Prag && <h2 className="Banner-text-title">{slide.Prag}</h2>}
+                                            <p className="Banner-text-des">{slide.des}</p>
+                                            <p className="Banner-text-paragraph">{slide.paragraph}</p>
+                                            <div className="Banner-text-overlay-btn">
+                                                <button onClick={() => navigate(slide.link)}>
+                                                    See Your Product
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {slides.length > 1 && (
+                    <>
+                        <button onClick={prevSlide} className="nav-arrow nav-arrow-left" aria-label="Previous slide">
+                            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style={{ fontSize: '24px' }}>
+                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                            </svg>
+                        </button>
+                        <button onClick={nextSlide} className="nav-arrow nav-arrow-right" aria-label="Next slide">
+                            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style={{ fontSize: '24px' }}>
+                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                            </svg>
+                        </button>
+
+                        <div className="dots-container">
+                            {slides.map((_, index) => (
+                                <button
+                                    key={index}
+                                    className={`dot ${index === currentSlide ? 'dot-active' : ''}`}
+                                    onClick={() => goToSlide(index)}
+                                    aria-label={`Go to slide ${index + 1}`}
+                                />
+                            ))}
+                        </div>
+
+                        <div className="Banner-slide-counter">
+                            {currentSlide + 1} / {slides.length}
+                        </div>
+                    </>
+                )}
+            </div>
+        </>
     );
 }
